@@ -28,13 +28,22 @@ An open-source Bee Swarm Simulator macro written in AutoHotkey!
 
 __Join our official [Discord server][discord-link]!__ This is where you can connect with the community, get immediate pings for macro updates, and download custom patterns, paths, and themes.
 
+If Natro Macro helped you, let us know by giving it a ⭐ on Github!
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://reporoster.com/stars/dark/NatroTeam/NatroMacro"> <!-- dark theme -->
+  <img src="https://reporoster.com/stars/NatroTeam/NatroMacro"> <!-- light theme -->
+</picture>
+
 
 ## ⌨️ Contributing
 
-Natro Macro is an open-source project. We greatly appreciate all contributions, whether you are helping us fix bugs or suggesting new features to the development team. For discussion, please join us on our [Discord server][discord-link] instead.
+Natro Macro is an open-source project. We greatly appreciate all contributions, whether you are helping us fix bugs or suggesting new features to the development team. If you want to get started, give our [Contributing Guidelines](./CONTRIBUTING.md) a read.
 
 - Bugs: If you find an issue or run into an error message while using the macro, please create a [bug report][bug-report-link].
 - Suggestions: If you have an idea for a feature that you'd like to see in the macro, please submit a [suggestion][suggestion-link].
+
+For discussion, please join us on our [Discord server][discord-link] instead.
 
 
 <details><summary><h4>📝 License</h4></summary>
