@@ -52,6 +52,6 @@ This project is licensed under [GNU GPL v3.0](./LICENSE.md).
 [discord-shield]: https://img.shields.io/discord/1012610056921038868?style=flat-square&logo=discord&logoColor=white&label=discord&labelColor=black&color=5865F2
 [discord-link]: https://discord.gg/natromacro
 [latest-release-link]: https://github.com/NatroTeam/NatroMacro/releases/latest
-[bug-report-link]: https://github.com/NatroTeam/NatroMacro/issues
-[suggestion-link]: https://github.com/NatroTeam/NatroMacro/issues
+[bug-report-link]: https://github.com/NatroTeam/NatroMacro/issues/new?assignees=&labels=bug%2Cneeds+triage&projects=&template=bug.yml
+[suggestion-link]: https://github.com/NatroTeam/NatroMacro/issues/new?assignees=&labels=suggestion%2Cneeds+triage&projects=&template=suggestion.yml
 [github-profile-link]: http://github.com/NatroTeam
