@@ -40,7 +40,7 @@ If Natro Macro helped you, let us know by giving it a ⭐ $\color{yellow}{\texts
 
 ## ⌨️ Contributing
 
-Natro Macro is an open-source project. We greatly appreciate all contributions, whether you are helping us fix bugs or suggesting new features to the development team. If you want to get started, give our [Contributing Guidelines][contributing-link] a read.
+Natro Macro is an open-source project. We greatly appreciate all contributions, whether you are helping us fix bugs or suggesting new features. If you want to get started, give our [Contributing Guidelines][contributing-link] a read.
 
 - Bugs: If you find an issue or run into an error message while using the macro, please create a [bug report][bug-report-link].
 - Suggestions: If you have an idea for a feature that you'd like to see in the macro, please submit a [suggestion][suggestion-link].
