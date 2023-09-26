@@ -7144,6 +7144,9 @@ nm_HiveBeesHelp(){
 }
 nm_ContributorsImage(page:=1){
 	static hCtrl, hBM1, hBM2, hBM3, hBM4, hBM5, hBM6, hBM7, hBM8, hBM9 ; 9 pages max
+		, colorArr := {"blue": [0xff83c6e2, 0xff2779d8, 0xff83c6e2]
+			, "gold": [0xfff0ca8f, 0xffd48d22, 0xfff0ca8f]
+			, "red": [0xffA82428, 0xffA82428, 0xffA82428]}
 
 	if (hBM1 = "")
 	{
@@ -7169,149 +7172,17 @@ nm_ContributorsImage(page:=1){
 			, ["idote",0xfff47fff]
 			, ["axetar",0xffec8fd0]]
 
-		contributors := []
-		contributors.Push(["wilalwil2#4175","gold"]
-			, ["Ashtonishing#4420","gold"]
-			, ["TheRealXoli#1017","gold"]
-			, ["K_Money#0001","gold"]
-			, ["Sasuel#5393","gold"]
-			, ["Disco#9130","gold"]
-			, ["Ethereal_Sparks#7693","gold"]
-			, ["Inzainiac#9806","gold"]
-			, ["Raccoon City#2912","gold"]
-			, ["Gambols#1084","gold"]
-			, ["Anonymous_D","gold"]
-			, ["olnumber8#1487","gold"]
-			, ["Trystar001#5076","gold"]
-			, ["IceBreaker420#7887","gold"]
-			, ["YarikzBSS","gold"]
-			, ["sheeva#1786","gold"]
-			, ["misc#4583","gold"]
-			, ["Bobbythebob12#6969","gold"]
-			, ["3xykoz#5481","gold"]
-			, ["bacon#2389","gold"]
-			, ["Mxeil#9534","gold"]
-			, ["Novi1Alpha#2360","gold"]
-			, ["Wheezy#9419","gold"]
-			, ["Albert#9999","gold"])
-		contributors.Push(["swiftlyanerd#6969","gold"]
-			, ["Techy.#0001","gold"]
-			, ["J4m3z#0184","gold"]
-			, ["onion#1506","gold"]
-			, ["Val Blaze#1599","gold"]
-			, ["DeL#9582","gold"]
-			, ["NiGHTFoX#1010","gold"]
-			, ["gfc#0001","gold"]
-			, ["abiu#9024","gold"]
-			, ["heyabro#6950","gold"]
-			, ["ninju#0001","gold"]
-			, ["qzltt#5704","gold"]
-			, ["mariposa#5719","gold"]
-			, ["imdom#2002","gold"]
-			, ["SagePage590#1084","gold"]
-			, ["Čäm just Çãm#6392","gold"]
-			, ["Pizza Guy#9720","gold"]
-			, ["WolfySoy#7178","gold"]
-			, ["jak#1000","gold"]
-			, ["That_Iemon","gold"]
-			, ["Misni#1309","gold"]
-			, ["Chasesonic1#7053","gold"]
-			, ["SektorQ#3717","gold"]
-			, ["KingDotz#6114","gold"])
-		contributors.Push(["JoshRules301#8291","gold"]
-			, ["Diosaur#5829","gold"]
-			, ["templan#4763","gold"]
-			, ["Householdsage60","gold"]
-			, ["老頭 OldMan#8750","gold"]
-			, ["Memoryless#3001","gold"]
-			, ["N&R Games#7387","gold"]
-			, ["Izu#1234","gold"]
-			, ["mahir is here#3632","gold"]
-			, ["Jast4#8220","gold"]
-			, ["Electroryx#3621","gold"]
-			, ["blastin#2461","gold"]
-			, ["ducky44374","gold"]
-			, ["Urmum#6253","gold"]
-			, ["Hey buddy#7371","gold"]
-			, ["pielord#9597","gold"]
-			, ["Bamf#2958","gold"]
-			, ["wholg#5801","gold"]
-			, ["idiot#9999","gold"]
-			, ["Blu#6083","gold"]
-			, ["レッドステッド#1111","gold"]
-			, ["Argentina#2302","gold"]
-			, ["-ryann#8474","gold"]
-			, ["SKNinja#0690","gold"])
-		contributors.Push(["MNS_0_o#4128","gold"]
-			, ["Degus22#8945","gold"]
-			, ["ReadPopz#0486","gold"]
-			, ["Ignorant#1247","gold"]
-			, ["tyler#3797","gold"]
-			, ["Shawn#3957","gold"]
-			, ["Stronurus#7597","gold"]
-			, ["YEP#1871","gold"]
-			, ["klassiker#3033","gold"]
-			, ["NoddaPro","gold"]
-			, ["Hoboyo#1752","gold"]
-			, ["Rodr1c#1896","gold"]
-			, ["ꃳ꒒꒤ꋪ#6807","gold"]
-			, ["DrPepperMan#6686","gold"]
-			, ["PogChong2#6885","gold"]
-			, ["Guff#3659","gold"]
-			, ["Shelk#2941","gold"]
-			, ["redhiveacc#5406","gold"]
-			, ["NerdDrummerBoi","gold"]
-			, ["PooDilly#8488","gold"]
-			, ["3706#0001","gold"]
-			, ["ツ Ⓙ ⓤ ⓢ ⓣ ⓘ ⓝ","gold"]
-			, ["chloeshih#0001","gold"]
-			, ["tim57#2100","gold"])
-		contributors.Push(["Anonymous 1","gold"]
-			, ["Anonymous 2","gold"]
-			, ["Anonymous 3","gold"]
-			, ["Anonymous 4","gold"]
-			, ["Anonymous 5","gold"]
-			, ["Anonymous 6","gold"]
-			, ["Anonymous 7","gold"]
-			, ["diegotropolis#3525","blue"]
-			, ["vader#0475","blue"]
-			, ["tappi#4538","blue"]
-			, ["Usowowo#5225","blue"]
-			, ["ArtieArty#0484","blue"]
-			, ["gfc#0001","blue"]
-			, ["blastin#2461","blue"]
-			, ["Zecroia#5089","blue"]
-			, ["thestarmacker#6779","blue"]
-			, ["uglycar#6816","blue"]
-			, ["weather#2333","blue"]
-			, ["Dyllian#4291","blue"]
-			, ["chase#9999","blue"]
-			, ["Bocon#0001","blue"]
-			, ["Xav#0471","blue"]
-			, ["scooba#2243","blue"]
-			, ["ninju#0001","blue"])
-		contributors.Push(["hfpint01#1413","blue"]
-			, ["Rocco#1281","blue"]
-			, ["wxxmlz#6969","blue"]
-			, ["H4rmly#6624","blue"]
-			, ["craz#5714","blue"]
-			, ["Derpytoby#1520","blue"]
-			, ["Heyee#6624","blue"]
-			, ["Zip#1313","blue"]
-			, ["nikiPOW3#8874","blue"]
-			, ["T-ℝex♛#0325","blue"]
-			, ["Memoryless#3001","blue"]
-			, ["Fiva.#8959","blue"]
-			, ["KrazyBro#6300","blue"]
-			, ["Rob..#5790","blue"]
-			, ["DrFluuf#2302","blue"]
-			, ["knei#5537","blue"]
-			, ["IMPERIAL745#6193","blue"]
-			, ["BupMaster#3145","blue"]
-			, ["NotACircle#5663","gold"]
-			, ["michaelbsss#1117","gold"]
-			, ["! Tack#0001","gold"]
-			, ["chuudidnothingwrong","gold"])
+		try
+		{
+			wr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+			wr.Open("GET", "https://raw.githubusercontent.com/NatroTeam/.github/main/profile/data/contributors.txt", 1)
+			wr.SetRequestHeader("accept", "application/vnd.github.v3.raw")
+			wr.Send()
+			wr.WaitForResponse()
+			contributors := StrSplit(wr.ResponseText, "`n", " `t")
+		}
+		catch
+			contributors := ["Error while loading,red", "contributors!,red", "", "Make sure you have,red", "a working internet,red", "connection and then,red", "reload the macro.,red"]
 
 		pBM := Gdip_CreateBitmap(244,212)
 		G := Gdip_GraphicsFromImage(pBM)
@@ -7379,13 +7250,13 @@ nm_ContributorsImage(page:=1){
 				Gdip_DeleteBrush(pBrush)
 			}
 
-			colors := (v[2] = "blue") ? [0xff83c6e2, 0xff2779d8, 0xff83c6e2] : [0xfff0ca8f, 0xffd48d22, 0xfff0ca8f]
+			name := Trim(SubStr(v, 1, (pos := InStr(v, ",", , 0))-1)), color := Trim(SubStr(v, pos+1))
 			x := (Mod(k-1, 24) > 11) ? 124 : 4, y := 48+Mod(k-1, 12)*13
-			pos := Gdip_TextToGraphics(G, v[1], "s11 x" x " y0 cff000000", "Tahoma", , , 1)
+			pos := Gdip_TextToGraphics(G, name, "s11 x" x " y0 cff000000", "Tahoma", , , 1)
 			pBrush := Gdip_CreateLinearGrBrushFromRect(x, y+1, SubStr(pos, InStr(pos, "|", , , 2)+1, InStr(pos, "|", , , 3)-InStr(pos, "|", , , 2)-1), 12, 0x00000000, 0x00000000, 2)
-			Gdip_SetLinearGrBrushPresetBlend(pBrush, [0.0, 0.5, 1], colors)
+			Gdip_SetLinearGrBrushPresetBlend(pBrush, [0.0, 0.5, 1], colorArr[colorArr.HasKey(color) ? color : "gold"].Clone())
 			pPen := Gdip_CreatePenFromBrush(pBrush,1)
-			Gdip_DrawOrientedString(G, v[1], "Tahoma", 11, 0, x, y, 130, 10, 0, pBrush, pPen)
+			Gdip_DrawOrientedString(G, name, "Tahoma", 11, 0, x, y, 130, 10, 0, pBrush, pPen)
 			Gdip_DeletePen(pPen), Gdip_DeleteBrush(pBrush)
 		}
 		Gdip_DeleteGraphics(G)
