@@ -97,18 +97,18 @@ gui ptimers:add, Text, x387 y86 w113 h2 0x7
 gui ptimers:add, Text,x390 y90 +left +BackgroundTrans,Transparency
 Gui ptimers:Add, Text, x469 y90 w29 h14 +Center
 Gui ptimers:Add, updown, Range0-70 vtimerGuiTransparency gsetTimerGuiTransparency, %TimerGuiTransparency%
-Gui, ptimers:Add, Button, x2 y76 w40 h15 hwndhReady1 gba_resetPlanterTimer, Ready
-Gui, ptimers:Add, Button, x88 y76 w40 h15 hwndhReady2 gba_resetPlanterTimer, Ready
-Gui, ptimers:Add, Button, x174 y76 w40 h15 hwndhReady3 gba_resetPlanterTimer, Ready
-Gui, ptimers:Add, Button, x44 y76 w40 h15 hwndhClear1 gba_setPlanterData, Add
-Gui, ptimers:Add, Button, x130 y76 w40 h15 hwndhClear2 gba_setPlanterData, Add
-Gui, ptimers:Add, Button, x216 y76 w40 h15 hwndhClear3 gba_setPlanterData, Add
-Gui, ptimers:Add, Button, x2 y92 w40 h15 hwndhSubHour1 gba_setPlanterTimer, -1HR
-Gui, ptimers:Add, Button, x88 y92 w40 h15 hwndhSubHour2 gba_setPlanterTimer, -1HR
-Gui, ptimers:Add, Button, x174 y92 w40 h15 hwndhSubHour3 gba_setPlanterTimer, -1HR
-Gui, ptimers:Add, Button, x44 y92 w40 h15 hwndhAddHour1 gba_setPlanterTimer, +1HR
-Gui, ptimers:Add, Button, x130 y92 w40 h15 hwndhAddHour2 gba_setPlanterTimer, +1HR
-Gui, ptimers:Add, Button, x216 y92 w40 h15 hwndhAddHour3 gba_setPlanterTimer, +1HR
+Gui, ptimers:Add, Button, x1 y76 w42 h15 hwndhReady1 gba_resetPlanterTimer, Ready
+Gui, ptimers:Add, Button, xp+86 y76 wp h15 hwndhReady2 gba_resetPlanterTimer, Ready
+Gui, ptimers:Add, Button, xp+86 y76 wp h15 hwndhReady3 gba_resetPlanterTimer, Ready
+Gui, ptimers:Add, Button, x43 y76 wp h15 hwndhClear1 gba_setPlanterData, Add
+Gui, ptimers:Add, Button, xp+86 y76 wp h15 hwndhClear2 gba_setPlanterData, Add
+Gui, ptimers:Add, Button, xp+86 y76 wp h15 hwndhClear3 gba_setPlanterData, Add
+Gui, ptimers:Add, Button, x2 y92 wp h15 hwndhSubHour1 gba_setPlanterTimer, -1HR
+Gui, ptimers:Add, Button, xp+86 y92 wp h15 hwndhSubHour2 gba_setPlanterTimer, -1HR
+Gui, ptimers:Add, Button, xp+86 y92 wp h15 hwndhSubHour3 gba_setPlanterTimer, -1HR
+Gui, ptimers:Add, Button, x43 y92 wp h15 hwndhAddHour1 gba_setPlanterTimer, +1HR
+Gui, ptimers:Add, Button, xp+86 y92 wp h15 hwndhAddHour2 gba_setPlanterTimer, +1HR
+Gui, ptimers:Add, Button, xp+86 y92 wp h15 hwndhAddHour3 gba_setPlanterTimer, +1HR
 gui ptimers:add, text,x388 y73 w112 +center +BackgroundTrans vdayOrNight,Day Detected
 gui, ptimers:add, text,x391 y2 w110 h60 vstatus +center +BackgroundTrans,Status:
 gui, ptimers:add, text,x392 y13 w104 h56 vpstatus +left +BackgroundTrans,unknown
