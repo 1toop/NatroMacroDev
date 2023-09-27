@@ -93,6 +93,10 @@ If (!FileExist("settings")) ; make sure the settings folder exists
 VersionID := "0.9.5"
 currentWalk := {"pid":"", "name":""} ; stores "pid" (script process ID) and "name" (pattern/movement name)
 
+;initial load warnings
+if (A_ScreenDPI*100//96 != 100)
+	msgbox, 0x1030, WARNING!!, % "Your Display Scale seems to be a value other than 100`%. This means the macro will NOT work correctly!`n`nTo change this, right click on your Desktop -> Click 'Display Settings' -> Under 'Scale & Layout', set Scale to 100`% -> Close and Restart Roblox before starting the macro.", 60
+
 DetectHiddenWindows, On
 lp_PID := nm_LoadingProgress()
 PostMessage, 0x5555, 0, 0, , ahk_pid %lp_PID%
@@ -3103,10 +3107,6 @@ PostMessage, 0x5555, 95, 0, , ahk_pid %lp_PID%
 if (BuffDetectReset = 1)
 	nm_AdvancedGUI()
 PostMessage, 0x5555, 100, 0, , ahk_pid %lp_PID%
-
-;initial load warnings
-if (A_ScreenDPI*100//96 != 100)
-	msgbox, 0x1030, WARNING!!, % "Your Display Scale seems to be a value other than 100`%. This means the macro will NOT work correctly!`n`nTo change this, right click on your Desktop -> Click 'Display Settings' -> Under 'Scale & Layout', set Scale to 100`% -> Close and Restart Roblox before starting the macro.", 60
 
 WinClose, ahk_pid %lp_PID% ahk_class AutoHotkey
 DetectHiddenWindows, Off
