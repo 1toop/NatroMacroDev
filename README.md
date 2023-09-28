@@ -1,3 +1,17 @@
+<!--
+Thanks for downloading Natro Macro!
+
+To run the macro, just extract the folder and open 'natro_macro.exe'!
+
+If you need help or just want to discuss, join our Discord at .gg/natromacro!
+
+IMPORTANT: Make sure you are only downloading from an official source!
+The only official sources are our GitHub page (https://github.com/NatroTeam/NatroMacro)
+and our Discord server (https://discord.gg/natromacro)
+
+>>> IGNORE BELOW THIS LINE <<<
+-->
+
 <div align="center">
 
 <!-- logo banner -->
