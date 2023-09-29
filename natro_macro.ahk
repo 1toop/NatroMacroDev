@@ -1989,7 +1989,7 @@ Gui, Font, w700
 Gui, Add, Text, x15 y28 w225 +wrap +backgroundtrans cWhite, Development
 Gui, Add, Text, x261 y28 w225 +wrap +backgroundtrans cWhite, Contributors
 Gui, Font, s8 cDefault Norm, Tahoma
-Gui, Add, Text, x18 y43 w225 +wrap +backgroundtrans cWhite, Special Thanks for your contributions in the development and testing of this project!
+Gui, Add, Text, x18 y43 w225 +wrap +backgroundtrans cWhite, Special Thanks to the developers and testers!
 Gui, Add, Text, x264 y43 w180 +wrap +backgroundtrans cWhite, Thank you for your donations and contributions to this project!
 Gui, Add, Button, x440 y46 w18 h18 hwndhcleft gnm_ContributorsPageButton Disabled, <
 Gui, Add, Button, % "x464 y46 w18 h18 hwndhcright gnm_ContributorsPageButton Disabled" page_end, >
@@ -7215,7 +7215,8 @@ nm_ContributorsImage(page:=1){
 			, ["phucduc#9444",0xffffde48]
 			, ["anniespony",0xff0096ff]
 			, ["idote",0xfff47fff]
-			, ["axetar",0xffec8fd0]]
+			, ["axetar",0xffec8fd0]
+			, ["mahirishere",0xffa3bded]]
 
 		try
 		{
@@ -7238,30 +7239,30 @@ nm_ContributorsImage(page:=1){
 		Gdip_FillRoundedRectangle(G, pBrush, 0, 0, 242, 210, 5)
 		Gdip_DeleteBrush(pBrush)
 
-		pos := Gdip_TextToGraphics(G, "Dev Team", "s12 x6 y48 Bold cff000000", "Tahoma", , , 1)
-		pBrush := Gdip_CreateLinearGrBrushFromRect(6, 48, SubStr(pos, InStr(pos, "|", , , 2)+1, InStr(pos, "|", , , 3)-InStr(pos, "|", , , 2)-1)+2, 14, 0x00000000, 0x00000000, 2)
+		pos := Gdip_TextToGraphics(G, "Dev Team", "s12 x6 y35 Bold cff000000", "Tahoma", , , 1)
+		pBrush := Gdip_CreateLinearGrBrushFromRect(6, 35, SubStr(pos, InStr(pos, "|", , , 2)+1, InStr(pos, "|", , , 3)-InStr(pos, "|", , , 2)-1)+2, 14, 0x00000000, 0x00000000, 2)
 		Gdip_SetLinearGrBrushPresetBlend(pBrush, [0.0, 0.5, 1], [0xfff0ca8f, 0xffd48d22, 0xfff0ca8f])
-		Gdip_FillRoundedRectangle(G, pBrush, 6, 48, SubStr(pos, InStr(pos, "|", , , 2)+1, InStr(pos, "|", , , 3)-InStr(pos, "|", , , 2)-1), 14, 4)
+		Gdip_FillRoundedRectangle(G, pBrush, 6, 35, SubStr(pos, InStr(pos, "|", , , 2)+1, InStr(pos, "|", , , 3)-InStr(pos, "|", , , 2)-1), 14, 4)
 		Gdip_DeleteBrush(pBrush)
-		Gdip_TextToGraphics(G, "Dev Team", "s12 x7 y48 r4 Bold cff000000", "Tahoma")
+		Gdip_TextToGraphics(G, "Dev Team", "s12 x7 y35 r4 Bold cff000000", "Tahoma")
 
-		pos := Gdip_TextToGraphics(G, "Testers", "s12 x115 y48 Bold cff000000", "Tahoma", , , 1)
-		pBrush := Gdip_CreateLinearGrBrushFromRect(115, 48, SubStr(pos, InStr(pos, "|", , , 2)+1, InStr(pos, "|", , , 3)-InStr(pos, "|", , , 2)-1), 14, 0x00000000, 0x00000000, 2)
+		pos := Gdip_TextToGraphics(G, "Testers", "s12 x126 y35 Bold cff000000", "Tahoma", , , 1)
+		pBrush := Gdip_CreateLinearGrBrushFromRect(126, 35, SubStr(pos, InStr(pos, "|", , , 2)+1, InStr(pos, "|", , , 3)-InStr(pos, "|", , , 2)-1), 14, 0x00000000, 0x00000000, 2)
 		Gdip_SetLinearGrBrushPresetBlend(pBrush, [0.0, 0.5, 1], [0xfff0ca8f, 0xffd48d22, 0xfff0ca8f])
-		Gdip_FillRoundedRectangle(G, pBrush, 115, 48, SubStr(pos, InStr(pos, "|", , , 2)+1, InStr(pos, "|", , , 3)-InStr(pos, "|", , , 2)-1)+1, 14, 4)
+		Gdip_FillRoundedRectangle(G, pBrush, 126, 35, SubStr(pos, InStr(pos, "|", , , 2)+1, InStr(pos, "|", , , 3)-InStr(pos, "|", , , 2)-1)+1, 14, 4)
 		Gdip_DeleteBrush(pBrush)
-		Gdip_TextToGraphics(G, "Testers", "s12 x116 y48 r4 Bold cff000000", "Tahoma")
+		Gdip_TextToGraphics(G, "Testers", "s12 x127 y35 r4 Bold cff000000", "Tahoma")
 
 		for k,v in devs
 		{
-			pBrush := Gdip_CreateLinearGrBrushFromRect(0, 64+(k-1)*12, 242, 12, 0xff000000 + (Min(Round(Gdip_RFromARGB(v[2])*1.2), 255) << 16) + (Min(Round(Gdip_GFromARGB(v[2])*1.2), 255) << 8) + Min(Round(Gdip_BFromARGB(v[2])*1,2), 255), 0xff000000 + (Min(Round(Gdip_RFromARGB(v[2])*0.9), 255) << 16) + (Min(Round(Gdip_GFromARGB(v[2])*0.9), 255) << 8) + Min(Round(Gdip_BFromARGB(v[2])*0.9), 255)), pPen := Gdip_CreatePenFromBrush(pBrush,1)
-			Gdip_DrawOrientedString(G, v[1], "Tahoma", 11, 0, 5, 63+(k-1)*12, 130, 10, 0, pBrush, pPen)
+			pBrush := Gdip_CreateLinearGrBrushFromRect(0, 52+(k-1)*12, 242, 12, 0xff000000 + (Min(Round(Gdip_RFromARGB(v[2])*1.2), 255) << 16) + (Min(Round(Gdip_GFromARGB(v[2])*1.2), 255) << 8) + Min(Round(Gdip_BFromARGB(v[2])*1,2), 255), 0xff000000 + (Min(Round(Gdip_RFromARGB(v[2])*0.9), 255) << 16) + (Min(Round(Gdip_GFromARGB(v[2])*0.9), 255) << 8) + Min(Round(Gdip_BFromARGB(v[2])*0.9), 255)), pPen := Gdip_CreatePenFromBrush(pBrush,1)
+			Gdip_DrawOrientedString(G, v[1], "Tahoma", 11, 0, 5, 51+(k-1)*12, 130, 10, 0, pBrush, pPen)
 			Gdip_DeletePen(pPen), Gdip_DeleteBrush(pBrush)
 		}
 		for k,v in testers
 		{
-			pBrush := Gdip_CreateLinearGrBrushFromRect(0, 64+(k-1)*12, 242, 12, 0xff000000 + (Min(Round(Gdip_RFromARGB(v[2])*1.2), 255) << 16) + (Min(Round(Gdip_GFromARGB(v[2])*1.2), 255) << 8) + Min(Round(Gdip_BFromARGB(v[2])*1.2), 255), 0xff000000 + (Min(Round(Gdip_RFromARGB(v[2])*0.9), 255) << 16) + (Min(Round(Gdip_GFromARGB(v[2])*0.9), 255) << 8) + Min(Round(Gdip_BFromARGB(v[2])*0.9), 255)), pPen := Gdip_CreatePenFromBrush(pBrush,1)
-			Gdip_DrawOrientedString(G, v[1], "Tahoma", 11, 0, 114, 63+(k-1)*12, 130, 10, 0, pBrush, pPen)
+			pBrush := Gdip_CreateLinearGrBrushFromRect(0, 52+(k-1)*12, 242, 12, 0xff000000 + (Min(Round(Gdip_RFromARGB(v[2])*1.2), 255) << 16) + (Min(Round(Gdip_GFromARGB(v[2])*1.2), 255) << 8) + Min(Round(Gdip_BFromARGB(v[2])*1.2), 255), 0xff000000 + (Min(Round(Gdip_RFromARGB(v[2])*0.9), 255) << 16) + (Min(Round(Gdip_GFromARGB(v[2])*0.9), 255) << 8) + Min(Round(Gdip_BFromARGB(v[2])*0.9), 255)), pPen := Gdip_CreatePenFromBrush(pBrush,1)
+			Gdip_DrawOrientedString(G, v[1], "Tahoma", 11, 0, 125, 51+(k-1)*12, 130, 10, 0, pBrush, pPen)
 			Gdip_DeletePen(pPen), Gdip_DeleteBrush(pBrush)
 		}
 
