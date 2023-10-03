@@ -3228,7 +3228,7 @@ nm_LoadingProgress(){
 	#NoEnv
 	#NoTrayIcon
 	#Requires AutoHotkey v1.1.36.01+
-	#Include %A_WorkingDir%\lib\Gdip_All.ahk
+	#Include %A_ScriptDir%\lib\Gdip_All.ahk
 	CoordMode, Mouse, Screen
 
 	pToken := Gdip_Startup()
@@ -3513,7 +3513,7 @@ nm_testButton(){ ;~~ lines 3464 and 3465 have the same change as 14156
 	OnExit(""""ExitFunc"""")
 	CoordMode, Mouse, Screen
 
-	#Include %A_WorkingDir%\lib
+	#Include %A_ScriptDir%\lib
 	#Include Gdip_All.ahk
 	#Include Gdip_ImageSearch.ahk
 	#Include HyperSleep.ahk
@@ -6398,7 +6398,7 @@ nm_WebhookGUI(){
 	#SingleInstance Force
 	#Requires AutoHotkey v1.1.36.01+
 	#MaxThreads 255
-	#Include %A_WorkingDir%
+	#Include %A_ScriptDir%
 	#Include lib\Gdip_All.ahk
 	#Include lib\Gdip_ImageSearch.ahk
 
@@ -7633,239 +7633,6 @@ nm_TabSettingsUnLock(){
 	GuiControl, enable, ReconnectMessage
 	GuiControl, enable, PublicFallback
 }
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Optical Character Recognition (OCR) functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-HBitmapFromScreen(X, Y, W, H) {
-   HDC := DllCall("GetDC", "Ptr", 0, "UPtr")
-   HBM := DllCall("CreateCompatibleBitmap", "Ptr", HDC, "Int", W, "Int", H, "UPtr")
-   PDC := DllCall("CreateCompatibleDC", "Ptr", HDC, "UPtr")
-   DllCall("SelectObject", "Ptr", PDC, "Ptr", HBM)
-   DllCall("BitBlt", "Ptr", PDC, "Int", 0, "Int", 0, "Int", W, "Int", H
-                   , "Ptr", HDC, "Int", X, "Int", Y, "UInt", 0x00CC0020)
-   DllCall("DeleteDC", "Ptr", PDC)
-   DllCall("ReleaseDC", "Ptr", 0, "Ptr", HDC)
-   Return HBM
-}
-HBitmapToRandomAccessStream(hBitmap) {
-   static IID_IRandomAccessStream := "{905A0FE1-BC53-11DF-8C49-001E4FC686DA}"
-        , IID_IPicture            := "{7BF80980-BF32-101A-8BBB-00AA00300CAB}"
-        , PICTYPE_BITMAP := 1
-        , BSOS_DEFAULT   := 0
-
-   DllCall("Ole32\CreateStreamOnHGlobal", "Ptr", 0, "UInt", true, "PtrP", pIStream, "UInt")
-
-   VarSetCapacity(PICTDESC, sz := 8 + A_PtrSize*2, 0)
-   NumPut(sz, PICTDESC)
-   NumPut(PICTYPE_BITMAP, PICTDESC, 4)
-   NumPut(hBitmap, PICTDESC, 8)
-   riid := CLSIDFromString(IID_IPicture, GUID1)
-   DllCall("OleAut32\OleCreatePictureIndirect", "Ptr", &PICTDESC, "Ptr", riid, "UInt", false, "PtrP", pIPicture, "UInt")
-   ; IPicture::SaveAsFile
-   DllCall(NumGet(NumGet(pIPicture+0) + A_PtrSize*15), "Ptr", pIPicture, "Ptr", pIStream, "UInt", true, "UIntP", size, "UInt")
-   riid := CLSIDFromString(IID_IRandomAccessStream, GUID2)
-   DllCall("ShCore\CreateRandomAccessStreamOverStream", "Ptr", pIStream, "UInt", BSOS_DEFAULT, "Ptr", riid, "PtrP", pIRandomAccessStream, "UInt")
-   ObjRelease(pIPicture)
-   ObjRelease(pIStream)
-   Return pIRandomAccessStream
-}
-ocr(file, lang := "FirstFromAvailableLanguages")
-{
-   static OcrEngineStatics, OcrEngine, MaxDimension, LanguageFactory, Language, CurrentLanguage, BitmapDecoderStatics, GlobalizationPreferencesStatics
-   if (OcrEngineStatics = "")
-   {
-      CreateClass("Windows.Globalization.Language", ILanguageFactory := "{9B0252AC-0C27-44F8-B792-9793FB66C63E}", LanguageFactory)
-      CreateClass("Windows.Graphics.Imaging.BitmapDecoder", IBitmapDecoderStatics := "{438CCB26-BCEF-4E95-BAD6-23A822E58D01}", BitmapDecoderStatics)
-      CreateClass("Windows.Media.Ocr.OcrEngine", IOcrEngineStatics := "{5BFFA85A-3384-3540-9940-699120D428A8}", OcrEngineStatics)
-      DllCall(NumGet(NumGet(OcrEngineStatics+0)+6*A_PtrSize), "ptr", OcrEngineStatics, "uint*", MaxDimension)   ; MaxImageDimension
-   }
-   if (file = "ShowAvailableLanguages")
-   {
-      if (GlobalizationPreferencesStatics = "")
-         CreateClass("Windows.System.UserProfile.GlobalizationPreferences", IGlobalizationPreferencesStatics := "{01BF4326-ED37-4E96-B0E9-C1340D1EA158}", GlobalizationPreferencesStatics)
-      DllCall(NumGet(NumGet(GlobalizationPreferencesStatics+0)+9*A_PtrSize), "ptr", GlobalizationPreferencesStatics, "ptr*", LanguageList)   ; get_Languages
-      DllCall(NumGet(NumGet(LanguageList+0)+7*A_PtrSize), "ptr", LanguageList, "int*", count)   ; count
-      loop % count
-      {
-         DllCall(NumGet(NumGet(LanguageList+0)+6*A_PtrSize), "ptr", LanguageList, "int", A_Index-1, "ptr*", hString)   ; get_Item
-         DllCall(NumGet(NumGet(LanguageFactory+0)+6*A_PtrSize), "ptr", LanguageFactory, "ptr", hString, "ptr*", LanguageTest)   ; CreateLanguage
-         DllCall(NumGet(NumGet(OcrEngineStatics+0)+8*A_PtrSize), "ptr", OcrEngineStatics, "ptr", LanguageTest, "int*", bool)   ; IsLanguageSupported
-         if (bool = 1)
-         {
-            DllCall(NumGet(NumGet(LanguageTest+0)+6*A_PtrSize), "ptr", LanguageTest, "ptr*", hText)
-            buffer := DllCall("Combase.dll\WindowsGetStringRawBuffer", "ptr", hText, "uint*", length, "ptr")
-            text .= StrGet(buffer, "UTF-16") "`n"
-         }
-         ObjRelease(LanguageTest)
-      }
-      ObjRelease(LanguageList)
-      return text
-   }
-   if (lang != CurrentLanguage) or (lang = "FirstFromAvailableLanguages")
-   {
-      if (OcrEngine != "")
-      {
-         ObjRelease(OcrEngine)
-         if (CurrentLanguage != "FirstFromAvailableLanguages")
-            ObjRelease(Language)
-      }
-      if (lang = "FirstFromAvailableLanguages")
-         DllCall(NumGet(NumGet(OcrEngineStatics+0)+10*A_PtrSize), "ptr", OcrEngineStatics, "ptr*", OcrEngine)   ; TryCreateFromUserProfileLanguages
-      else
-      {
-         CreateHString(lang, hString)
-         DllCall(NumGet(NumGet(LanguageFactory+0)+6*A_PtrSize), "ptr", LanguageFactory, "ptr", hString, "ptr*", Language)   ; CreateLanguage
-         DeleteHString(hString)
-         DllCall(NumGet(NumGet(OcrEngineStatics+0)+9*A_PtrSize), "ptr", OcrEngineStatics, ptr, Language, "ptr*", OcrEngine)   ; TryCreateFromLanguage
-      }
-      if (OcrEngine = 0)
-      {
-         msgbox Can not use language "%lang%" for OCR, please install language pack.
-         ExitApp
-      }
-      CurrentLanguage := lang
-   }
-   IRandomAccessStream := file
-   DllCall(NumGet(NumGet(BitmapDecoderStatics+0)+14*A_PtrSize), "ptr", BitmapDecoderStatics, "ptr", IRandomAccessStream, "ptr*", BitmapDecoder)   ; CreateAsync
-   WaitForAsync(BitmapDecoder)
-   BitmapFrame := ComObjQuery(BitmapDecoder, IBitmapFrame := "{72A49A1C-8081-438D-91BC-94ECFC8185C6}")
-   DllCall(NumGet(NumGet(BitmapFrame+0)+12*A_PtrSize), "ptr", BitmapFrame, "uint*", width)   ; get_PixelWidth
-   DllCall(NumGet(NumGet(BitmapFrame+0)+13*A_PtrSize), "ptr", BitmapFrame, "uint*", height)   ; get_PixelHeight
-   if (width > MaxDimension) or (height > MaxDimension)
-   {
-      msgbox Image is to big - %width%x%height%.`nIt should be maximum - %MaxDimension% pixels
-      ExitApp
-   }
-   BitmapFrameWithSoftwareBitmap := ComObjQuery(BitmapDecoder, IBitmapFrameWithSoftwareBitmap := "{FE287C9A-420C-4963-87AD-691436E08383}")
-   DllCall(NumGet(NumGet(BitmapFrameWithSoftwareBitmap+0)+6*A_PtrSize), "ptr", BitmapFrameWithSoftwareBitmap, "ptr*", SoftwareBitmap)   ; GetSoftwareBitmapAsync
-   WaitForAsync(SoftwareBitmap)
-   DllCall(NumGet(NumGet(OcrEngine+0)+6*A_PtrSize), "ptr", OcrEngine, ptr, SoftwareBitmap, "ptr*", OcrResult)   ; RecognizeAsync
-   WaitForAsync(OcrResult)
-   DllCall(NumGet(NumGet(OcrResult+0)+6*A_PtrSize), "ptr", OcrResult, "ptr*", LinesList)   ; get_Lines
-   DllCall(NumGet(NumGet(LinesList+0)+7*A_PtrSize), "ptr", LinesList, "int*", count)   ; count
-   loop % count
-   {
-      DllCall(NumGet(NumGet(LinesList+0)+6*A_PtrSize), "ptr", LinesList, "int", A_Index-1, "ptr*", OcrLine)
-      DllCall(NumGet(NumGet(OcrLine+0)+7*A_PtrSize), "ptr", OcrLine, "ptr*", hText)
-      buffer := DllCall("Combase.dll\WindowsGetStringRawBuffer", "ptr", hText, "uint*", length, "ptr")
-      text .= StrGet(buffer, "UTF-16") "`n"
-      ObjRelease(OcrLine)
-   }
-   Close := ComObjQuery(IRandomAccessStream, IClosable := "{30D5A829-7FA4-4026-83BB-D75BAE4EA99E}")
-   DllCall(NumGet(NumGet(Close+0)+6*A_PtrSize), "ptr", Close)   ; Close
-   ObjRelease(Close)
-   Close := ComObjQuery(SoftwareBitmap, IClosable := "{30D5A829-7FA4-4026-83BB-D75BAE4EA99E}")
-   DllCall(NumGet(NumGet(Close+0)+6*A_PtrSize), "ptr", Close)   ; Close
-   ObjRelease(Close)
-   ObjRelease(IRandomAccessStream)
-   ObjRelease(BitmapDecoder)
-   ObjRelease(BitmapFrame)
-   ObjRelease(BitmapFrameWithSoftwareBitmap)
-   ObjRelease(SoftwareBitmap)
-   ObjRelease(OcrResult)
-   ObjRelease(LinesList)
-   return text
-}
-CLSIDFromString(IID, ByRef CLSID) {
-   VarSetCapacity(CLSID, 16, 0)
-   if res := DllCall("ole32\CLSIDFromString", "WStr", IID, "Ptr", &CLSID, "UInt")
-      throw Exception("CLSIDFromString failed. Error: " . Format("{:#x}", res))
-   Return &CLSID
-}
-CreateClass(string, interface, ByRef Class)
-{
-   CreateHString(string, hString)
-   VarSetCapacity(GUID, 16)
-   DllCall("ole32\CLSIDFromString", "wstr", interface, "ptr", &GUID)
-   result := DllCall("Combase.dll\RoGetActivationFactory", "ptr", hString, "ptr", &GUID, "ptr*", Class)
-   if (result != 0)
-   {
-      if (result = 0x80004002)
-         msgbox No such interface supported
-      else if (result = 0x80040154)
-         msgbox Class not registered
-      else
-         msgbox error: %result%
-      ExitApp
-   }
-   DeleteHString(hString)
-}
-CreateHString(string, ByRef hString)
-{
-    DllCall("Combase.dll\WindowsCreateString", "wstr", string, "uint", StrLen(string), "ptr*", hString)
-}
-DeleteHString(hString)
-{
-   DllCall("Combase.dll\WindowsDeleteString", "ptr", hString)
-}
-WaitForAsync(ByRef Object)
-{
-   AsyncInfo := ComObjQuery(Object, IAsyncInfo := "{00000036-0000-0000-C000-000000000046}")
-   loop
-   {
-      DllCall(NumGet(NumGet(AsyncInfo+0)+7*A_PtrSize), "ptr", AsyncInfo, "uint*", status)   ; IAsyncInfo.Status
-      if (status != 0)
-      {
-         if (status != 1)
-         {
-            DllCall(NumGet(NumGet(AsyncInfo+0)+8*A_PtrSize), "ptr", AsyncInfo, "uint*", ErrorCode)   ; IAsyncInfo.ErrorCode
-            msgbox AsyncInfo status error: %ErrorCode%
-            ExitApp
-         }
-         ObjRelease(AsyncInfo)
-         break
-      }
-      sleep 10
-   }
-   DllCall(NumGet(NumGet(Object+0)+8*A_PtrSize), "ptr", Object, "ptr*", ObjectResult)   ; GetResults
-   ObjRelease(Object)
-   Object := ObjectResult
-}
-;OCRMutation(ByRef amount, ByRef stat, x1, y1, w1, h1)
-ba_OCRStringExists(findString, aim:="full")
-{
-	WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " GetRobloxHWND())
-    xi := 0
-    yi := 0
-	ww := windowWidth
-	wh := windowHeight
-    if (aim!="full"){
-        if (aim = "low")
-			yi := windowHeight / 2
-        if (aim = "high")
-            wh := windowHeight / 2
-		if (aim = "buff")
-            wh := 150
-		if (aim = "left")
-			ww := windowWidth / 2
-		if (aim = "right")
-			xi := windowWidth / 2
-		if (aim = "center") {
-			xi := windowWidth / 4
-			yi := windowHeight / 4
-			ww := xi*3
-			wh := yi*3
-		}
-        if (aim = "lowright") {
-            yi := windowHeight / 2
-            xi := windowWidth / 2
-        }
-		if (aim = "highright") {
-            xi := windowWidth / 2
-			wh := windowHeight / 2
-        }
-    }
-	hBitmap := HBitmapFromScreen(xi, yi, ww, wh)
-	pIRandomAccessStream := HBitmapToRandomAccessStream(hBitmap)
-	DllCall("DeleteObject", "Ptr", hBitmap)
-	ocrtext := StrReplace(StrReplace(ocr(pIRandomAccessStream, "en"), "`n"), " ")
-	;msgbox %ocrtext%
-	if(InStr(ocrtext, findString)) {
-		return 1
-	} else {
-		return 0
-	}
-}
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -8529,69 +8296,6 @@ nm_findHiveSlot(){
 	}
 
 	return HiveConfirmed
-}
-nm_walkTo(location){
-	global
-	static paths := {}, SetHiveSlot, SetHiveBees
-
-	nm_setShiftLock(0)
-
-	if ((paths.Count() = 0) || (SetHiveSlot != HiveSlot) || (SetHiveBees != HiveBees))
-	{
-		#Include %A_ScriptDir%\..\paths
-		#Include wt-bamboo.ahk
-		#Include wt-blueflower.ahk
-		#Include wt-cactus.ahk
-		#Include wt-clover.ahk
-		#Include wt-coconut.ahk
-		#Include wt-dandelion.ahk
-		#Include wt-mountaintop.ahk
-		#Include wt-mushroom.ahk
-		#Include wt-pepper.ahk
-		#Include wt-pinetree.ahk
-		#Include wt-pineapple.ahk
-		#Include wt-pumpkin.ahk
-		#Include wt-rose.ahk
-		#Include wt-spider.ahk
-		#Include wt-strawberry.ahk
-		#Include wt-stump.ahk
-		#Include wt-sunflower.ahk
-		SetHiveSlot := HiveSlot, SetHiveBees := HiveBees
-	}
-
-	HiveConfirmed:=0
-
-	InStr(paths[location], "gotoramp") ? nm_gotoRamp()
-	InStr(paths[location], "gotocannon") ? nm_gotoCannon()
-
-	nm_createWalk(paths[location])
-	KeyWait, F14, D T5 L
-	KeyWait, F14, T120 L
-	nm_endWalk()
-}
-nm_gotoBooster(booster){
-	global
-	static paths := {}, SetMoveMethod, SetHiveSlot, SetHiveBees
-
-	nm_setShiftLock(0)
-
-	if ((paths.Count() = 0) || (SetMoveMethod != MoveMethod) || (SetHiveSlot != HiveSlot) || (SetHiveBees != HiveBees))
-	{
-		#Include gtb-red.ahk
-		#Include gtb-blue.ahk
-		#Include gtb-mountain.ahk
-		SetMoveMethod := MoveMethod, SetHiveSlot := HiveSlot, SetHiveBees := HiveBees
-	}
-
-	HiveConfirmed:=0
-
-	InStr(paths[booster], "gotoramp") ? nm_gotoRamp()
-	InStr(paths[booster], "gotocannon") ? nm_gotoCannon()
-
-	nm_createWalk(paths[booster])
-	KeyWait, F14, D T5 L
-	KeyWait, F14, T120 L
-	nm_endWalk()
 }
 nm_toBooster(location){
 	global FwdKey, LeftKey, BackKey, RightKey, RotLeft, RotRight, KeyDelay, MoveSpeedNum, MoveMethod, SC_E
@@ -9500,54 +9204,6 @@ nm_Collect(){
 			nm_setStatus("Reporting", "Daily Honey LB`nDate: " DateStr)
 			LastHoneyLB:=nowUnix()
 		}
-	}
-}
-nm_gotoCollect(location, waitEnd := 1){
-	global
-	static paths := {}, SetMoveMethod, SetHiveSlot, SetHiveBees
-
-	nm_setShiftLock(0)
-
-	if ((paths.Count() = 0) || (SetMoveMethod != MoveMethod) || (SetHiveSlot != HiveSlot) || (SetHiveBees != HiveBees))
-	{
-		#Include gtc-clock.ahk
-		#Include gtc-antpass.ahk
-		#Include gtc-robopass.ahk
-		#Include gtc-honeydis.ahk
-		#Include gtc-treatdis.ahk
-		#Include gtc-blueberrydis.ahk
-		#Include gtc-strawberrydis.ahk
-		#Include gtc-coconutdis.ahk
-		#Include gtc-gluedis.ahk
-		#Include gtc-royaljellydis.ahk
-		;beesmas
-		#Include gtc-stockings.ahk
-		#Include gtc-wreath.ahk
-		#Include gtc-feast.ahk
-		#Include gtc-gingerbread.ahk
-		#Include gtc-snowmachine.ahk
-		#Include gtc-candles.ahk
-		#Include gtc-samovar.ahk
-		#Include gtc-lidart.ahk
-		#Include gtc-gummybeacon.ahk
-		#Include gtc-rbpdelevel.ahk
-		;other
-		#Include gtc-honeystorm.ahk
-		#Include gtc-honeylb.ahk
-		SetMoveMethod := MoveMethod, SetHiveSlot := HiveSlot, SetHiveBees := HiveBees
-	}
-
-	HiveConfirmed:=0
-
-	InStr(paths[location], "gotoramp") ? nm_gotoRamp()
-	InStr(paths[location], "gotocannon") ? nm_gotoCannon()
-
-	nm_createWalk(paths[location])
-	KeyWait, F14, D T5 L
-	if waitEnd
-	{
-		KeyWait, F14, T120 L
-		nm_endWalk()
 	}
 }
 nm_Bugrun(){
@@ -12102,126 +11758,6 @@ nm_Mondo(){
 		IniWrite, %LastMondoBuff%, settings\nm_config.ini, Collect, LastMondoBuff
 	}
 }
-nm_cannonTo(location){
-	global
-	static paths := {}, SetHiveSlot, SetHiveBees
-
-	nm_setShiftLock(0)
-
-	if ((paths.Count() = 0) || (SetHiveSlot != HiveSlot) || (SetHiveBees != HiveBees))
-	{
-		#Include ct-bamboo.ahk
-		#Include ct-blueflower.ahk
-		#Include ct-cactus.ahk
-		#Include ct-clover.ahk
-		#Include ct-coconut.ahk
-		#Include ct-dandelion.ahk
-		#Include ct-mountaintop.ahk
-		#Include ct-mushroom.ahk
-		#Include ct-pepper.ahk
-		#Include ct-pinetree.ahk
-		#Include ct-pineapple.ahk
-		#Include ct-pumpkin.ahk
-		#Include ct-rose.ahk
-		#Include ct-spider.ahk
-		#Include ct-strawberry.ahk
-		#Include ct-stump.ahk
-		#Include ct-sunflower.ahk
-		SetHiveSlot := HiveSlot, SetHiveBees := HiveBees
-	}
-
-	HiveConfirmed:=0
-
-	InStr(paths[location], "gotoramp") ? nm_gotoRamp()
-	InStr(paths[location], "gotocannon") ? nm_gotoCannon()
-
-	nm_createWalk(paths[location])
-	KeyWait, F14, D T5 L
-	KeyWait, F14, T60 L
-	nm_endWalk()
-}
-nm_gotoPlanter(location, waitEnd := 1){
-	global
-	static paths := {}, SetHiveSlot, SetHiveBees
-
-	nm_setShiftLock(0)
-
-	if ((paths.Count() = 0) || (SetHiveSlot != HiveSlot) || (SetHiveBees != HiveBees))
-	{
-		#Include gtp-bamboo.ahk
-		#Include gtp-blueflower.ahk
-		#Include gtp-cactus.ahk
-		#Include gtp-clover.ahk
-		#Include gtp-coconut.ahk
-		#Include gtp-dandelion.ahk
-		#Include gtp-mountaintop.ahk
-		#Include gtp-mushroom.ahk
-		#Include gtp-pepper.ahk
-		#Include gtp-pinetree.ahk
-		#Include gtp-pineapple.ahk
-		#Include gtp-pumpkin.ahk
-		#Include gtp-rose.ahk
-		#Include gtp-spider.ahk
-		#Include gtp-strawberry.ahk
-		#Include gtp-stump.ahk
-		#Include gtp-sunflower.ahk
-		SetHiveSlot := HiveSlot, SetHiveBees := HiveBees
-	}
-
-	HiveConfirmed:=0
-
-	InStr(paths[location], "gotoramp") ? nm_gotoRamp()
-	InStr(paths[location], "gotocannon") ? nm_gotoCannon()
-
-	nm_createWalk(paths[location])
-    KeyWait, F14, D T5 L
-	if WaitEnd
-	{
-		KeyWait, F14, T60 L
-		nm_endWalk()
-	}
-}
-nm_walkFrom(field:="none")
-{
-	global
-	static paths := {}, SetHiveSlot, SetHiveBees
-
-	nm_setShiftLock(0)
-
-	if ((paths.Count() = 0) || (SetHiveSlot != HiveSlot) || (SetHiveBees != HiveBees))
-	{
-		#Include wf-bamboo.ahk
-		#Include wf-blueflower.ahk
-		#Include wf-cactus.ahk
-		#Include wf-clover.ahk
-		#Include wf-coconut.ahk
-		#Include wf-dandelion.ahk
-		#Include wf-mountaintop.ahk
-		#Include wf-mushroom.ahk
-		#Include wf-pepper.ahk
-		#Include wf-pinetree.ahk
-		#Include wf-pineapple.ahk
-		#Include wf-pumpkin.ahk
-		#Include wf-rose.ahk
-		#Include wf-spider.ahk
-		#Include wf-strawberry.ahk
-		#Include wf-stump.ahk
-		#Include wf-sunflower.ahk
-		SetHiveSlot := HiveSlot, SetHiveBees := HiveBees
-	}
-
-	if !paths.HasKey(field)
-	{
-		msgbox walkFrom(): Invalid fieldname= %field%
-		return
-	}
-
-	nm_createWalk(paths[field])
-	KeyWait, F14, D T5 L
-	nm_setStatus("Traveling", "Hive")
-	KeyWait, F14, T60 L
-	nm_endWalk()
-}
 nm_GoGather(){
 	global youDied, VBState
 	global TCFBKey, AFCFBKey, TCLRKey, AFCLRKey, FwdKey, LeftKey, BackKey, RightKey, RotLeft, RotRight, SC_E, KeyDelay
@@ -13183,10 +12719,10 @@ nm_BitterberryFeeder()
 	#NoTrayIcon
 	#SingleInstance Force
 	#Requires AutoHotkey v1.1.36.01+
-	#Include %A_WorkingDir%\lib
+	#Include %A_ScriptDir%\lib
 	#Include Gdip_All.ahk
 	#Include Gdip_ImageSearch.ahk
-	#Include %A_WorkingDir%\submacros\shared\nm_misc.ahk
+	#Include %A_ScriptDir%\submacros\shared\nm_misc.ahk
 
 	CoordMode, Mouse, Screen
 	SetBatchLines -1
@@ -13332,10 +12868,10 @@ nm_BasicEggHatcher()
 	#NoTrayIcon
 	#SingleInstance Force
 	#Requires AutoHotkey v1.1.36.01+
-	#Include %A_WorkingDir%\lib
+	#Include %A_ScriptDir%\lib
 	#Include Gdip_All.ahk
 	#Include Gdip_ImageSearch.ahk
-	#Include %A_WorkingDir%\submacros\shared\nm_misc.ahk
+	#Include %A_ScriptDir%\submacros\shared\nm_misc.ahk
 
 	CoordMode, Mouse, Screen
 	SetBatchLines -1
@@ -14079,7 +13615,7 @@ nm_createWalk(movement, name:="") ; this function generates the 'walk' code and 
 		ListLines, Off
 		OnExit(""ExitFunc"")
 
-		#Include %A_WorkingDir%\lib
+		#Include %A_ScriptDir%\lib
 		#Include Gdip_All.ahk
 		#Include Gdip_ImageSearch.ahk
 		#Include HyperSleep.ahk
@@ -14140,7 +13676,7 @@ nm_createWalk(movement, name:="") ; this function generates the 'walk' code and 
 		ListLines, Off
 		OnExit(""ExitFunc"")
 
-		#Include %A_WorkingDir%\lib
+		#Include %A_ScriptDir%\lib
 		#Include Gdip_All.ahk
 		#Include Gdip_ImageSearch.ahk
 		#Include HyperSleep.ahk
@@ -17323,72 +16859,6 @@ nm_BlackQuest(){
 		IniWrite, %LastBlackQuest%, settings\nm_config.ini, Quests, LastBlackQuest
 	}
 }
-nm_gotoQuestgiver(giver){
-	global
-	static paths := {}, SetMoveMethod, SetHiveSlot, SetHiveBees
-	local success, searchRet, windowX, windowY, windowWidth, windowHeight
-
-	nm_setShiftLock(0)
-
-	if ((paths.Count() = 0) || (SetMoveMethod != MoveMethod) || (SetHiveSlot != HiveSlot) || (SetHiveBees != HiveBees))
-	{
-		#Include gtq-polar.ahk
-		#Include gtq-honey.ahk
-		#Include gtq-black.ahk
-		#Include gtq-riley.ahk
-		#Include gtq-bucko.ahk
-		SetMoveMethod := MoveMethod, SetHiveSlot := HiveSlot, SetHiveBees := HiveBees
-	}
-
-	success:=0
-	Loop, 2
-	{
-		nm_Reset()
-
-		HiveConfirmed:=0
-
-		nm_setStatus("Traveling", "Questgiver: " giver)
-
-		InStr(paths[giver], "gotoramp") ? nm_gotoRamp()
-		InStr(paths[giver], "gotocannon") ? nm_gotoCannon()
-
-		nm_createWalk(paths[giver])
-		KeyWait, F14, D T5 L
-		KeyWait, F14, T120 L
-		nm_endWalk()
-
-		Loop, 2
-		{
-			Sleep, 500
-			searchRet := nm_imgSearch("e_button.png",30,"high")
-			If (searchRet[1] = 0) {
-				success:=1
-				sendinput {%SC_E% down}
-				Sleep, 100
-				sendinput {%SC_E% up}
-				sleep, 2000
-				Loop, 500
-				{
-					WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " GetRobloxHWND())
-					pBMScreen := Gdip_BitmapFromScreen(windowX+windowWidth//2-50 "|" windowY+2*windowHeight//3 "|100|" windowHeight//3)
-					if (Gdip_ImageSearch(pBMScreen, bitmaps["dialog"], pos, , , , , 10, , 3) = 0) {
-						Gdip_DisposeImage(pBMScreen)
-						break
-					}
-					Gdip_DisposeImage(pBMScreen)
-					MouseMove, windowX+windowWidth//2, windowY+2*windowHeight//3+SubStr(pos, InStr(pos, ",")+1)-15
-					Click
-					sleep, 150
-				}
-				MouseMove, windowX+350, windowY+100
-			}
-		}
-
-		QuestGatherField:="None"
-		if(success)
-			return
-	}
-}
 nm_bugDeathCheck(){
 	global objective, TotalBugKills, SessionBugKills, LastBugrunLadybugs, LastBugrunRhinoBeetles, LastBugrunSpider, LastBugrunMantis, LastBugrunScorpions, LastBugrunWerewolf, BugDeathCheckLockout, BugrunLadybugsCheck, BugrunRhinoBeetlesCheck, BugrunMantisCheck, BugrunWerewolfCheck
 	if(BugDeathCheckLockout && (nowUnix() - BugDeathCheckLockout)>20)
@@ -17643,6 +17113,306 @@ nm_LoadFieldDefaults()
 			if (p := InStr(A_LoopField, "="))
 				k := SubStr(A_LoopField, 1, p-1), FieldDefault[s][k] := SubStr(A_LoopField, p+1)
 		}
+	}
+}
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; PATH FUNCTIONS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#Include %A_ScriptDir%\..\paths
+nm_walkTo(location){
+	global
+	static paths := {}, SetHiveSlot, SetHiveBees
+
+	nm_setShiftLock(0)
+
+	if ((paths.Count() = 0) || (SetHiveSlot != HiveSlot) || (SetHiveBees != HiveBees))
+	{
+		#Include wt-bamboo.ahk
+		#Include wt-blueflower.ahk
+		#Include wt-cactus.ahk
+		#Include wt-clover.ahk
+		#Include wt-coconut.ahk
+		#Include wt-dandelion.ahk
+		#Include wt-mountaintop.ahk
+		#Include wt-mushroom.ahk
+		#Include wt-pepper.ahk
+		#Include wt-pinetree.ahk
+		#Include wt-pineapple.ahk
+		#Include wt-pumpkin.ahk
+		#Include wt-rose.ahk
+		#Include wt-spider.ahk
+		#Include wt-strawberry.ahk
+		#Include wt-stump.ahk
+		#Include wt-sunflower.ahk
+		SetHiveSlot := HiveSlot, SetHiveBees := HiveBees
+	}
+
+	HiveConfirmed:=0
+
+	InStr(paths[location], "gotoramp") ? nm_gotoRamp()
+	InStr(paths[location], "gotocannon") ? nm_gotoCannon()
+
+	nm_createWalk(paths[location])
+	KeyWait, F14, D T5 L
+	KeyWait, F14, T120 L
+	nm_endWalk()
+}
+nm_cannonTo(location){
+	global
+	static paths := {}, SetHiveSlot, SetHiveBees
+
+	nm_setShiftLock(0)
+
+	if ((paths.Count() = 0) || (SetHiveSlot != HiveSlot) || (SetHiveBees != HiveBees))
+	{
+		#Include ct-bamboo.ahk
+		#Include ct-blueflower.ahk
+		#Include ct-cactus.ahk
+		#Include ct-clover.ahk
+		#Include ct-coconut.ahk
+		#Include ct-dandelion.ahk
+		#Include ct-mountaintop.ahk
+		#Include ct-mushroom.ahk
+		#Include ct-pepper.ahk
+		#Include ct-pinetree.ahk
+		#Include ct-pineapple.ahk
+		#Include ct-pumpkin.ahk
+		#Include ct-rose.ahk
+		#Include ct-spider.ahk
+		#Include ct-strawberry.ahk
+		#Include ct-stump.ahk
+		#Include ct-sunflower.ahk
+		SetHiveSlot := HiveSlot, SetHiveBees := HiveBees
+	}
+
+	HiveConfirmed:=0
+
+	InStr(paths[location], "gotoramp") ? nm_gotoRamp()
+	InStr(paths[location], "gotocannon") ? nm_gotoCannon()
+
+	nm_createWalk(paths[location])
+	KeyWait, F14, D T5 L
+	KeyWait, F14, T60 L
+	nm_endWalk()
+}
+nm_walkFrom(field:="none")
+{
+	global
+	static paths := {}, SetHiveSlot, SetHiveBees
+
+	nm_setShiftLock(0)
+
+	if ((paths.Count() = 0) || (SetHiveSlot != HiveSlot) || (SetHiveBees != HiveBees))
+	{
+		#Include wf-bamboo.ahk
+		#Include wf-blueflower.ahk
+		#Include wf-cactus.ahk
+		#Include wf-clover.ahk
+		#Include wf-coconut.ahk
+		#Include wf-dandelion.ahk
+		#Include wf-mountaintop.ahk
+		#Include wf-mushroom.ahk
+		#Include wf-pepper.ahk
+		#Include wf-pinetree.ahk
+		#Include wf-pineapple.ahk
+		#Include wf-pumpkin.ahk
+		#Include wf-rose.ahk
+		#Include wf-spider.ahk
+		#Include wf-strawberry.ahk
+		#Include wf-stump.ahk
+		#Include wf-sunflower.ahk
+		SetHiveSlot := HiveSlot, SetHiveBees := HiveBees
+	}
+
+	if !paths.HasKey(field)
+	{
+		msgbox walkFrom(): Invalid fieldname= %field%
+		return
+	}
+
+	nm_createWalk(paths[field])
+	KeyWait, F14, D T5 L
+	nm_setStatus("Traveling", "Hive")
+	KeyWait, F14, T60 L
+	nm_endWalk()
+}
+nm_gotoPlanter(location, waitEnd := 1){
+	global
+	static paths := {}, SetHiveSlot, SetHiveBees
+
+	nm_setShiftLock(0)
+
+	if ((paths.Count() = 0) || (SetHiveSlot != HiveSlot) || (SetHiveBees != HiveBees))
+	{
+		#Include gtp-bamboo.ahk
+		#Include gtp-blueflower.ahk
+		#Include gtp-cactus.ahk
+		#Include gtp-clover.ahk
+		#Include gtp-coconut.ahk
+		#Include gtp-dandelion.ahk
+		#Include gtp-mountaintop.ahk
+		#Include gtp-mushroom.ahk
+		#Include gtp-pepper.ahk
+		#Include gtp-pinetree.ahk
+		#Include gtp-pineapple.ahk
+		#Include gtp-pumpkin.ahk
+		#Include gtp-rose.ahk
+		#Include gtp-spider.ahk
+		#Include gtp-strawberry.ahk
+		#Include gtp-stump.ahk
+		#Include gtp-sunflower.ahk
+		SetHiveSlot := HiveSlot, SetHiveBees := HiveBees
+	}
+
+	HiveConfirmed:=0
+
+	InStr(paths[location], "gotoramp") ? nm_gotoRamp()
+	InStr(paths[location], "gotocannon") ? nm_gotoCannon()
+
+	nm_createWalk(paths[location])
+    KeyWait, F14, D T5 L
+	if WaitEnd
+	{
+		KeyWait, F14, T60 L
+		nm_endWalk()
+	}
+}
+nm_gotoCollect(location, waitEnd := 1){
+	global
+	static paths := {}, SetMoveMethod, SetHiveSlot, SetHiveBees
+
+	nm_setShiftLock(0)
+
+	if ((paths.Count() = 0) || (SetMoveMethod != MoveMethod) || (SetHiveSlot != HiveSlot) || (SetHiveBees != HiveBees))
+	{
+		#Include gtc-clock.ahk
+		#Include gtc-antpass.ahk
+		#Include gtc-robopass.ahk
+		#Include gtc-honeydis.ahk
+		#Include gtc-treatdis.ahk
+		#Include gtc-blueberrydis.ahk
+		#Include gtc-strawberrydis.ahk
+		#Include gtc-coconutdis.ahk
+		#Include gtc-gluedis.ahk
+		#Include gtc-royaljellydis.ahk
+		;beesmas
+		#Include gtc-stockings.ahk
+		#Include gtc-wreath.ahk
+		#Include gtc-feast.ahk
+		#Include gtc-gingerbread.ahk
+		#Include gtc-snowmachine.ahk
+		#Include gtc-candles.ahk
+		#Include gtc-samovar.ahk
+		#Include gtc-lidart.ahk
+		#Include gtc-gummybeacon.ahk
+		#Include gtc-rbpdelevel.ahk
+		;other
+		#Include gtc-honeystorm.ahk
+		#Include gtc-honeylb.ahk
+		SetMoveMethod := MoveMethod, SetHiveSlot := HiveSlot, SetHiveBees := HiveBees
+	}
+
+	HiveConfirmed:=0
+
+	InStr(paths[location], "gotoramp") ? nm_gotoRamp()
+	InStr(paths[location], "gotocannon") ? nm_gotoCannon()
+
+	nm_createWalk(paths[location])
+	KeyWait, F14, D T5 L
+	if waitEnd
+	{
+		KeyWait, F14, T120 L
+		nm_endWalk()
+	}
+}
+nm_gotoBooster(booster){
+	global
+	static paths := {}, SetMoveMethod, SetHiveSlot, SetHiveBees
+
+	nm_setShiftLock(0)
+
+	if ((paths.Count() = 0) || (SetMoveMethod != MoveMethod) || (SetHiveSlot != HiveSlot) || (SetHiveBees != HiveBees))
+	{
+		#Include gtb-red.ahk
+		#Include gtb-blue.ahk
+		#Include gtb-mountain.ahk
+		SetMoveMethod := MoveMethod, SetHiveSlot := HiveSlot, SetHiveBees := HiveBees
+	}
+
+	HiveConfirmed:=0
+
+	InStr(paths[booster], "gotoramp") ? nm_gotoRamp()
+	InStr(paths[booster], "gotocannon") ? nm_gotoCannon()
+
+	nm_createWalk(paths[booster])
+	KeyWait, F14, D T5 L
+	KeyWait, F14, T120 L
+	nm_endWalk()
+}
+nm_gotoQuestgiver(giver){
+	global
+	static paths := {}, SetMoveMethod, SetHiveSlot, SetHiveBees
+	local success, searchRet, windowX, windowY, windowWidth, windowHeight
+
+	nm_setShiftLock(0)
+
+	if ((paths.Count() = 0) || (SetMoveMethod != MoveMethod) || (SetHiveSlot != HiveSlot) || (SetHiveBees != HiveBees))
+	{
+		#Include gtq-polar.ahk
+		#Include gtq-honey.ahk
+		#Include gtq-black.ahk
+		#Include gtq-riley.ahk
+		#Include gtq-bucko.ahk
+		SetMoveMethod := MoveMethod, SetHiveSlot := HiveSlot, SetHiveBees := HiveBees
+	}
+
+	success:=0
+	Loop, 2
+	{
+		nm_Reset()
+
+		HiveConfirmed:=0
+
+		nm_setStatus("Traveling", "Questgiver: " giver)
+
+		InStr(paths[giver], "gotoramp") ? nm_gotoRamp()
+		InStr(paths[giver], "gotocannon") ? nm_gotoCannon()
+
+		nm_createWalk(paths[giver])
+		KeyWait, F14, D T5 L
+		KeyWait, F14, T120 L
+		nm_endWalk()
+
+		Loop, 2
+		{
+			Sleep, 500
+			searchRet := nm_imgSearch("e_button.png",30,"high")
+			If (searchRet[1] = 0) {
+				success:=1
+				sendinput {%SC_E% down}
+				Sleep, 100
+				sendinput {%SC_E% up}
+				sleep, 2000
+				Loop, 500
+				{
+					WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " GetRobloxHWND())
+					pBMScreen := Gdip_BitmapFromScreen(windowX+windowWidth//2-50 "|" windowY+2*windowHeight//3 "|100|" windowHeight//3)
+					if (Gdip_ImageSearch(pBMScreen, bitmaps["dialog"], pos, , , , , 10, , 3) = 0) {
+						Gdip_DisposeImage(pBMScreen)
+						break
+					}
+					Gdip_DisposeImage(pBMScreen)
+					MouseMove, windowX+windowWidth//2, windowY+2*windowHeight//3+SubStr(pos, InStr(pos, ",")+1)-15
+					Click
+					sleep, 150
+				}
+				MouseMove, windowX+350, windowY+100
+			}
+		}
+
+		QuestGatherField:="None"
+		if(success)
+			return
 	}
 }
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
