@@ -26,6 +26,7 @@ You should have received a copy of the license along with Natro Macro. If not, p
 #Include %A_ScriptDir%\..\lib
 #Include Gdip_All.ahk
 #Include Gdip_ImageSearch.ahk
+#Include JSON.ahk
 
 SetBatchLines -1
 SetWorkingDir %A_ScriptDir%\..
@@ -385,7 +386,8 @@ config["Settings"] := {"GuiTheme":"MacLion3"
 	, "StopHotkey":"F3"
 	, "AutoClickerHotkey":"F4"
 	, "TimersHotkey":"F5"
-	, "ShowOnPause":0}
+	, "ShowOnPause":0
+	, "IgnoreUpdateVersion":""}
 
 config["Status"] := {"StatusLogReverse":0
 	, "TotalRuntime":0
@@ -1716,7 +1718,7 @@ bitmaps["babylovegui"] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAABIAAAA
 bitmaps["discordgui"] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAABUAAAAQCAYAAAD52jQlAAAACXBIWXMAAAsTAAALEwEAmpwYAAAE2mlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4xLWMwMDAgNzkuOWNjYzRkZSwgMjAyMi8wMy8xNC0xMToyNjoxOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIzLjMgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMy0wMi0yMlQyMDozMzowNFoiIHhtcDpNb2RpZnlEYXRlPSIyMDIzLTAyLTIyVDIyOjU0OjM0WiIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMy0wMi0yMlQyMjo1NDozNFoiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOmY5NzJlODZjLTIzM2QtYTY0Yi05YjM2LTU5ZmY0M2ZlNjQ2MCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpmOTcyZTg2Yy0yMzNkLWE2NGItOWIzNi01OWZmNDNmZTY0NjAiIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpmOTcyZTg2Yy0yMzNkLWE2NGItOWIzNi01OWZmNDNmZTY0NjAiPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJjcmVhdGVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOmY5NzJlODZjLTIzM2QtYTY0Yi05YjM2LTU5ZmY0M2ZlNjQ2MCIgc3RFdnQ6d2hlbj0iMjAyMy0wMi0yMlQyMDozMzowNFoiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMy4zIChXaW5kb3dzKSIvPiA8L3JkZjpTZXE+IDwveG1wTU06SGlzdG9yeT4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4kuCcAAAAB00lEQVQ4ja1UPUvEQBAdUUS5wsLC3rP0TrGzsrESLKzycWfOuyT3AwQFQaxORBQULP0PVgqCX/iBgmAlCAoqNoL4kexeK+ibJMq5rnCoxWOTebsvs/MmQ8VCQMWxgEpOQLYnyPRlj+XLKaxHlie3k1iL6VXbsLZaeLd8sY7nE+ybxtqXQ6wEjbEE5BRDKiTApjWjLN+wsRY3wCNQBZ6Aa4V/w7kNxw3IKQU0ClDODSnvsqCYNPxvgnXBiIUreS+kHICr8fVECuTrbwS/ZOzJdi4PZ8g1m/mrYIJFTpJysREP/yQqbC9sguNy4IcN+8DOD9wesKvjoDfEjle+uylWEQdXZX5O4VbMctRW3ILLmk5Y4qtvakQ7+FAsLBuUQ6kkTjAmpcn2gEUv1fZABv1x00cZpZUPZqMfwIuEMxrRGxZ91LTGFdBnlmUGImdfOXGBWC/4LETPNaIvLCr+yfkPVEkXBG7rFLjTJcV1WVCCXI4JYDZpHbU8z8AhMI+z41jvFX6F7MhJMYiX41qzLD/M2H4yoXzZCXQDXeBSbCJmRlqZFaeID6FPKRK1I5cxVDwxjCm1BeIQU6s57woyylGJPmHwfog6btgIs3aS24yYcd/yz0TvJMcgxVE+atQAAAAASUVORK5CYII=")
 bitmaps["robloxgui"] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAE2mlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4xLWMwMDAgNzkuOWNjYzRkZSwgMjAyMi8wMy8xNC0xMToyNjoxOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIzLjMgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMy0wMi0yMlQyMDozMjo0MloiIHhtcDpNb2RpZnlEYXRlPSIyMDIzLTAyLTIyVDIyOjU0OjE5WiIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMy0wMi0yMlQyMjo1NDoxOVoiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOmY5NzZmODFmLTE3MDQtYzk0Yy05NjE1LThkYjczYjk0ZDVmNiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpmOTc2ZjgxZi0xNzA0LWM5NGMtOTYxNS04ZGI3M2I5NGQ1ZjYiIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpmOTc2ZjgxZi0xNzA0LWM5NGMtOTYxNS04ZGI3M2I5NGQ1ZjYiPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJjcmVhdGVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOmY5NzZmODFmLTE3MDQtYzk0Yy05NjE1LThkYjczYjk0ZDVmNiIgc3RFdnQ6d2hlbj0iMjAyMy0wMi0yMlQyMDozMjo0MloiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMy4zIChXaW5kb3dzKSIvPiA8L3JkZjpTZXE+IDwveG1wTU06SGlzdG9yeT4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7vrBMcAAACIUlEQVQ4EXXBwWpdVRiG4ff719p7h5OmpRMpHShiwIDoQMEOmgbSgDOvoQjiNQnOHHgRKlFD68BhS8GKRKhgR0VMT+o5Z+/1f7amPSqtz6Pj1y9hnhK1xHfR8o8lfJlDHJVVu31eE7/3HSe5Qe8l/WLFZgw8ZEIU6qz/Ewe46bVpmu25BBv4Q48mFT+P1Ftl4miIvNngJ9vYkIIA6qJtkSmK80Ay2CRnArZHynbffGPIkRF+dO1uSj6qyS3guE4SlgizHzaWeM6AMBZ/62CHUnaMP75AEBFf1c3+BBnG5ex6EgjzMgbMEzZP9SFO0hfq6XSR6rZdmC5L5jkJbLBB4gWJaG38PPKxyRUHSKwJWssV+LOtTj8UM0/+qwGDytexEXM6rfaNWLMpLt+j8slxyyuPMr7o+YcBp3/dzLgX4yQyYl82a4Yy6Pacyv1TMzG9HWLNCrpsh3VcUGdF74zolQTEMxKrafpocL575Vy5Y+f7S4N4xgnUb9vQUd1zkATh5N+C2Kpil/SuEeKMgQJ0w3SoCOo01RtRzcskLwpDE788hPt2UluN095JcyAMggTE/yiC1Xg4zkcw1KG2q4+XejNq7hbYo+mqxBsCLDAgs5YY3H1zPgaE0W87l5gvgzJMTC50i+Bcl2/NVa7VKa9J7KZ4tUPYkCSLXF1ewYPAVJ4QIAsMwoR0d1Lc7cf8tEdabrT35s49onwwI0pfZg8GzvwFnngUHu4H9AoAAAAASUVORK5CYII=")
 bitmaps["paypalgui"] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAAA4AAAAQCAYAAAAmlE46AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAE2mlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4xLWMwMDAgNzkuOWNjYzRkZSwgMjAyMi8wMy8xNC0xMToyNjoxOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIzLjMgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMy0wMi0yM1QwMDowMjozM1oiIHhtcDpNb2RpZnlEYXRlPSIyMDIzLTAyLTIzVDAwOjAzOjExWiIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMy0wMi0yM1QwMDowMzoxMVoiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjVlNTE5Y2EyLWU1MjQtYTM0OS05Y2FhLTExZWQwZmYwZTc1OCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo1ZTUxOWNhMi1lNTI0LWEzNDktOWNhYS0xMWVkMGZmMGU3NTgiIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1ZTUxOWNhMi1lNTI0LWEzNDktOWNhYS0xMWVkMGZmMGU3NTgiPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJjcmVhdGVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjVlNTE5Y2EyLWU1MjQtYTM0OS05Y2FhLTExZWQwZmYwZTc1OCIgc3RFdnQ6d2hlbj0iMjAyMy0wMi0yM1QwMDowMjozM1oiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMy4zIChXaW5kb3dzKSIvPiA8L3JkZjpTZXE+IDwveG1wTU06SGlzdG9yeT4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4BkaF1AAABKklEQVQoFWNggAG9fn4G3c56rFinM51Bs0ucASvQ6e5j1O36jwsz6HZ9Y9DtyMeisXMbPo1wAzBs1u18hqqg8RwSvsWo3QYR1+62Z0D2H4ompeIjDPLZ/zGwXNYHhtJt6Ui2dZijaJTPvYxVo3z2e4bpd78xzL4PtVW7IxxFo1zWe6wao2buY5z14D/DzPv1MP+1wTXptL3Aqsms4hzINrDGWffjoRq71sE1atSfQtHg0HicoWjzIZAGGAZq1IfZeA2uMX39HpjJ2DDDrAf7kAKn6xtcY+e5/Xg0LWOYf58dGvE96igBM+nGcbjCmQ++ARW3gQMDHpKIFOOPonHm/UdwjbMf9DHgBMAEDNdkO/E9WiCkMxAFgKGFohHDeXg0gkMNgtchAgITAACfKCNu3pc7egAAAABJRU5ErkJggg==")
-bitmaps["githubgui"] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAgQAAAIEBHRF40wAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFJSURBVDiNjdOxSlxREAbg794sLizZZgvFLmxjIYGA+wA2BoutY2Fp4VOE1DYLPoFFyrCorY0W1oKFlSAphKiNRBCWNCfFnStnr2s2B4Y755/55575z5wipSRfRVEs4AvW0Q/4Bqf4kVL6M0VIKb0YtvGA9IbdYWuKk5FH/yA2bTRVALsRuMV3PM8gPeMAv2K/W7e/iEmAZwEu4XNo0A9/OWLnkTvBYgs7aIckT6HLPU4yqW4y/zG+beyUGGbBY/PXUeYPqZStj9TNFZ5l6GYt35XoRLV3IdS8NUEr/E6J69i08Ok/CqzFz+C6xFUWHBVF8f4tZsT2MugKBqp+9gP4ia9YyfpexbeI5bMxqBPG+B3Huwz/Y1Zgw+vBGueT2MOF6u4/YKGhfNkgX6DXfAs91YtLSDOuryaf1uSpAlnipmpYygZ+iM1m/l+r2AEqRmEVzAAAAABJRU5ErkJggg==")
+bitmaps["githubgui"] := Gdip_BitmapFromBase64("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")
 bitmaps["warninggui"] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAMAAAAolt3jAAAAyVBMVEVHcEz/IUf/Ikf/IUf/IUf/IUf/IUf/IUf/IUf/Ikn/IUj/IUb/JEL/IEf/IUf/Ikf/Ikf/IUj/IUf/IUf/Ikf/IUf/IUf/Ikj/I0f/Ik3/IUf/IUf/JkL/JEv/JEj/Ikf/IUf/H0f/IUf/IUj/IEf/IUf/IUf/IUf/IEf/IEb/NFb/vcj/KU7/laf/L1L/K0//5ur/0Nj/S2r/7O//Kk7/JEn/Kk//fZP/fJL/JEr/QWH/5uv/QGH/SGf/nq7/M1b/na7/SGj/5+sudTdoAAAAJ3RSTlMA8dDU8s7V/v0FXlwFMIIxMIPohYTW8zEFCF7nBwgIX10F0DHQ6V/g0khgAAAACXBIWXMAAAB2AAAAdgFOeyYIAAAAnElEQVQIHQXBBQKCQABFwa8Cu5jY3fEAuzvvfyhnJA3H5UmtNqoUfEnqzarWRJGxXropNfpTCFerEEppX/UqEL8+b8ALVLYQ7vb7XQi2qKQBvr/7EzCuHIDbZvMASMgBiLfbGCChpAGu58sRMK4qFjjN5wfA5lXwgMVyuQBSOfmtErBeA+1MVuoOPGuiyNhUpiNJflB0HcfN57LSH2+WFhZkM2KAAAAAAElFTkSuQmCC")
 bitmaps["kingbeetleamu"] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAE2mlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4xLWMwMDAgNzkuOWNjYzRkZSwgMjAyMi8wMy8xNC0xMToyNjoxOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIzLjMgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMy0wMy0xOFQyMjo0ODowMVoiIHhtcDpNb2RpZnlEYXRlPSIyMDIzLTAzLTE4VDIyOjUyOjUzWiIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMy0wMy0xOFQyMjo1Mjo1M1oiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjc5NzIyNzI3LTQ5ZWYtYTg0Ny1hNzA2LWI4NjE5ZThkMWI3YyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo3OTcyMjcy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")
 bitmaps["supremeshellamu"] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAE2mlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNy4xLWMwMDAgNzkuOWNjYzRkZSwgMjAyMi8wMy8xNC0xMToyNjoxOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIzLjMgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyMy0wMy0xOFQyMjo0ODowN1oiIHhtcDpNb2RpZnlEYXRlPSIyMDIzLTAzLTE4VDIyOjUyOjM3WiIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMy0wMy0xOFQyMjo1MjozN1oiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOmQ5M2U4NGFiLTMwNzUtYzQ0Ni05ZTNhLTIwZjBjMDI1ZDg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpkOTNlODRh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")
@@ -1819,10 +1821,159 @@ Menu, Tray, Click, 1
 
 PostMessage, 0x5555, 12, 0, , ahk_pid %lp_PID%
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; CREATE GUI
+; GUI SKINNING
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;https://www.autohotkey.com/boards/viewtopic.php?f=6&t=5841&hilit=gui+skin
 SkinForm(Apply, A_WorkingDir . "\nm_image_assets\Styles\USkin.dll", A_WorkingDir . "\nm_image_assets\styles\" . GuiTheme . ".msstyles")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; AUTO-UPDATE
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; get latest release tag from GitHub
+try
+{
+	wr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+	wr.Open("GET", "https://api.github.com/repos/NatroTeam/NatroMacro/releases/latest", 1)
+	wr.SetRequestHeader("accept", "application/vnd.github+json")
+	wr.Send()
+	wr.WaitForResponse()
+	if !(LatestVer := Trim((latest_release := JSON.parse(wr.ResponseText))["tag_name"], "v"))
+		throw
+}
+catch
+	LatestVer := 0
+
+; create auto-update GUI if outdated
+outdated_flag := 0
+if (VerCompare(VersionID, LatestVer) < 0)
+{
+	outdated_flag := 1
+	if (LatestVer != IgnoreUpdateVersion)
+	{
+		PostMessage, 0x5556, 0, 0, , ahk_pid %lp_PID%
+		nm_AutoUpdateGUI()
+		PostMessage, 0x5556, 1, 0, , ahk_pid %lp_PID%
+	}
+}
+
+; auto-update functions
+nm_AutoUpdateGUI()
+{
+	global
+	local size, downloads
+	local Prev_DetectHiddenWindows
+	Gui, update:Destroy
+	Gui, update:+AlwaysOnTop +Border +hwndhUpdateGUI
+	Gui, update:Font, s9 cDefault Norm, Tahoma
+	Gui, update:Add, Text, x20 w260 +Center +BackgroundTrans, A newer version of Natro Macro was found!`nDo you want to update now?
+	Gui, update:Add, Text, +BackgroundTrans Hidden vVersionChange, % "Natro Macro v" VersionID " ⮕ v" LatestVer
+	GuiControlGet, pos, update:Pos, VersionChange
+	Gui, update:Add, Text, % "x" 149-posW//2 " y40 +Left +BackgroundTrans", % "Natro Macro v" VersionID " ⮕ "
+	Gui, update:Add, Text, x+0 yp +c379e37 +BackgroundTrans, % "v" LatestVer
+	Gui, update:Add, Text, +BackgroundTrans Hidden vVersionDetails, % (size := Round(latest_release["assets"][1]["size"]/1048576, 2)) " MB // Downloads: " (downloads := latest_release["assets"][1]["download_count"])
+	GuiControlGet, pos, update:Pos, VersionDetails
+	Gui, update:Add, Text, % "x" 150-posW//2 " y54 +Left +BackgroundTrans", % size " MB // Downloads: " downloads
+	hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["githubgui"])
+	Gui, update:Add, Picture, x76 y+1 w16 h16 gGitHubRepoLink +BackgroundTrans, HBITMAP:*%hBM%
+	DllCall("DeleteObject", "ptr", hBM)
+	Gui, update:Add, Text, x+4 yp+1 c0046ee gGitHubReleaseLink +BackgroundTrans, Patch Notes && Updates
+	Gui, update:Font, w700 s8
+	Gui, update:Add, GroupBox, x50 y+4 w200 h50, Options
+	Gui, update:Font, Norm
+	Gui, update:Add, CheckBox, xp+8 yp+16 Checked vCopySettings, Copy Settings
+	Gui, update:Add, CheckBox, xp+92 yp Checked vCopyPatterns, Copy Patterns
+	Gui, update:Add, CheckBox, xp-92 yp+16 Checked vCopyPaths, Copy Paths
+	Gui, update:Add, CheckBox, xp+92 yp vDeleteOld, Delete v%VersionID%
+	Gui, update:Font, s9
+	Gui, update:Add, Button, x8 y144 w92 h26 gnm_NeverButton, Never
+	Gui, update:Add, Button, xp+96 yp wp hp vDismissButton gnm_DismissButton, Dismiss (120)
+	Gui, update:Font, Bold
+	Gui, update:Add, Button, xp+96 yp wp hp vUpdateButton gnm_UpdateButton, Update
+	Gui, update:Show, w300, Natro Macro Update
+	GuiControl, update:Focus, UpdateButton
+	Prev_DetectHiddenWindows := A_DetectHiddenWindows
+	DetectHiddenWindows Off
+	SetTimer, nm_DismissLabel, -1000
+	WinWaitClose, ahk_id %hUpdateGUI%, , 125
+	DetectHiddenWindows %Prev_DetectHiddenWindows%
+	Gui, update:Destroy
+}
+nm_DismissLabel()
+{
+	static countdown:=120
+	if (--countdown = 0)
+		Gui, update:Destroy
+	else
+	{
+		GuiControl, update:, DismissButton, % "Dismiss (" countdown ")"
+		SetTimer, nm_DismissLabel, -1000
+	}
+}
+nm_DismissButton()
+{
+	Gui, update:Destroy
+}
+nm_NeverButton()
+{
+	global
+	Gui, update:+OwnDialogs
+	msgbox, 0x1044, Disable Automatic Update, Are you sure you want to disable prompts for v%LatestVer%?`nYou can still update manually, or by clicking the red symbol in the bottom right corner of the GUI.
+	IfMsgBox, Yes
+	{
+		IniWrite, % (IgnoreUpdateVersion := LatestVer), settings\nm_config.ini, Settings, IgnoreUpdateVersion
+		Gui, update:Destroy
+	}
+}
+nm_UpdateButton()
+{
+	global latest_release, VersionID
+	url := latest_release["assets"][1]["browser_download_url"]
+	olddir := A_WorkingDir
+	GuiControlGet, CopySettings, update:
+	GuiControlGet, CopyPatterns, update:
+	GuiControlGet, CopyPaths, update:
+	GuiControlGet, DeleteOld, update:
+	changedpaths := ""
+
+	if (CopyPaths = 1)
+	{
+		Gui, update:Destroy
+		try
+		{
+			wr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+			wr.Open("GET", "https://api.github.com/repos/NatroTeam/NatroMacro/tags?per_page=100", 1)
+			wr.SetRequestHeader("accept", "application/vnd.github+json")
+			wr.Send()
+			wr.WaitForResponse()
+			for k,v in (tags := JSON.parse(wr.ResponseText))
+				if ((VerCompare(Trim(v["name"], "v"), VersionID) <= 0) && (base := v["name"]))
+					break
+			if !base
+				throw
+
+			wr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+			wr.Open("GET", "https://api.github.com/repos/NatroTeam/NatroMacro/compare/" base "..." latest_release["tag_name"] , 1)
+			wr.SetRequestHeader("accept", "application/vnd.github+json")
+			wr.Send()
+			wr.WaitForResponse()
+			for k,v in (files := JSON.parse(wr.ResponseText)["files"])
+				if (SubStr(v["filename"], 1, 6) = "paths/")
+					changedpaths .= SubStr(v["filename"], 7) ","
+		}
+		catch
+		{
+			msgbox, 0x1010, Error, Unable to fetch changed paths from GitHub!`nIf you still want to update, disable 'Copy Paths' (and copy them manually) or try again later.
+			return
+		}
+	}
+	
+	Run, submacros\update.bat "%url%" "%olddir%" "%CopySettings%" "%CopyPatterns%" "%CopyPaths%" "%DeleteOld%" "%changedpaths%"
+	getout()
+	ExitApp
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; CREATE GUI
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 OnExit("GetOut")
 if (AlwaysOnTop)
 	gui +AlwaysOnTop
@@ -1839,24 +1990,11 @@ Gui, Add, Text, x92 y240 w73 +center +BackgroundTrans +border vCurrentField,%Cur
 Gui, Add, Text, x220 y240 w275 +left +BackgroundTrans vstate hwndhwndstate +border, %state%
 Gui, Add, Text, x435 y263 gnm_showAdvancedSettings vVersionText, v%versionID%
 GuiControlGet, pos, Pos, VersionText
-; get latest release tag from GitHub
-try
-{
-	wr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-	wr.Open("GET", "https://api.github.com/repos/NatroTeam/NatroMacro/releases/latest", 1)
-	wr.SetRequestHeader("accept", "application/vnd.github+json")
-	wr.Send()
-	wr.WaitForResponse()
-	if !RegExMatch(wr.ResponseText, "i)""tag_name"":\s?""v?(.+?)""", LatestVer)
-		throw
-}
-catch
-	LatestVer1 := 0
 ; shift elements to left if macro version is not latest
-if (VerCompare(VersionID, LatestVer1) < 0)
+if (outdated_flag = 1)
 {
 	hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["warninggui"])
-	Gui, Add, Picture, % "+BackgroundTrans x484 y263 w14 h14 gGitHubReleaseLink vImageUpdateLink", HBITMAP:*%hBM%
+	Gui, Add, Picture, % "+BackgroundTrans x484 y263 w14 h14 gnm_AutoUpdateGUI vImageUpdateLink", HBITMAP:*%hBM%
 	DllCall("DeleteObject", "ptr", hBM)
 	posW += 15
 }
@@ -1864,7 +2002,6 @@ GuiControl, Move, VersionText, % "x" 495-posW
 hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["githubgui"])
 Gui, Add, Picture, % "+BackgroundTrans x" 495-posW-20 " y262 w16 h16 gGitHubRepoLink vImageGitHubLink", HBITMAP:*%hBM%
 DllCall("DeleteObject", "ptr", hBM)
-Gdip_DisposeImage(bitmaps["githubgui"])
 Gui, Font, s8 w700 c0046ee
 w := 255-posW-12
 hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["discordgui"])
@@ -3276,6 +3413,7 @@ nm_LoadingProgress(){
 	Gdip_SetInterpolationMode(G, 2)
 	pPen := Gdip_CreatePen(0x80000000, 10), Gdip_DrawArc(G, pPen, 10, 10, 44, 44, -90, 360), Gdip_DeletePen(pPen)
 	OnMessage(0x5555, ""UpdateProgress"")
+	OnMessage(0x5556, ""ShowHide"")
 	WinSet, AlwaysOnTop, On, % ""ahk_id "" hMain
 	Loop
 	{
@@ -3295,6 +3433,11 @@ nm_LoadingProgress(){
 		percent := wParam*3.6
 		pPen := Gdip_CreatePen(0xff551a8b, 10), Gdip_DrawArc(G, pPen, 10, 10, 44, 44, -91, percent+1), Gdip_DeletePen(pPen)
 		pPen := Gdip_CreatePen(0x80000000, 10), Gdip_DrawArc(G, pPen, 10, 10, 44, 44, -91 + percent, 361 - percent), Gdip_DeletePen(pPen)
+	}
+
+	ShowHide(wParam)
+	{
+		Gui, % (wParam = 1) ? ""Show"" : ""Hide""
 	}
 	)"
 
@@ -7484,11 +7627,7 @@ GitHubRepoLink(){
 	run, https://github.com/NatroTeam/NatroMacro
 }
 GitHubReleaseLink(){
-	global LatestVer1
-	Gui, +OwnDialogs
-	MsgBox, 0x1044, Update, % "A newer version of Natro Macro was found!`r`nDo you want to update to v" LatestVer1 "?"
-	IfMsgBox, Yes
-		run, https://github.com/NatroTeam/NatroMacro/releases/latest
+	run, https://github.com/NatroTeam/NatroMacro/releases
 }
 BeesmasActiveFail(){
 	Gui, +OwnDialogs
