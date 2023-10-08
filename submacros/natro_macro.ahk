@@ -118,7 +118,7 @@ if (A_ScreenDPI*100//96 != 100)
 
 DetectHiddenWindows, On
 lp_PID := nm_LoadingProgress()
-PostMessage, 0x5555, 0, 0, , ahk_pid %lp_PID%
+SetLoadingProgress(0)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; IMPORT PATTERNS
@@ -282,7 +282,7 @@ nm_import() ; at every start of macro, import patterns
 	}
 }
 nm_import() ; import patterns
-PostMessage, 0x5555, 7, 0, , ahk_pid %lp_PID%
+SetLoadingProgress(7)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; SET CONFIG
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1687,7 +1687,7 @@ global PackFilterArray:=[]
 global BackpackPercent, BackpackPercentFiltered
 global ActiveHotkeys:=[]
 
-PostMessage, 0x5555, 10, 0, , ahk_pid %lp_PID%
+SetLoadingProgress(10)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; STATUS HANDLER
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1820,7 +1820,7 @@ Menu, Tray, Add
 Menu, Tray, Default, Start Macro
 Menu, Tray, Click, 1
 
-PostMessage, 0x5555, 12, 0, , ahk_pid %lp_PID%
+SetLoadingProgress(12)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; GUI SKINNING
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2026,7 +2026,7 @@ Gui, Add, Button, x5 y260 w65 h20 -Wrap vStartButton gstart, % " Start (" StartH
 Gui, Add, Button, x75 y260 w65 h20 -Wrap vPauseButton gpause, % " Pause (" PauseHotkey ")"
 Gui, Add, Button, x145 y260 w65 h20 -Wrap vStopButton gstop, % " Stop (" StopHotkey ")"
 
-PostMessage, 0x5555, 15, 0, , ahk_pid %lp_PID%
+SetLoadingProgress(15)
 ;ADD TABS
 Gui, Add, Tab, x0 y-1 w502 h240 -Wrap hwndhTab vTab gnm_TabSelect, Gather|Collect/Kill|Boost|Quest|Planters|Status|Settings|Misc|Contributors
 SendMessage, 0x1331, 0, 20, , ahk_id %hTab% ; set minimum tab width
@@ -2058,6 +2058,7 @@ Gui, Font, s8 cDefault Norm, Tahoma
 Gui, Add, DropDownList, x18 y57 w96 vFieldName1 gnm_FieldSelect1 Disabled, % LTrim(StrReplace("|Bamboo|Blue Flower|Cactus|Clover|Coconut|Dandelion|Mountain Top|Mushroom|Pepper|Pine Tree|Pineapple|Pumpkin|Rose|Spider|Strawberry|Stump|Sunflower|", "|" FieldName1 "|", "|" FieldName1 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldName2 gnm_FieldSelect2 Disabled, % LTrim(StrReplace("|None|Bamboo|Blue Flower|Cactus|Clover|Coconut|Dandelion|Mountain Top|Mushroom|Pepper|Pine Tree|Pineapple|Pumpkin|Rose|Spider|Strawberry|Stump|Sunflower|", "|" FieldName2 "|", "|" FieldName2 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldName3 gnm_FieldSelect3 Disabled, % LTrim(StrReplace("|None|Bamboo|Blue Flower|Cactus|Clover|Coconut|Dandelion|Mountain Top|Mushroom|Pepper|Pine Tree|Pineapple|Pumpkin|Rose|Spider|Strawberry|Stump|Sunflower|", "|" FieldName3 "|", "|" FieldName3 "||"), "|")
+SetLoadingProgress(17)
 hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["savefield"])
 Gui, Add, Picture, x2 y86 w18 h18 gnm_SaveFieldDefault hwndhSaveFieldDefault1, HBITMAP:*%hBM%
 DllCall("DeleteObject", "ptr", hBM)
@@ -2073,12 +2074,15 @@ Gui, Add, Checkbox, xp yp+60 wp +BackgroundTrans +Center vFieldDriftCheck3 gnm_S
 Gui, Add, DropDownList, x121 y57 w112 vFieldPattern1 gnm_SaveGather Disabled, % LTrim(StrReplace(patternlist "Stationary|", "|" FieldPattern1 "|", "|" FieldPattern1 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldPattern2 gnm_SaveGather Disabled, % LTrim(StrReplace(patternlist "Stationary|", "|" FieldPattern2 "|", "|" FieldPattern2 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldPattern3 gnm_SaveGather Disabled, % LTrim(StrReplace(patternlist "Stationary|", "|" FieldPattern3 "|", "|" FieldPattern3 "||"), "|")
+SetLoadingProgress(20)
 Gui, Add, DropDownList, x236 y57 w46 vFieldPatternSize1 gnm_SaveGather Disabled, % LTrim(StrReplace("|XS|S|M|L|XL|", "|" FieldPatternSize1 "|", "|" FieldPatternSize1 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldPatternSize2 gnm_SaveGather Disabled, % LTrim(StrReplace("|XS|S|M|L|XL|", "|" FieldPatternSize2 "|", "|" FieldPatternSize2 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldPatternSize3 gnm_SaveGather Disabled, % LTrim(StrReplace("|XS|S|M|L|XL|", "|" FieldPatternSize3 "|", "|" FieldPatternSize3 "||"), "|")
+SetLoadingProgress(22)
 Gui, Add, DropDownList, x284 y57 w36 vFieldPatternReps1 gnm_SaveGather Disabled, % LTrim(StrReplace("|1|2|3|4|5|6|7|8|9|", "|" FieldPatternReps1 "|", "|" FieldPatternReps1 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldPatternReps2 gnm_SaveGather Disabled, % LTrim(StrReplace("|1|2|3|4|5|6|7|8|9|", "|" FieldPatternReps2 "|", "|" FieldPatternReps2 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldPatternReps3 gnm_SaveGather Disabled, % LTrim(StrReplace("|1|2|3|4|5|6|7|8|9|", "|" FieldPatternReps3 "|", "|" FieldPatternReps3 "||"), "|")
+SetLoadingProgress(24)
 Gui, Add, Checkbox, x121 y82 +BackgroundTrans vFieldPatternShift1 gnm_SaveGather Checked%FieldPatternShift1% Disabled, Gather w/Shift-Lock
 Gui, Add, Checkbox, xp yp+60 +BackgroundTrans vFieldPatternShift2 gnm_SaveGather Checked%FieldPatternShift2% Disabled, Gather w/Shift-Lock
 Gui, Add, Checkbox, xp yp+60 +BackgroundTrans vFieldPatternShift3 gnm_SaveGather Checked%FieldPatternShift3% Disabled, Gather w/Shift-Lock
@@ -2097,24 +2101,29 @@ Gui, Add, Text, xp yp+60 +BackgroundTrans +Center, Rotate Camera:
 Gui, Add, DropDownList, x236 y92 w50 vFieldRotateDirection1 gnm_SaveGather Disabled, % LTrim(StrReplace("|None|Left|Right|", "|" FieldRotateDirection1 "|", "|" FieldRotateDirection1 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldRotateDirection2 gnm_SaveGather Disabled, % LTrim(StrReplace("|None|Left|Right|", "|" FieldRotateDirection2 "|", "|" FieldRotateDirection2 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldRotateDirection3 gnm_SaveGather Disabled, % LTrim(StrReplace("|None|Left|Right|", "|" FieldRotateDirection3 "|", "|" FieldRotateDirection3 "||"), "|")
+SetLoadingProgress(26)
 Gui, Add, DropDownList, x288 y92 w32 vFieldRotateTimes1 gnm_SaveGather Disabled, % LTrim(StrReplace("|1|2|3|4|", "|" FieldRotateTimes1 "|", "|" FieldRotateTimes1 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldRotateTimes2 gnm_SaveGather Disabled, % LTrim(StrReplace("|1|2|3|4|", "|" FieldRotateTimes2 "|", "|" FieldRotateTimes2 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldRotateTimes3 gnm_SaveGather Disabled, % LTrim(StrReplace("|1|2|3|4|", "|" FieldRotateTimes3 "|", "|" FieldRotateTimes3 "||"), "|")
+SetLoadingProgress(28)
 Gui, Add, Edit, x327 y58 w36 h19 limit4 number vFieldUntilMins1 gnm_SaveGather Disabled, %FieldUntilMins1%
 Gui, Add, Edit, xp yp+60 wp h19 limit4 number vFieldUntilMins2 gnm_SaveGather Disabled, %FieldUntilMins2%
 Gui, Add, Edit, xp yp+60 wp h19 limit4 number vFieldUntilMins3 gnm_SaveGather Disabled, %FieldUntilMins3%
 Gui, Add, DropDownList, x365 y57 w42 vFieldUntilPack1 gnm_SaveGather Disabled, % LTrim(StrReplace("|100|95|90|85|80|75|70|65|60|55|50|45|40|35|30|25|20|15|10|5|", "|" FieldUntilPack1 "|", "|" FieldUntilPack1 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 w45 vFieldUntilPack2 gnm_SaveGather Disabled, % LTrim(StrReplace("|100|95|90|85|80|75|70|65|60|55|50|45|40|35|30|25|20|15|10|5|", "|" FieldUntilPack2 "|", "|" FieldUntilPack2 "||"), "|")
 Gui, Add, DropDownList, xp yP+60 w45 vFieldUntilPack3 gnm_SaveGather Disabled, % LTrim(StrReplace("|100|95|90|85|80|75|70|65|60|55|50|45|40|35|30|25|20|15|10|5|", "|" FieldUntilPack3 "|", "|" FieldUntilPack3 "||"), "|")
+SetLoadingProgress(30)
 Gui, Add, Text, x322 y78 w93 +BackgroundTrans +Center, To Hive By:
 Gui, Add, Text, xp yp+60 wp +BackgroundTrans +Center, To Hive By:
 Gui, Add, Text, xp yp+60 wp +BackgroundTrans +Center, To Hive By:
 Gui, Add, DropDownList, x339 y92 w58 vFieldReturnType1 gnm_SaveGather Disabled, % LTrim(StrReplace("|Walk|Reset|", "|" FieldReturnType1 "|", "|" FieldReturnType1 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldReturnType2 gnm_SaveGather Disabled, % LTrim(StrReplace("|Walk|Reset|", "|" FieldReturnType2 "|", "|" FieldReturnType2 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldReturnType3 gnm_SaveGather Disabled, % LTrim(StrReplace("|Walk|Reset|", "|" FieldReturnType3 "|", "|" FieldReturnType3 "||"), "|")
+SetLoadingProgress(32)
 Gui, Add, DropDownList, x414 y57 w82 vFieldSprinklerLoc1 gnm_SaveGather Disabled, % LTrim(StrReplace("|Center|Upper Left|Upper|Upper Right|Right|Lower Right|Lower|Lower Left|Left|", "|" FieldSprinklerLoc1 "|", "|" FieldSprinklerLoc1 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldSprinklerLoc2 gnm_SaveGather Disabled, % LTrim(StrReplace("|Center|Upper Left|Upper|Upper Right|Right|Lower Right|Lower|Lower Left|Left|", "|" FieldSprinklerLoc2 "|", "|" FieldSprinklerLoc2 "||"), "|")
 Gui, Add, DropDownList, xp yp+60 wp vFieldSprinklerLoc3 gnm_SaveGather Disabled, % LTrim(StrReplace("|Center|Upper Left|Upper|Upper Right|Right|Lower Right|Lower|Lower Left|Left|", "|" FieldSprinklerLoc3 "|", "|" FieldSprinklerLoc3 "||"), "|")
+SetLoadingProgress(34)
 Gui, Add, Text, x412 y79 w86 +BackgroundTrans +Center, Distance:
 Gui, Add, Text, xp yp+60 wp +BackgroundTrans +Center, Distance:
 Gui, Add, Text, xp yp+60 wp +BackgroundTrans +Center, Distance:
@@ -2124,7 +2133,7 @@ Gui, Add, DropDownList, xp yp+60 wp vFieldSprinklerDist3 gnm_SaveGather Disabled
 Gui, Add, Button, x108 y89 w9 h14 gnm_FDCHelp, ?
 Gui, Add, Button, xp yp+60 w9 h14 gnm_FDCHelp, ?
 Gui, Add, Button, xp yp+60 w9 h14 gnm_FDCHelp, ?
-PostMessage, 0x5555, 25, 0, , ahk_pid %lp_PID%
+SetLoadingProgress(36)
 
 ;Contributors TAB
 ;------------------------
@@ -2139,7 +2148,7 @@ Gui, Add, Text, x18 y43 w225 +wrap +backgroundtrans cWhite, Special Thanks to th
 Gui, Add, Text, x264 y43 w180 +wrap +backgroundtrans cWhite, Thank you for your donations and contributions to this project!
 Gui, Add, Button, x440 y46 w18 h18 hwndhcleft gnm_ContributorsPageButton Disabled, <
 Gui, Add, Button, % "x464 y46 w18 h18 hwndhcright gnm_ContributorsPageButton Disabled" page_end, >
-PostMessage, 0x5555, 28, 0, , ahk_pid %lp_PID%
+SetLoadingProgress(38)
 
 ;MISC TAB
 ;------------------------
@@ -2193,7 +2202,6 @@ Gui, Add, Text, x375 y55 w119 h120 -Wrap vSessionStats
 Gui, Add, Button, x290 y39 w50 h15 vResetTotalStats gnm_ResetTotalStats, Reset
 Gui, Add, Button, x265 y202 w215 h24 gnm_WebhookGUI, Change Discord Settings
 nm_setStats()
-PostMessage, 0x5555, 35, 0, , ahk_pid %lp_PID%
 
 ;SETTINGS TAB
 ;------------------------
@@ -2206,6 +2214,7 @@ nm_importStyles()
 Gui, Add, DropDownList, x85 y34 w72 h100 vGuiTheme gnm_guiThemeSelect Disabled, % LTrim(StrReplace(StylesList, "|" GuiTheme "|", "|" GuiTheme "||"), "|")
 Gui, Add, Text, x10 y57 w100 +left +BackgroundTrans,GUI Transparency:
 Gui, Add, DropDownList, x105 y55 w52 h100 vGuiTransparency gnm_guiTransparencySet Disabled, % LTrim(StrReplace("|0|5|10|15|20|25|30|35|40|45|50|55|60|65|70|", "|" GuiTransparency "|", "|" GuiTransparency "||"), "|")
+SetLoadingProgress(40)
 
 ;hive settings
 Gui, Add, GroupBox, x5 y95 w160 h65, HIVE SETTINGS
@@ -2292,8 +2301,7 @@ Gui, Add, Slider, x415 y168 w78 h16 vMultiReset gnm_saveConfig Thick16 Disabled 
 Gui, Add, CheckBox, x345 y186 vGatherDoubleReset gnm_saveConfig +BackgroundTrans Checked%GatherDoubleReset%, Gather Double Reset
 Gui, Add, CheckBox, x345 y201 vDisableToolUse gnm_saveConfig +BackgroundTrans Checked%DisableToolUse%, Disable Tool Use
 Gui, Add, CheckBox, x345 y216 vAnnounceGuidingStar gnm_saveConfig +BackgroundTrans Checked%AnnounceGuidingStar%, Announce Guiding Star
-
-PostMessage, 0x5555, 45, 0, , ahk_pid %lp_PID%
+SetLoadingProgress(42)
 
 ;COLLECT/Kill TAB
 ;------------------------
@@ -2314,6 +2322,7 @@ Gui, Add, DropDownList, x52 y92 w70 vAntPassAction hwndhDDLAntPass gnm_saveColle
 PostMessage, 0x153, -1, 14,, ahk_id %hDDLAntPass%
 Gui, Add, Checkbox, x15 y114 +BackgroundTrans vRoboPassCheck gnm_saveCollect Checked%RoboPassCheck% Disabled, Robo Pass
 Gui, Add, Checkbox, x15 y133 +BackgroundTrans vHoneystormCheck gnm_saveCollect Checked%HoneystormCheck% Disabled, Honeystorm
+SetLoadingProgress(44)
 ;dispensers
 Gui, Font, w700
 Gui, Add, GroupBox, x130 y42 w170 h109 vDispensersGroupBox, Dispensers
@@ -2371,6 +2380,7 @@ Gui, Add, Checkbox, % "x108 yp+17 +BackgroundTrans gnm_saveCollect hwndhwndBeesm
 Gui, Add, Checkbox, % "x201 y170 +BackgroundTrans gnm_saveCollect hwndhwndBeesmas9 " (beesmasActive ? "vSamovarCheck Checked" SamovarCheck : "Disabled"), Samovar
 Gui, Add, Checkbox, % "x201 yp+17 +BackgroundTrans gnm_saveCollect hwndhwndBeesmas10 " (beesmasActive ? "vLidArtCheck Checked" LidArtCheck : "Disabled"), Lid Art
 Gui, Add, Checkbox, % "x201 yp+17 +BackgroundTrans gnm_saveCollect hwndhwndBeesmas11 " (beesmasActive ? "vGummyBeaconCheck Checked" GummyBeaconCheck : "Disabled"), Gummy Beacon
+SetLoadingProgress(45)
 
 ;KILL
 ;bugrun
@@ -2412,6 +2422,7 @@ Gui, Add, Checkbox, % "x305 y62 vStingerCactusCheck gnm_saveStingers Checked" St
 Gui, Add, Checkbox, % "x305 y80 vStingerRoseCheck gnm_saveStingers Checked" StingerRoseCheck " Hidden Disabled" !StingerCheck, Rose
 Gui, Add, Checkbox, % "x390 y62 vStingerMountainTopCheck gnm_saveStingers Checked" StingerMountainTopCheck " Hidden Disabled" !StingerCheck, Mountain Top
 Gui, Add, Checkbox, % "x390 y80 vStingerPepperCheck gnm_saveStingers Checked" StingerPepperCheck " Hidden Disabled" !StingerCheck, Pepper
+SetLoadingProgress(48)
 ;bosses
 Gui, Font, w700
 Gui, Add, GroupBox, x149 y104 w341 h126 vBossesGroupBox Hidden, Bosses
@@ -2463,10 +2474,7 @@ Gui, Add, Text, x448 y186 w22 vSnailTimeText +Center Hidden, % (SnailTime = "Kil
 Gui, Add, UpDown, xp+22 yp-1 w10 h16 -16 Range1-4 vSnailTimeUpDown gnm_SnailTime Hidden, % (SnailTime = "Kill") ? 4 : SnailTime//5
 Gui, Add, Text, x448 y207 w22 vChickTimeText +Center Hidden, % (ChickTime = "Kill") ? ChickTime : ChickTime "m"
 Gui, Add, UpDown, xp+22 yp-1 w10 h16 -16 Range1-4 vChickTimeUpDown gnm_ChickTime Hidden, % (ChickTime = "Kill") ? 4 : ChickTime//5
-
-
-nm_saveCollect()
-PostMessage, 0x5555, 55, 0, , ahk_pid %lp_PID%
+SetLoadingProgress(50)
 
 ;BOOST TAB
 ;------------------------
@@ -2487,6 +2495,7 @@ Gui, Add, Text, x10 y102 w10 left +BackgroundTrans, 3:
 Gui, Add, DropDownList, x20 y58 w55 vFieldBooster1 gnm_FieldBooster1 Disabled, % LTrim(StrReplace("|None|Blue|Red|Mountain|", "|" FieldBooster1 "|", "|" FieldBooster1 "||"), "|")
 Gui, Add, DropDownList, x20 y78 w55 vFieldBooster2 gnm_FieldBooster2 Disabled, % LTrim(StrReplace("|None|Blue|Red|Mountain|", "|" FieldBooster2 "|", "|" FieldBooster2 "||"), "|")
 Gui, Add, DropDownList, x20 y98 w55 vFieldBooster3 gnm_FieldBooster3 Disabled, % LTrim(StrReplace("|None|Blue|Red|Mountain|", "|" FieldBooster3 "|", "|" FieldBooster3 "||"), "|")
+SetLoadingProgress(53)
 Gui, Add, Text, x77 y62 w10 left +BackgroundTrans, Booster
 Gui, Add, Text, x77 y82 w10 left +BackgroundTrans, Booster
 Gui, Add, Text, x77 y102 w10 left +BackgroundTrans, Booster
@@ -2495,6 +2504,7 @@ Gui, Add, Text, x35 y137 w100 left +BackgroundTrans,By:
 Gui, Add, DropDownList, x55 y135 w37 vFieldBoosterMins gnm_saveBoost Disabled, % LTrim(StrReplace("|0|5|10|15|20|30|", "|" FieldBoosterMins "|", "|" FieldBoosterMins "||"), "|")
 Gui, Add, Text, x95 y137 w100 left +BackgroundTrans, Mins
 Gui, Add, CheckBox, x20 y165 +border +center vBoostChaserCheck gnm_BoostChaserCheck Checked%BoostChaserCheck%, Gather in`nBoosted Field
+SetLoadingProgress(54)
 ;hotbar
 Gui, Add, Text, x165 y40 w140 left +BackgroundTrans, Use
 Gui, Add, Text, x286 y40 w140 left +BackgroundTrans, Options
@@ -2511,12 +2521,12 @@ Loop, 6
 	Gui, Add, UpDown, % "x290 y" 40 + 20 * A_Index " w10 h16 -16 Range1-99999 vHotbarTime" i " gnm_saveBoost Hidden", % HotbarTime%i%
 	Gui, Add, Text, % "x308 y" 41 + 20 * A_Index " w62 vHBConditionText" i " +Center Hidden"
 	Gui, Add, UpDown, % "x370 y" 40 + 20 * A_Index " w10 h16 -16 Range1-100 vHotkeyMax" i " gnm_saveBoost Hidden", % HotkeyMax%i%
+	SetLoadingProgress(54+A_Index)
 }
 nm_HotbarWhile()
 Gui, Add, Button, x20 y200 w90 h30 vAutoFieldBoostButton gnm_autoFieldBoostButton, % (AutoFieldBoostActive ? "Auto Field Boost`n[ON]" : "Auto Field Boost`n[OFF]")
 Gui, Font, w700
 Gui, Font, s8 cDefault Norm, Tahoma
-PostMessage, 0x5555, 65, 0, , ahk_pid %lp_PID%
 
 ;QUEST TAB
 ;------------------------
@@ -2552,7 +2562,7 @@ Gui, Add, Checkbox, x340 y145 vRileyQuestGatherInterruptCheck gnm_RileyQuestChec
 Gui, Add, Text, x333 y159 w158 h78 vRileyQuestProgress, % StrReplace(RileyQuestProgress, "|", "`n")
 Gui, Font, w700
 Gui, Font, s8 cDefault Norm, Tahoma
-PostMessage, 0x5555, 70, 0, , ahk_pid %lp_PID%
+SetLoadingProgress(62)
 
 ;PLANTERS TAB
 ;------------------------
@@ -2565,6 +2575,7 @@ Gui, Add, Text, x478 y43 h20 cGreen +Center +BackgroundTrans, +
 ;Planters+ Start
 Gui, Add, Text, % "x17 y27 w40 h20 +left +BackgroundTrans vTextPresets" ((PlanterMode = 2) ? "" : " Hidden"), Presets
 Gui, Add, DropDownList, % "x57 y24 w60 h100 vNPreset gba_nPresetSwitch_" ((PlanterMode = 2) ? "" : " Hidden"), %nPreset%||Custom|Blue|Red|White
+SetLoadingProgress(63)
 Gui, Add, Text, % "x10 y47 w80 h20 +center +BackgroundTrans vTextNP" ((PlanterMode = 2) ? "" : " Hidden"), Nectar Priority
 Gui, Add, Text, % "x100 y47 w47 h30 +center +BackgroundTrans vTextMin" ((PlanterMode = 2) ? "" : " Hidden"), Min `%
 Gui, Add, Text, % "x10 y62 w137 h1 0x7 vTextLine1" ((PlanterMode = 2) ? "" : " Hidden")
@@ -2578,11 +2589,13 @@ Gui, Add, DropDownList, % "x20 y86 w80 h120 vN2priority gba_N2unswitch_" (((Plan
 Gui, Add, DropDownList, % "x20 y106 w80 h120 vN3priority gba_N3unswitch_" (((PlanterMode = 2) && (N2Priority != "none")) ? "" : " Hidden"), % LTrim(StrReplace("|" LTrim(n3string, "|") "|", "|" n3priority "|", "|" n3priority "||"), "|")
 Gui, Add, DropDownList, % "x20 y126 w80 h120 vN4priority gba_N4unswitch_" (((PlanterMode = 2) && (N3Priority != "none")) ? "" : " Hidden"), % LTrim(StrReplace("|" LTrim(n4string, "|") "|", "|" n4priority "|", "|" n4priority "||"), "|")
 Gui, Add, DropDownList, % "x20 y146 w80 h120 vN5priority gba_N5unswitch_" (((PlanterMode = 2) && (N4Priority != "none")) ? "" : " Hidden"), % LTrim(StrReplace("|" LTrim(n5string, "|") "|", "|" n5priority "|", "|" n5priority "||"), "|")
+SetLoadingProgress(66)
 Gui, Add, DropDownList, % "x105 y66 w40 h100 vN1minPercent gba_N1Punswitch_" ((PlanterMode = 2) ? "" : " Hidden"), % LTrim(StrReplace("|10|20|30|40|50|60|70|80|90|", "|" n1minPercent "|", "|" n1minPercent "||"), "|")
 Gui, Add, DropDownList, % "x105 y86 w40 h100 vN2minPercent gba_N2Punswitch_" (((PlanterMode = 2) && (N1Priority != "none")) ? "" : " Hidden"), % LTrim(StrReplace("|10|20|30|40|50|60|70|80|90|", "|" n2minPercent "|", "|" n2minPercent "||"), "|")
 Gui, Add, DropDownList, % "x105 y106 w40 h100 vN3minPercent gba_N3Punswitch_" (((PlanterMode = 2) && (N2Priority != "none")) ? "" : " Hidden"), % LTrim(StrReplace("|10|20|30|40|50|60|70|80|90|", "|" n3minPercent "|", "|" n3minPercent "||"), "|")
 Gui, Add, DropDownList, % "x105 y126 w40 h100 vN4minPercent gba_N4Punswitch_" (((PlanterMode = 2) && (N3Priority != "none")) ? "" : " Hidden"), % LTrim(StrReplace("|10|20|30|40|50|60|70|80|90|", "|" n4minPercent "|", "|" n4minPercent "||"), "|")
 Gui, Add, DropDownList, % "x105 y146 w40 h100 vN5minPercent gba_N5Punswitch_" (((PlanterMode = 2) && (N4Priority != "none")) ? "" : " Hidden"), % LTrim(StrReplace("|10|20|30|40|50|60|70|80|90|", "|" n5minPercent "|", "|" n5minPercent "||"), "|")
+SetLoadingProgress(69)
 Gui, Add, Text, % "x10 y171 w137 h1 0x7 vTextLine2" ((PlanterMode = 2) ? "" : " Hidden")
 Gui, Add, Text, % "x5 y178 w70 h20 +right +BackgroundTrans vTextHarvest" ((PlanterMode = 2) ? "" : " Hidden"), Harvest Every
 Gui, Add, Checkbox, % "x103 y194 w40 +BackgroundTrans vAutomaticHarvestInterval gba_AutoHarvestSwitch_ Checked" AutomaticHarvestInterval ((PlanterMode = 2) ? "" : " Hidden"), Auto
@@ -2647,7 +2660,7 @@ Gui, Add, Checkbox, % "x364 y200 w126 h13 vConvertFullBagHarvest gba_saveConfig_
 Gui, Add, Checkbox, % "x364 y216 w126 h13 vGatherPlanterLoot gba_saveConfig_ Checked" GatherPlanterLoot ((PlanterMode = 2) ? "" : " Hidden"), Gather Planter Loot
 
 Gui, Font, s8 cDefault Norm, Tahoma
-PostMessage, 0x5555, 80, 0, , ahk_pid %lp_PID%
+SetLoadingProgress(70)
 ;Manual Planters Start
 
 MPlanterListText := "|Plastic|Candy|Blue Clay|Red Clay|Tacky|Pesticide|Heat Treated|Hydroponic|Petal|Planter of Plenty|Paper|Ticket|"
@@ -2666,6 +2679,7 @@ Loop, 3 {
 		Gui, Add, DropDownList, % "x" ((Mod(A_Index, 3) = 1) ? "s+62" : "p") " ys+17 w92 vMSlot" i "Cycle" A_Index "Field gmp_SaveConfig" (((PlanterMode == 1) && (A_Index < 4)) ? "" : " Hidden"), % (MSlot%i%Cycle%A_Index%Field ? StrReplace(MFieldListText, MSlot%i%Cycle%A_Index%Field, MSlot%i%Cycle%A_Index%Field "|") : "|" MFieldListText)
 		Gui, Add, CheckBox, % "x" ((Mod(A_Index, 3) = 1) ? "s+62" : "p") " ys+41 w46 vMSlot" i "Cycle" A_Index "Glitter gmp_SaveConfig" (((PlanterMode == 1) && (A_Index < 4)) ? "" : " Hidden") " Checked" MSlot%i%Cycle%A_Index%Glitter, Glitter
 		Gui, Add, DropDownList, % "x" ((Mod(A_Index, 3) = 1) ? "s+108" : "p+46") " ys+38 w46 vMSlot" i "Cycle" A_Index "AutoFull gmp_SaveConfig" (((PlanterMode == 1) && (A_Index < 4)) ? "" : " Hidden"), % StrReplace("Full|Timed|", MSlot%i%Cycle%A_Index%AutoFull, MSlot%i%Cycle%A_Index%AutoFull "|")
+		SetLoadingProgress(61+i*9+A_Index)
 	}
     Gui, Add, Text, % "xs ys+20 +Center Section vMSlot" i "FieldText" (PlanterMode == 1 ? "" : " Hidden"), S%i% Fields:
     Gui, Add, Text, % "xs ys+20 +Center Section vMSlot" i "SettingsText" (PlanterMode == 1 ? "" : " Hidden"), S%i% Settings:
@@ -2686,6 +2700,7 @@ Gui, Add, Text, % "x355 y58 h1 w150 0x7 vMSliderSeparatorLine" (PlanterMode == 1
 ;; check plants button
 Gui, Add, Text, % "xs ys+50 +Center vMHarvestText Section" (PlanterMode == 1 ? "" : " Hidden"), Harvest
 Gui, Add, DropdownList, % "xp+41 yp-3 w94 vMHarvestInterval gmp_SaveConfig" (PlanterMode == 1 ? "" : " Hidden"), % StrReplace("Every 30 Minutes|Every Hour|Every 2 Hours|Every 3 Hours|Every 4 Hours|Every 5 Hours|Every 6 Hours|", MHarvestInterval, MHarvestInterval "|")
+SetLoadingProgress(98)
 
 ; page movement
 Gui, Add, Button, % "xs+25 ys+24 w20 h20 hwndMPageLeftHWND vMPageLeft gmp_UpdatePage Disabled" (PlanterMode == 1 ? "" : " Hidden"), <
@@ -3323,10 +3338,10 @@ mp_HarvestPlanter(PlanterIndex) {
 }
 ;;Manual planters end
 
-PostMessage, 0x5555, 95, 0, , ahk_pid %lp_PID%
+SetLoadingProgress(99)
 if (BuffDetectReset = 1)
 	nm_AdvancedGUI()
-PostMessage, 0x5555, 100, 0, , ahk_pid %lp_PID%
+SetLoadingProgress(100)
 
 WinClose, ahk_pid %lp_PID% ahk_class AutoHotkey
 DetectHiddenWindows, Off
@@ -3450,6 +3465,11 @@ nm_LoadingProgress(){
     exec.StdIn.Write(script), exec.StdIn.Close()
 
 	return exec.ProcessID
+}
+SetLoadingProgress(percent)
+{
+	global lp_PID
+	PostMessage, 0x5555, percent, 0, , ahk_pid %lp_PID%
 }
 nm_WebhookEasterEgg(){
 	global WebhookEasterEgg
