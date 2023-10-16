@@ -1700,6 +1700,7 @@ bitmaps["yes"] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAAB0AAAAPAQMAAAA
 bitmaps["no"] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAAB4AAAAQAQMAAAA79F2RAAAABlBMVEUAAAD3//lCqWtQAAAAAXRSTlMAQObYZgAAAFtJREFUeAEBUACv/wD4CAHAANwIB/AAjAgMGACGCAgIAIYIEAwAgwgQBACBiBAEAIGIEAQAgMgQBACAeBAEAIA4EAQAgDgQBACAOBAEAIAYCAgAgAgMGACACAfwttYQFVcrYb0AAAAASUVORK5CYII=")
 bitmaps["keep"] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAAEIAAAAcAQMAAADvHvssAAAABlBMVEUAAAD3//lCqWtQAAAAAXRSTlMAQObYZgAAAIBJREFUeNqVzjEOwjAQRNGxLHmbyLmAJa6RY6WkQitxMR9lIwpKWgrLy8pgkyJNfvW6GUjCL1mGrkPrkHRtuevBsOgGPNm/XSE1gYqvpIwX4kSB7gzFFIInl6GcQmzavoIpX+qsJogcaE2I2MmZlr/6hqS5kO3C1B5UU2yv0DuhDxaLPafi+H0cAAAAAElFTkSuQmCC")
 bitmaps["emptyhealth"] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAABQAAAABCAAAAAD7+dH5AAAADElEQVR42mNczoAJAA02AKmWDxinAAAAAElFTkSuQmCC")
+bitmaps["disconnected"] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAAAoAAAAUAgMAAADJgETFAAAACVBMVEU5Oz3+/v7///+uecUjAAAAF3RFWHRTb2Z0d2FyZQBQaG90b0RlbW9uIDkuMM0c2DEAAAMoaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49J++7vycgaWQ9J1c1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCc/Pgo8eDp4bXBtZXRhIHhtbG5zOng9J2Fkb2JlOm5zOm1ldGEvJyB4OnhtcHRrPSdJbWFnZTo6RXhpZlRvb2wgMTIuNDQnPgo8cmRmOlJERiB4bWxuczpyZGY9J2h0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMnPgoKIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PScnCiAgeG1sbnM6ZXhpZj0naHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8nPgogIDxleGlmOlBpeGVsWERpbWVuc2lvbj4xMDwvZXhpZjpQaXhlbFhEaW1lbnNpb24+CiAgPGV4aWY6UGl4ZWxZRGltZW5zaW9uPjIwPC9leGlmOlBpeGVsWURpbWVuc2lvbj4KIDwvcmRmOkRlc2NyaXB0aW9uPgoKIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PScnCiAgeG1sbnM6dGlmZj0naHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8nPgogIDx0aWZmOkltYWdlTGVuZ3RoPjIwPC90aWZmOkltYWdlTGVuZ3RoPgogIDx0aWZmOkltYWdlV2lkdGg+MTA8L3RpZmY6SW1hZ2VXaWR0aD4KICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogIDx0aWZmOlJlc29sdXRpb25Vbml0PjI8L3RpZmY6UmVzb2x1dGlvblVuaXQ+CiAgPHRpZmY6WFJlc29sdXRpb24+OTYvMTwvdGlmZjpYUmVzb2x1dGlvbj4KICA8dGlmZjpZUmVzb2x1dGlvbj45Ni8xPC90aWZmOllSZXNvbHV0aW9uPgogPC9yZGY6RGVzY3JpcHRpb24+CjwvcmRmOlJERj4KPC94OnhtcG1ldGE+Cjw/eHBhY2tldCBlbmQ9J3InPz5QDHWDAAAAEklEQVR42mMgFmStWsCwijAGAH2jE0nFh8hRAAAAAElFTkSuQmCC")
 
 ;gui
 bitmaps["beesmas"] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAC1lBMVEUAAABkuTNitTJfqTPSdVGQakFhqjJkpDRgpjP+5l3211ZdqjBgpzNcnzJhrjNdqi5jpTVhtC5epDM9wCNenzNhojf84mBayjForTVbrzL30RmZb07z4F/+XV/y0k9fuzH91y9dnTRkrDRkojNXnyZeuTCeclKBsz1SwC6SaUOYi0FjtTJWqTD+4m3y3mTsYVhiqDT+42NWuy6gdFSrviRitzPcaVRiqDT01FKVa0RPviz72EVfsjH7WVljtzGWdU9gtTJ+ljpYlTObblBkuDJ/pDhGrC5fpTT1zyWOnD1nrzf311b63l6wf0mQYkVTqy9hsC/Uvw7+Om2LakH+4mcr0iEajBpitTJitjJhpjNfpDBjsjJnvzT/V19gpjJWqzBesy1boyv/T2L/U2D4XVxpqz1jozRjrDNhpTNgtS9YsSTP5cH/UWH+W13oZVhpuTtmrjdqxDZntDVnvDRjsDNhuDFhsTFcujBUrDBTqDBYvC9cpC9UvS3////7/v2y1Jyn1Yz/72j/aWKGxWHlaFfhalTBe02Zeky9eku4ekqbikGNcUGGpT6MnD18njtqszp8pDlqmDZrsTVvqzVkoDRcmjRfqDJVtDFdrzFaqTFPoDFXmTFatjBatDBYozBXuS5bsyhbqyZXoSZNqCVUoCPc7dG/2q2936mw2Zms0JSazYOWxHiPwG+NyWv/6WiJvmaLw2X/YmL7312rhln/UVl7tVXv11Scm1Oef1PW1VLWclLXcVLQcFF3s1DJbVD42E/TzU9tuU/Jc0+tjkuReEtyrkm1fkmvgEite0hwvEWbs0Scq0SjmUSfiUOciUP+1kKyyEL/5kGOh0GKsz6Qnj6Kkz6Kkj7/4D2AujyFlTx4lDptujm30TdrwjdqozdynjdkuTZftzVvrjVnojRgqDNXnTNXvTFYrzFTrTFMojBmwy9eoS9Uui5ivi1RtC1jsSxaridTpCZajVxKAAAAV3RSTlMA/s8a/vLizsmpmpN+em5DOy8iDwv9/Pv6+Pj29fXs7Ojn5ubg393b0MvBu7i1tLGvrq2soZ+ckpCQjYSEf395eGhnXlpZVlJQSklAPTMrKikjIh4aFggjtvGzAAACC0lEQVQ4y2JAA1zeDPiBmAU+WWtO3XVyXJw+OBV4KFzcv6nRMAS3EYFS5xv18Nlhcv3ANhkB3PJudy48n7xTPQyXfKh88dyy6nnvuXEp0L88PyI6KnV9Pz92edemvPDy6EWrazeoiGBVYHUqaXf5nKjUNanpQlgVMGucSdoVHR+1KJ0Hhxs4pp9Lyrv18qmoE3Z57rsz3vWmJJ+Y8kLSH5s8f0wEY0TN5EM5Kcd62LHIC6vGJCzNXjA3/uae2OQmW0wFAJndmJ+womFBWUZ8/P2uNhZfdHnPjS1FVVlZEdEZkZEfF1eEs6MHhdHpnJZHNeFABXGJ9fWJcUXoUcYnfiU2pbemHKQgOzsxnY0Z3Q62ZxPyktomvZkZGRcVFVXAiy7PW5BWmdaZk3t84qxZs2dPnaqIZoIgY0RZyYzpfSzJsfsuTZxXWflQB1UB09usCCCoqprQkZKc29px9mqPI7I8YDavmhvCQSBiTkXatc7W3NgtsbJBCPmA4qzldfkJIAUfqqfFV8x83Le967AWkgUxmfknM8FGNB+NioyMW7Kq7uDiB+5wBcWM4ZkJIOmE/NplSyIjIxO3rkyNuo1IFg4xhYWFMTGlpZmla/dWP5mWXlCysKhfSQjJly52ptpMEpNKohe+TptyT5nDwJzPSxgjQu0372g/0t3dzhqMK907G6tJs2pa+iGLAQCiD78p46afzQAAAABJRU5ErkJggg==")
@@ -8514,7 +8515,7 @@ nm_imgSearch(fileName,v,aim := "full", trans:="none"){
 	;ww := windowWidth
 	;wh := windowHeight
 	xi:=(aim="actionbar") ? windowWidth/4 : (aim="highright") ? windowWidth/2 : (aim="right") ? windowWidth/2 : (aim="center") ? windowWidth/4 : (aim="lowright") ? windowWidth/2 : 0
-	yi:=(aim="low") ? windowHeight/2 : (aim="actionbar") ? (windowHeight/4)*3 : (aim="center") ? yi:=windowHeight/4 : (aim="lowright") ? windowHeight/2 : (aim="quest") ? 150 : 0
+	yi:=(aim="low") ? windowHeight/2 : (aim="actionbar") ? (windowHeight/4)*3 : (aim="center") ? windowHeight/4 : (aim="lowright") ? windowHeight/2 : (aim="quest") ? 150 : 0
 	ww:=(aim="actionbar") ? xi*3 : (aim="highleft") ? windowWidth/2 : (aim="left") ? windowWidth/2 : (aim="center") ? xi*3 : (aim="quest") ? 310 : windowWidth
 	wh:=(aim="high") ? windowHeight/2 : (aim="highright") ? windowHeight/2 : (aim="highleft") ? windowHeight/2 : (aim="buff") ? 150 : (aim="abovebuff") ? 30 : (aim="center") ? yi*3 : (aim="quest") ? Max(560, windowHeight-100) : windowHeight
 	IfExist, %A_WorkingDir%\nm_image_assets\
@@ -14794,6 +14795,7 @@ CloseRoblox()
 		send {%SC_Esc%}{%SC_L%}{%SC_Enter%}
 		SetKeyDelay, PrevKeyDelay
 		WinClose, Roblox
+		Sleep, 5000 ;Delay to prevent Roblox Error Code 264
 	}
 	; kill any remnant processes
 	for p in ComObjGet("winmgmts:").ExecQuery("SELECT * FROM Win32_Process WHERE Name LIKE '%Roblox%' OR CommandLine LIKE '%ROBLOXCORPORATION%'")
@@ -14802,11 +14804,18 @@ CloseRoblox()
 DisconnectCheck(testCheck := 0)
 {
 	global LastClock, LastGingerbread, KeyDelay, HiveSlot, CurrentAction, PreviousAction, PrivServer, TotalDisconnects, SessionDisconnects, DailyReconnect, PublicFallback, resetTime, SC_Esc, SC_R, SC_Enter, SC_E, bitmaps, PlanterName1, PlanterName2, PlanterName3, PlanterHarvestTime1, PlanterHarvestTime2, PlanterHarvestTime3, MacroState, ReconnectDelay, FallbackServer1, FallbackServer2, FallbackServer3, beesmasActive
-	static ServerLabels := {0: "Public Server Link", 1: "Private Server Link", 2: "Fallback Server Link 1", 3: "Fallback Server Link 2", 4: "Fallback Server Link 3"}, LegacyOverride := 0
+	static ServerLabels := {0: "Public Server", 1: "Private Server", 2: "Fallback Server 1", 3: "Fallback Server 2", 4: "Fallback Server 3"}, LegacyOverride := 0
 	
 	; return if not disconnected or crashed
-	if (nm_imgSearch("disconnected.png",25, "center")[1] = 1 && GetRobloxHWND() && !WinExist("Roblox Crash"))
-		return 0
+	WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " GetRobloxHWND())
+	if ((windowWidth != 0) && !WinExist("Roblox Crash")) {
+		pBMScreen := Gdip_BitmapFromScreen(windowX+windowWidth//2-200 "|" windowY+windowHeight//2-160 "|400|320")
+		if (Gdip_ImageSearch(pBMScreen, bitmaps["disconnected"], , , , , , 2) = 0) {
+			Gdip_DisposeImage(pBMScreen)
+			return 0
+		}
+		Gdip_DisposeImage(pBMScreen)
+	}
 
 	; end any residual movement and set reconnect start time
 	nm_endWalk()
@@ -14815,17 +14824,15 @@ DisconnectCheck(testCheck := 0)
 	CurrentAction:="Reconnect"
 
 	; wait for any requested delay time (e.g. from remote control or daily reconnect)
-	if (ReconnectDelay)
-	{
+	if (ReconnectDelay) {
 		nm_setStatus("Waiting", ReconnectDelay " seconds before Reconnect")
 		Sleep, 1000*ReconnectDelay
 		ReconnectDelay := 0
 	}
-	if (DailyReconnect)
-	{
-		staggerDelay:=30000*HiveSlot
-		nm_setStatus("Waiting", round(2+(staggerDelay/60000), 1) " minutes before Reconnect")
-		sleep, 120000+staggerDelay
+	if (DailyReconnect) {
+		staggerDelay:=30000+5000*HiveSlot
+		nm_setStatus("Waiting", staggerDelay//1000 " seconds before Reconnect")
+		sleep, staggerDelay
 		DailyReconnect := 0
 		Prev_DetectHiddenWindows := A_DetectHiddenWindows
 		Prev_TitleMatchMode := A_TitleMatchMode
@@ -14837,8 +14844,7 @@ DisconnectCheck(testCheck := 0)
 		DetectHiddenWindows %Prev_DetectHiddenWindows%
 		SetTitleMatchMode %Prev_TitleMatchMode%
 	}
-	else if (MacroState = 2)
-	{
+	else if (MacroState = 2) {
 		TotalDisconnects:=TotalDisconnects+1
 		SessionDisconnects:=SessionDisconnects+1
 		Prev_DetectHiddenWindows := A_DetectHiddenWindows
@@ -14857,66 +14863,53 @@ DisconnectCheck(testCheck := 0)
 
 	; obtain link codes from Private Server and Fallback Server links
 	linkCodes := {}
-	for k,v in ["PrivServer", "FallbackServer1", "FallbackServer2", "FallbackServer3"]
-	{
-		if (%v% && (StrLen(%v%) > 0))
-		{
+	for k,v in ["PrivServer", "FallbackServer1", "FallbackServer2", "FallbackServer3"] {
+		if (%v% && (StrLen(%v%) > 0)) {
 			if RegexMatch(%v%, "i)(?<=privateServerLinkCode=)(.{32})", linkCode)
 				linkCodes[k] := linkCode
 			else
 				nm_setStatus("Error", ServerLabels[k] " Invalid")
 		}
 	}
-	
+
 	; main reconnect loop
-	Loop {	
+	Loop {
 		;Decide Server
-		server := ((A_Index <= 12) && linkCodes.HasKey(n := (A_Index-1)//3 + 1)) ? n : ((PublicFallback = 0) && (n := linkCodes.MinIndex())) ? n : 0
+		server := ((A_Index <= 20) && linkCodes.HasKey(n := (A_Index-1)//5 + 1)) ? n : ((PublicFallback = 0) && (n := linkCodes.MinIndex())) ? n : 0
 		
 		;Wait For Success
 		i := A_Index, success := 0
-		Loop, 1 {
+		Loop, 5 {
 			;START
-			switch % LegacyOverride ? 0 : Mod(i, 3)
-			{
-				case 1:
+			switch % LegacyOverride ? 0 : Mod(i, 5) {
+				case 1,2:
 				;Close Roblox
 				CloseRoblox()
-				Sleep 500 ;Delay to prevent error during UWP reconnect
 				;Run Server Deeplink
 				nm_setStatus("Attempting", ServerLabels[server])
 				try Run % "roblox://placeID=1537690962" (server ? ("&linkCode=" linkCodes[server]) : "")
 				
-				case 2:
+				case 3,4:
 				;Run Server Deeplink (without closing)
 				nm_setStatus("Attempting", ServerLabels[server])
 				try Run % "roblox://placeID=1537690962" (server ? ("&linkCode=" linkCodes[server]) : "")
 				
 				default:
-				if server
-				{
+				if server {
 					;Close Roblox
 					CloseRoblox()
 					;Run Server Link (legacy method w/ browser)
 					nm_setStatus("Attempting", ServerLabels[server] " (Browser)")
-					if (success := LegacyReconnect(linkCodes[server]) = 1)
-					{
+					if (success := LegacyReconnect(linkCodes[server], i) = 1) {
 						LegacyOverride := 1
-						nm_setStatus("Warning", "Deeplink reconnect failed, legacy reconnect enabled for this session!") 
-						;Add ((state = "Interupted") || (state = "Reporting") || (state = "Warning")) ? 14408468 ; yellow - alert to update the Status.ahk file
+						nm_setStatus("Warning", "Deeplink reconnect failed, switched to legacy reconnect (browser) for this session!")
 						break
 					}
 					else
 						continue 2
-				}
-				else 
-				{
+				} else {
 					;Close Roblox
-					if (i = 1)
-					{
-						CloseRoblox()
-						Sleep 500
-					}
+					(i = 1) ? CloseRoblox()
 					;Run Server Link (spam deeplink method)
 					try Run % "roblox://placeID=1537690962"
 				}
@@ -14930,7 +14923,6 @@ DisconnectCheck(testCheck := 0)
 				}
 				if (A_Index = 240) {
 					nm_setStatus("Error", "No Roblox Found`nRetry: " i)
-					Sleep, 1000
 					break 2
 				}
 				sleep, 1000 ; timeout 4 mins, wait for any Roblox update to finish
@@ -14939,29 +14931,26 @@ DisconnectCheck(testCheck := 0)
 			Loop, 180 {
 				WinActivate, Roblox
 				WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " GetRobloxHWND())
-				pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY+30 "|" windowWidth "|150")
-				if (Gdip_ImageSearch(pBMScreen, bitmaps["loading"], , , , , , 4) = 1)
-				{
+				pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY+30 "|" windowWidth "|" windowHeight-30)
+				if (Gdip_ImageSearch(pBMScreen, bitmaps["loading"], , , , , 150, 4) = 1) {
 					Gdip_DisposeImage(pBMScreen)
 					nm_setStatus("Detected", "Game Open")
 					break
 				}
-				if (Gdip_ImageSearch(pBMScreen, bitmaps["science"], , , , , , 2) = 1)
-				{
+				if (Gdip_ImageSearch(pBMScreen, bitmaps["science"], , , , , 150, 2) = 1) {
 					Gdip_DisposeImage(pBMScreen)
 					nm_setStatus("Detected", "Game Loaded")
 					success := 1
 					break 2
 				}
-				Gdip_DisposeImage(pBMScreen)
-				if (nm_imgSearch("disconnected.png",25, "center")[1] = 0){
-					nm_setStatus("Error", "Disconnected during Reconnect`nRetry: " i)
-					Sleep, 1000
-					break 2
+				if (Gdip_ImageSearch(pBMScreen, bitmaps["disconnected"], , , , , , 2) = 1) {
+					Gdip_DisposeImage(pBMScreen)
+					nm_setStatus("Warning", "Disconnected during Reconnect")
+					continue 2
 				}
+				Gdip_DisposeImage(pBMScreen)
 				if (A_Index = 180) {
 					nm_setStatus("Error", "No BSS Found`nRetry: " i)
-					Sleep, 1000
 					break 2
 				}
 				sleep, 1000 ; timeout 3 mins, slow loading
@@ -14970,26 +14959,24 @@ DisconnectCheck(testCheck := 0)
 			Loop, 180 {
 				WinActivate, Roblox
 				WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " GetRobloxHWND())
-				pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY+30 "|" windowWidth "|150")
-				if ((Gdip_ImageSearch(pBMScreen, bitmaps["loading"], , , , , , 4) = 0) || (Gdip_ImageSearch(pBMScreen, bitmaps["science"], , , , , , 2) = 1))
-				{
+				pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY+30 "|" windowWidth "|" windowHeight-30)
+				if ((Gdip_ImageSearch(pBMScreen, bitmaps["loading"], , , , , 150, 4) = 0) || (Gdip_ImageSearch(pBMScreen, bitmaps["science"], , , , , 150, 2) = 1)) {
 					Gdip_DisposeImage(pBMScreen)
 					nm_setStatus("Detected", "Game Loaded")
 					success := 1
 					break 2
 				}
-				Gdip_DisposeImage(pBMScreen)
-				if (nm_imgSearch("disconnected.png",25, "center")[1] = 0){
-					nm_setStatus("Error", "Disconnected during Reconnect`nRetry: " i)
-					Sleep, 1000
-					break 2
+				if (Gdip_ImageSearch(pBMScreen, bitmaps["disconnected"], , , , , , 2) = 1) {
+					Gdip_DisposeImage(pBMScreen)
+					nm_setStatus("Warning", "Disconnected during Reconnect")
+					continue 2
 				}
+				Gdip_DisposeImage(pBMScreen)
 				if (A_Index = 180) {
 					nm_setStatus("Error", "BSS Load Timeout`nRetry: " i)
-					Sleep, 1000
 					break 2
 				}
-				sleep, 1000 ; timeout 4 mins, slow loading
+				sleep, 1000 ; timeout 3 mins, slow loading
 			}
 		}
 		
@@ -15039,8 +15026,9 @@ DisconnectCheck(testCheck := 0)
 		}
 	}
 }
-LegacyReconnect(linkCode)
-{ 
+LegacyReconnect(linkCode, i)
+{
+	global bitmaps
 	static init := VarSetCapacity(cmd, 512) + DllCall("shlwapi\AssocQueryString","Int",0,"Int",1,"Str","http","Str","open","Str",cmd, "IntP",512) + DllCall("Shell32\SHEvaluateSystemCommandTemplate","WStr",cmd,"PtrP",pEXE,"Ptr",0,"PtrP",pPARAMS), exe := StrGet(pEXE), params := StrGet(pPARAMS)
 	
 	ShellRun(exe, StrReplace(params, "%1", "https://www.roblox.com/games/1537690962?privateServerLinkCode=" linkCode)), success := 0
@@ -15289,8 +15277,13 @@ nm_claimHiveSlot(){
 				KeyWait, F14, T20 L
 				nm_endWalk()
 				Sleep, 500
-				HiveSlot := slots.MinIndex()
-				break
+				pBMScreen := Gdip_BitmapFromScreen(windowX+windowWidth//2-200 "|" windowY+36 "|200|120")
+				if (Gdip_ImageSearch(pBMScreen, bitmaps["e_button"], , , , , , 2, , 6) = 1) {
+					Gdip_DisposeImage(pBMScreen)
+					HiveSlot := slots.MinIndex()
+					break
+				}
+				Gdip_DisposeImage(pBMScreen)
 			}
 			else {
 				Loop % (6 - HiveSlot)
@@ -15318,7 +15311,7 @@ nm_claimHiveSlot(){
 	}
 
 	;update hive slot
-	GuiControl, Choose, HiveSlot, %HiveSlot%
+	GuiControl, , HiveSlot, %HiveSlot%
 	IniWrite, %HiveSlot%, settings\nm_config.ini, Settings, HiveSlot
 	nm_setStatus("Claimed", "Hive Slot " . HiveSlot)
 	;;;;; Natro so broke :weary:

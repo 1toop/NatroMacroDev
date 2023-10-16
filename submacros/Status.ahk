@@ -477,7 +477,7 @@ nm_status(status)
 		; ping
 		content := ((criticalCheck = 1) && discordUID 
 			&& (((CriticalErrorPingCheck = 1) && (state = "Error"))
-			|| ((DisconnectPingCheck = 1) && (state = "Disconnected"))
+			|| ((DisconnectPingCheck = 1) && InStr(stateString, "Disconnected"))
 			|| ((GameFrozenPingCheck = 1) && (InStr(stateString, "Resetting: Character") && (Mod(SubStr(objective, InStr(objective, " ")+1), 10) = 5)))
 			|| ((PhantomPingCheck = 1) && InStr(stateString, "Phantom"))
 			|| ((UnexpectedDeathPingCheck = 1) && (state = "You Died"))
