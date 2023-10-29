@@ -57,8 +57,8 @@ Discord is our main platform for troubleshooting and update news!
 
 <a href="https://discord.gg/natromacro">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://invidget.switchblade.xyz/natromacro"> <!-- dark theme -->
-    <img alt="discord-invite-widget" width=500 src="https://invidget.switchblade.xyz/natromacro?theme=light"> <!-- light theme -->
+    <source media="(prefers-color-scheme: dark)" srcset="http://invidget.switchblade.xyz/natromacro"> <!-- dark theme -->
+    <img alt="discord-invite-widget" width=500 src="http://invidget.switchblade.xyz/natromacro?theme=light"> <!-- light theme -->
   </picture>
 </a>
 
@@ -88,8 +88,8 @@ You can do this by scrolling up and clicking the Star button at the top of the p
 
 <a href="https://github.com/NatroTeam/NatroMacro/stargazers">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://reporoster.com/stars/dark/NatroTeam/NatroMacro"> <!-- dark theme -->
-    <img alt="stargazer-widget" src="https://reporoster.com/stars/NatroTeam/NatroMacro"> <!-- light theme -->
+    <source media="(prefers-color-scheme: dark)" srcset="http://reporoster.com/stars/dark/NatroTeam/NatroMacro"> <!-- dark theme -->
+    <img alt="stargazer-widget" src="http://reporoster.com/stars/NatroTeam/NatroMacro"> <!-- light theme -->
   </picture>
 </a>
 
