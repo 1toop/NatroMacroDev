@@ -1652,6 +1652,8 @@ global HasPopStar:=0
 global PopStarActive:=0
 global PreviousAction:="None"
 global CurrentAction:="Startup"
+fieldnamelist := "|Bamboo|Blue Flower|Cactus|Clover|Coconut|Dandelion|Mountain Top|Mushroom|Pepper|Pine Tree|Pineapple|Pumpkin|Rose|Spider|Strawberry|Stump|Sunflower|"
+hotbarwhilelist := "|Never|Always|At Hive|Gathering|Attacking|Microconverter|Whirligig|Enzymes|GatherStart|Snowflake|"
 sprinklerImages := ["saturator"]
 state:="Startup"
 objective:="UI"
@@ -2045,11 +2047,11 @@ Gui, Add, Text, x4 y61 w10 +left +BackgroundTrans,1:
 Gui, Add, Text, xp yp+60 wp +left +BackgroundTrans,2:
 Gui, Add, Text, xp yp+60 wp +left +BackgroundTrans,3:
 Gui, Font, s8 cDefault Norm, Tahoma
-Gui, Add, DropDownList, x18 y57 w106 vFieldName1 gnm_FieldSelect1 Disabled, % LTrim(StrReplace("|Bamboo|Blue Flower|Cactus|Clover|Coconut|Dandelion|Mountain Top|Mushroom|Pepper|Pine Tree|Pineapple|Pumpkin|Rose|Spider|Strawberry|Stump|Sunflower|", "|" FieldName1 "|", "|" FieldName1 "||"), "|")
+Gui, Add, DropDownList, x18 y57 w106 vFieldName1 gnm_FieldSelect1 Disabled, % LTrim(StrReplace(fieldnamelist, "|" FieldName1 "|", "|" FieldName1 "||"), "|")
 SetLoadingProgress(3)
-Gui, Add, DropDownList, xp yp+60 wp vFieldName2 gnm_FieldSelect2 Disabled, % LTrim(StrReplace("|None|Bamboo|Blue Flower|Cactus|Clover|Coconut|Dandelion|Mountain Top|Mushroom|Pepper|Pine Tree|Pineapple|Pumpkin|Rose|Spider|Strawberry|Stump|Sunflower|", "|" FieldName2 "|", "|" FieldName2 "||"), "|")
+Gui, Add, DropDownList, xp yp+60 wp vFieldName2 gnm_FieldSelect2 Disabled, % LTrim(StrReplace("|None" fieldnamelist, "|" FieldName2 "|", "|" FieldName2 "||"), "|")
 SetLoadingProgress(6)
-Gui, Add, DropDownList, xp yp+60 wp vFieldName3 gnm_FieldSelect3 Disabled, % LTrim(StrReplace("|None|Bamboo|Blue Flower|Cactus|Clover|Coconut|Dandelion|Mountain Top|Mushroom|Pepper|Pine Tree|Pineapple|Pumpkin|Rose|Spider|Strawberry|Stump|Sunflower|", "|" FieldName3 "|", "|" FieldName3 "||"), "|")
+Gui, Add, DropDownList, xp yp+60 wp vFieldName3 gnm_FieldSelect3 Disabled, % LTrim(StrReplace("|None" fieldnamelist, "|" FieldName3 "|", "|" FieldName3 "||"), "|")
 SetLoadingProgress(9)
 hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["savefield"])
 Gui, Add, Picture, x2 y86 w18 h18 gnm_SaveFieldDefault hwndhSaveFieldDefault1, HBITMAP:*%hBM%
@@ -2367,53 +2369,26 @@ Gui, Add, Checkbox, x135 yp+19 +BackgroundTrans vCoconutDisCheck gnm_saveCollect
 Gui, Add, Checkbox, x225 y57 +BackgroundTrans vRoyalJellyDisCheck gnm_saveCollect Checked%RoyalJellyDisCheck% Disabled, Royal Jelly
 Gui, Add, Checkbox, x225 yp+19 +BackgroundTrans vGlueDisCheck gnm_saveCollect Checked%GlueDisCheck% Disabled, Glue
 ;beesmas
+beesmasActive := 0
 Gui, Font, w700
-Gui, Add, GroupBox, x10 y153 w290 h84 vBeesmasGroupBox
-try
-{
-	wr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-	wr.Open("GET", "https://raw.githubusercontent.com/NatroTeam/.github/main/profile/data/beesmas.txt", 1)
-	wr.SetRequestHeader("accept", "application/vnd.github.v3.raw")
-	wr.Send()
-	wr.WaitForResponse()
-	switch Trim(wr.ResponseText, " `t`r`n")
-	{
-		case 1:
-		beesmasActive := 1
-		case 0:
-		beesmasActive := 0
-		default:
-		throw
-	}
-}
-catch
-{
-	beesmasActive := 0
-	hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["warninggui"])
-	Gui, Add, Picture, % "+BackgroundTrans x136 y153 w14 h14 gBeesmasActiveFail", HBITMAP:*%hBM%
-	DllCall("DeleteObject", "ptr", hBM)
-}
-if (beesmasActive = 0)
-	BeesmasGatherInterruptCheck := StockingsCheck := WreathCheck := FeastCheck := RBPDeLevelChck := GingerbreadCheck := SnowMachineCheck := CandlesCheck := SamovarCheck := LidArtCheck := GummyBeaconCheck := 0
-else
-	sprinklerImages.Push("saturatorWS")
-GuiControl, , BeesmasGroupBox, % "Beesmas" (beesmasActive ? " (Active)" : " (Inactive)")
+Gui, Add, GroupBox, x10 y153 w290 h84 vBeesmasGroupBox, Beesmas (Inactive)
 Gui, Font, s8 cDefault Norm, Tahoma
-hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["beesmas"]) 
-Gui, Add, Picture, +BackgroundTrans x122 y150 w20 h20 vBeesmasImage, % (beesmasActive ? "HBITMAP:*" . hBM : "")
+hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["warninggui"])
+Gui, Add, Picture, +BackgroundTrans x136 y153 w14 h14 gBeesmasActiveFail vBeesmasFailImage, HBITMAP:*%hBM%
 DllCall("DeleteObject", "ptr", hBM)
-Gdip_DisposeImage(bitmaps["beesmas"])
-Gui, Add, Checkbox, % "x156 y153 +BackgroundTrans gnm_saveCollect hwndhwndBeesmas1 " (beesmasActive ? "vBeesmasGatherInterruptCheck Checked" BeesmasGatherInterruptCheck : "Disabled"), Allow Gather Interrupt
-Gui, Add, Checkbox, % "x15 y170 +BackgroundTrans gnm_saveCollect hwndhwndBeesmas2 " (beesmasActive ? "vStockingsCheck Checked" StockingsCheck : "Disabled"), Stockings
-Gui, Add, Checkbox, % "x15 yp+17 +BackgroundTrans gnm_saveCollect hwndhwndBeesmas3 " (beesmasActive ? "vWreathCheck Checked" WreathCheck : "Disabled"), Honey Wreath
-Gui, Add, Checkbox, % "x15 yp+17 +BackgroundTrans gnm_saveCollect hwndhwndBeesmas4 " (beesmasActive ? "vFeastCheck Checked" FeastCheck : "Disabled"), Feast
-Gui, Add, Checkbox, % "x15 yp+17 +BackgroundTrans gnm_saveCollect hwndhwndBeesmas5 " (beesmasActive ? "vRBPDelevelCheck Checked" RBPDelevelCheck : "Disabled"), Robo Party De-level
-Gui, Add, Checkbox, % "x108 y170 +BackgroundTrans gnm_saveCollect hwndhwndBeesmas6 " (beesmasActive ? "vGingerbreadCheck Checked" GingerbreadCheck : "Disabled"), Gingerbread
-Gui, Add, Checkbox, % "x108 yp+17 +BackgroundTrans gnm_saveCollect hwndhwndBeesmas7 " (beesmasActive ? "vSnowMachineCheck Checked" SnowMachineCheck : "Disabled"), Snow Machine
-Gui, Add, Checkbox, % "x108 yp+17 +BackgroundTrans gnm_saveCollect hwndhwndBeesmas8 " (beesmasActive ? "vCandlesCheck Checked" CandlesCheck : "Disabled"), Candles
-Gui, Add, Checkbox, % "x201 y170 +BackgroundTrans gnm_saveCollect hwndhwndBeesmas9 " (beesmasActive ? "vSamovarCheck Checked" SamovarCheck : "Disabled"), Samovar
-Gui, Add, Checkbox, % "x201 yp+17 +BackgroundTrans gnm_saveCollect hwndhwndBeesmas10 " (beesmasActive ? "vLidArtCheck Checked" LidArtCheck : "Disabled"), Lid Art
-Gui, Add, Checkbox, % "x201 yp+17 +BackgroundTrans gnm_saveCollect hwndhwndBeesmas11 " (beesmasActive ? "vGummyBeaconCheck Checked" GummyBeaconCheck : "Disabled"), Gummy Beacon
+Gui, Add, Picture, +BackgroundTrans x122 y150 w20 h20 vBeesmasImage
+Gui, Add, Checkbox, x156 y153 +BackgroundTrans gnm_saveCollect hwndhBeesmas1 Disabled, Allow Gather Interrupt
+Gui, Add, Checkbox, x15 y170 +BackgroundTrans gnm_saveCollect hwndhBeesmas2 Disabled, Stockings
+Gui, Add, Checkbox, x15 yp+17 +BackgroundTrans gnm_saveCollect hwndhBeesmas3 Disabled, Honey Wreath
+Gui, Add, Checkbox, x15 yp+17 +BackgroundTrans gnm_saveCollect hwndhBeesmas4 Disabled, Feast
+Gui, Add, Checkbox, x15 yp+17 +BackgroundTrans gnm_saveCollect hwndhBeesmas5 Disabled, Robo Party De-level
+Gui, Add, Checkbox, x108 y170 +BackgroundTrans gnm_saveCollect hwndhBeesmas6 Disabled, Gingerbread
+Gui, Add, Checkbox, x108 yp+17 +BackgroundTrans gnm_saveCollect hwndhBeesmas7 Disabled, Snow Machine
+Gui, Add, Checkbox, x108 yp+17 +BackgroundTrans gnm_saveCollect hwndhBeesmas8 Disabled, Candles
+Gui, Add, Checkbox, x201 y170 +BackgroundTrans gnm_saveCollect hwndhBeesmas9 Disabled, Samovar
+Gui, Add, Checkbox, x201 yp+17 +BackgroundTrans gnm_saveCollect hwndhBeesmas10 Disabled, Lid Art
+Gui, Add, Checkbox, x201 yp+17 +BackgroundTrans gnm_saveCollect hwndhBeesmas11 Disabled, Gummy Beacon
+try AsyncHttpRequest("GET", "https://raw.githubusercontent.com/NatroTeam/.github/main/data/beesmas.txt", "nm_BeesmasHandler", {"accept": "application/vnd.github.v3.raw"})
 
 ;KILL
 ;bugrun
@@ -2537,7 +2512,6 @@ Gui, Add, UpDown, xp+14 yp-1 h16 -16 Range0-12 vFieldBoosterMinsUpDown gnm_Field
 Gui, Add, Text, xp+20 yp+1 w100 left +BackgroundTrans, Mins
 Gui, Add, CheckBox, x20 y62 +center vBoostChaserCheck gnm_BoostChaserCheck Checked%BoostChaserCheck%, Gather in`nBoosted Field
 ;hotbar
-hotbarwhilelist := "|Never|Always|At Hive|Gathering|Attacking|Microconverter|Whirligig|Enzymes|GatherStart" (beesmasActive ? "|Snowflake" : "") (PMondoGuid ? "|Glitter" : "") "|"
 Loop, 6
 {
 	i := A_Index + 1
@@ -3445,6 +3419,50 @@ nm_Start(){
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; GUI FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+AsyncHttpRequest(method, url, func:="", headers:="")
+{
+	req := ComObjCreate("Msxml2.XMLHTTP")
+	req.open(method, url, true)
+	for h,v in headers
+		req.setRequestHeader(h, v)
+	func ? (req.onreadystatechange := Func(func).Bind(req))
+	req.send()
+}
+nm_BeesmasHandler(req)
+{
+	global
+	local hBM, k, v
+
+	if (req.readyState != 4)
+        return
+
+	if (req.status = 200)
+	{
+		switch Trim(req.responseText, " `t`r`n")
+		{
+			case 1:
+			beesmasActive := 1
+
+			GuiControl, , BeesmasGroupBox, Beesmas (Active)
+
+			hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["beesmas"]) 
+			GuiControl, , BeesmasImage, HBITMAP:*%hBM%
+			DllCall("DeleteObject", "ptr", hBM)
+
+			for k,v in ["BeesmasGatherInterruptCheck","StockingsCheck","WreathCheck","FeastCheck","RBPDelevelCheck","GingerbreadCheck","SnowMachineCheck","CandlesCheck","SamovarCheck","LidArtCheck","GummyBeaconCheck"]
+			{
+				GuiControl, -Disabled +v%v%, % hBeesmas%k%
+				GuiControl, , % hBeesmas%k%, % %v%
+			}
+
+			sprinklerImages.Push("saturatorWS")
+			GuiControl, , BeesmasFailImage, % ""
+
+			case 0:
+			GuiControl, , BeesmasFailImage, % ""
+		}
+	}
+}
 nm_TabSelect(){
 	GuiControlGet, Tab
 	GuiControl,focus, Tab
@@ -4829,7 +4847,7 @@ nm_FieldBooster(hCtrl:=""){
 nm_HotbarWhile(hCtrl:=0){
 	global HotbarWhile2, HotbarWhile3, HotbarWhile4, HotbarWhile5, HotbarWhile6, HotbarWhile7
 		, hHB2, hHB3, hHB4, hHB5, hHB6, hHB7
-		, PFieldBoosted
+		, PFieldBoosted, hotbarwhilelist, beesmasActive
 
 	Loop, 6 {
 		i := A_Index + 1
@@ -4870,15 +4888,32 @@ nm_HotbarWhile(hCtrl:=0){
 				GuiControl, show, HBText%i%
 
 				case "snowflake":
-				GuiControlGet, HotkeyMax%i%
-				GuiControlGet, HotbarTime%i%
-				GuiControl,,HBConditionText%i%, % "Until: " HotkeyMax%i% "%"
-				GuiControl,,HBTimeText%i%, % nm_DurationFromSeconds(HotbarTime%i%)
-				GuiControl, hide, HBText%i%
-				GuiControl, show, HotbarTime%i%
-				GuiControl, show, HBTimeText%i%
-				GuiControl, show, HBConditionText%i%
-				GuiControl, show, HotkeyMax%i%
+				if (beesmasActive = 0)
+				{
+					if hCtrl
+					{
+						msgbox, 0x1030, Snowflake, This option is only available during Beesmas!
+						HotbarWhile%i% := "Never"
+						GuiControl, , HotbarWhile%i%, % StrReplace(hotbarwhilelist, "|Never|", "|Never||")
+						GuiControl, hide, HBText%i%
+						GuiControl, hide, HotbarTime%i%
+						GuiControl, hide, HBTimeText%i%
+						GuiControl, hide, HBConditionText%i%
+						GuiControl, hide, HotkeyMax%i%
+					}
+				}
+				else
+				{
+					GuiControlGet, HotkeyMax%i%
+					GuiControlGet, HotbarTime%i%
+					GuiControl,,HBConditionText%i%, % "Until: " HotkeyMax%i% "%"
+					GuiControl,,HBTimeText%i%, % nm_DurationFromSeconds(HotbarTime%i%)
+					GuiControl, hide, HBText%i%
+					GuiControl, show, HotbarTime%i%
+					GuiControl, show, HBTimeText%i%
+					GuiControl, show, HBConditionText%i%
+					GuiControl, show, HotkeyMax%i%
+				}
 
 				case "never":
 				GuiControl, hide, HBText%i%
@@ -7610,8 +7645,8 @@ nm_ContributorsPageButton(hwnd){
 }
 nm_CollectKillButton(hCtrl){
 	global
-	static CollectControls := ["CollectGroupBox","DispensersGroupBox","BeesmasGroupBox","BeesmasImage","ClockCheck","MondoBuffCheck","MondoAction","AntPassCheck","AntPassAction","RoboPassCheck","HoneystormCheck","HoneyDisCheck","TreatDisCheck","BlueberryDisCheck","StrawberryDisCheck","CoconutDisCheck","RoyalJellyDisCheck","GlueDisCheck"]
-	, CollectControlsH := ["hMALeft","hMARight","hAPALeft","hAPARight","hwndBeesmas1","hwndBeesmas2","hwndBeesmas3","hwndBeesmas4","hwndBeesmas5","hwndBeesmas6","hwndBeesmas7","hwndBeesmas8","hwndBeesmas9","hwndBeesmas10","hwndBeesmas11"]
+	static CollectControls := ["CollectGroupBox","DispensersGroupBox","BeesmasGroupBox","BeesmasFailImage","BeesmasImage","ClockCheck","MondoBuffCheck","MondoAction","AntPassCheck","AntPassAction","RoboPassCheck","HoneystormCheck","HoneyDisCheck","TreatDisCheck","BlueberryDisCheck","StrawberryDisCheck","CoconutDisCheck","RoyalJellyDisCheck","GlueDisCheck"]
+	, CollectControlsH := ["hMALeft","hMARight","hAPALeft","hAPARight","hBeesmas1","hBeesmas2","hBeesmas3","hBeesmas4","hBeesmas5","hBeesmas6","hBeesmas7","hBeesmas8","hBeesmas9","hBeesmas10","hBeesmas11"]
 	, KillControls := ["BugRunGroupBox","BugRunCheck","MonsterRespawnTime","TextMonsterRespawnPercent","TextMonsterRespawn","MonsterRespawnTimeHelp","BugrunInterruptCheck","TextLoot","TextKill","TextLineBugRun1","TextLineBugRun2","BugrunLadybugsLoot","BugrunRhinoBeetlesLoot","BugrunSpiderLoot","BugrunMantisLoot","BugrunScorpionsLoot","BugrunWerewolfLoot","BugrunLadybugsCheck","BugrunRhinoBeetlesCheck","BugrunSpiderCheck","BugrunMantisCheck","BugrunScorpionsCheck","BugrunWerewolfCheck","StingersGroupBox","StingerCheck","StingerDailyBonusCheck","TextFields","StingerCloverCheck","StingerSpiderCheck","StingerCactusCheck","StingerRoseCheck","StingerMountainTopCheck","StingerPepperCheck","BossesGroupBox","TunnelBearCheck","KingBeetleCheck","CocoCrabCheck","StumpSnailCheck","CommandoCheck","TunnelBearBabyCheck","KingBeetleBabyCheck","BabyLovePicture1","BabyLovePicture2","KingBeetleAmuletMode","ShellAmuletMode","KingBeetleAmuPicture","ShellAmuPicture","KingBeetleAmuletModeText","ShellAmuletModeText","ChickLevelTextLabel","ChickLevelText","ChickLevel","SnailHPText","SnailHealthEdit","SnailHealthText","ChickHPText","ChickHealthEdit","ChickHealthText","SnailTimeText","SnailTimeUpDown","ChickTimeText","ChickTimeUpDown","BossConfigHelp","TextLineBosses1","TextLineBosses2","TextLineBosses3","TextBosses1","TextBosses2","TextBosses3"]
 	local p, i, c, k, v
 
@@ -8661,7 +8696,7 @@ nm_toAnyBooster(){
 	}
 }
 nm_Collect(){
-	global FwdKey, BackKey, LeftKey, RightKey, RotLeft, RotRight, KeyDelay, objective, CurrentAction, PreviousAction, MoveSpeedNum, GatherFieldBoostedStart, LastGlitter, MondoBuffCheck, PMondoGuid, LastGuid, MondoAction, LastMondoBuff, VBState, ClockCheck, LastClock, AntPassCheck, AntPassAction, QuestAnt, LastAntPass, HoneyDisCheck, LastHoneyDis, TreatDisCheck, LastTreatDis, BlueberryDisCheck, LastBlueberryDis, StrawberryDisCheck, LastStrawberryDis, CoconutDisCheck, LastCoconutDis, GlueDisCheck, LastGlueDis, RoboPassCheck, LastRoboPass, HoneystormCheck, LastHoneystorm, RoyalJellyDisCheck, LastRoyalJellyDis, StockingsCheck, LastStockings, FeastCheck, RBPDelevelCheck, LastRBPDelevel, LastFeast, GingerbreadCheck, LastGingerbread, SnowMachineCheck, LastSnowMachine, CandlesCheck, LastCandles, SamovarCheck, LastSamovar, LidArtCheck, LastLidArt, GummyBeaconCheck, LastGummyBeacon, HoneySSCheck, resetTime, bitmaps, SC_E, SC_Space, SC_1
+	global FwdKey, BackKey, LeftKey, RightKey, RotLeft, RotRight, KeyDelay, objective, CurrentAction, PreviousAction, MoveSpeedNum, GatherFieldBoostedStart, LastGlitter, MondoBuffCheck, PMondoGuid, LastGuid, MondoAction, LastMondoBuff, VBState, ClockCheck, LastClock, AntPassCheck, AntPassAction, QuestAnt, LastAntPass, HoneyDisCheck, LastHoneyDis, TreatDisCheck, LastTreatDis, BlueberryDisCheck, LastBlueberryDis, StrawberryDisCheck, LastStrawberryDis, CoconutDisCheck, LastCoconutDis, GlueDisCheck, LastGlueDis, RoboPassCheck, LastRoboPass, HoneystormCheck, LastHoneystorm, RoyalJellyDisCheck, LastRoyalJellyDis, StockingsCheck, LastStockings, FeastCheck, RBPDelevelCheck, LastRBPDelevel, LastFeast, GingerbreadCheck, LastGingerbread, SnowMachineCheck, LastSnowMachine, CandlesCheck, LastCandles, SamovarCheck, LastSamovar, LidArtCheck, LastLidArt, GummyBeaconCheck, LastGummyBeacon, beesmasActive, HoneySSCheck, resetTime, bitmaps, SC_E, SC_Space, SC_1
 	static AntPassNum:=2, RoboPassNum:=1, LastHoneyLB:=1
 
 	if(VBState=1)
@@ -9074,336 +9109,340 @@ nm_Collect(){
 		LastRoyalJellyDis:=nowUnix()
 		IniWrite, %LastRoyalJellyDis%, settings\nm_config.ini, Collect, LastRoyalJellyDis
 	}
+
 	;BEESMAS
-	;Stockings
-	if (StockingsCheck && (nowUnix()-LastStockings)>3600) { ;1 hour
-		loop, 2 {
-			nm_Reset()
-			nm_setStatus("Traveling", "Stockings" ((A_Index > 1) ? " (Attempt 2)" : ""))
+	if beesmasActive {
+		;Stockings
+		if (StockingsCheck && (nowUnix()-LastStockings)>3600) { ;1 hour
+			loop, 2 {
+				nm_Reset()
+				nm_setStatus("Traveling", "Stockings" ((A_Index > 1) ? " (Attempt 2)" : ""))
 
-			nm_gotoCollect("stockings")
+				nm_gotoCollect("stockings")
 
-			searchRet := nm_imgSearch("e_button.png",30,"high")
-			If (searchRet[1] = 0) {
-				sendinput {%SC_E% down}
-				Sleep, 100
-				sendinput {%SC_E% up}
-				Sleep, 500
-
-				movement := "
-				(LTrim Join`r`n
-				" nm_Walk(8, FwdKey) "
-				" nm_Walk(2.5, BackKey) "
-				" nm_Walk(3, RightKey) "
-				Send {" SC_Space " down}
-				HyperSleep(500)
-				Send {" SC_Space " up}
-				DllCall(""GetSystemTimeAsFileTime"", ""int64p"", s)
-				" nm_Walk(3, RightKey) "
-				DllCall(""GetSystemTimeAsFileTime"", ""int64p"", t)
-				Sleep, 600-(t-s)//10000
-				" nm_Walk(9, LeftKey) "
-				Send {" SC_Space " down}
-				HyperSleep(500)
-				Send {" SC_Space " up}
-				DllCall(""GetSystemTimeAsFileTime"", ""int64p"", s)
-				" nm_Walk(3, LeftKey) "
-				DllCall(""GetSystemTimeAsFileTime"", ""int64p"", t)
-				Sleep, 600-(t-s)//10000
-				" nm_Walk(6, RightKey) "
-				)"
-				nm_createWalk(movement)
-				KeyWait, F14, D T5 L
-				KeyWait, F14, T60 L
-				nm_endWalk()
-
-				nm_setStatus("Collected", "Stockings")
-				break
-			}
-		}
-		LastStockings:=nowUnix()
-		IniWrite, %LastStockings%, settings\nm_config.ini, Collect, LastStockings
-	}
-	;Beesmas Feast
-	if (FeastCheck && (nowUnix()-LastFeast)>5400) { ;1.5 hours
-		loop, 2 {
-			nm_Reset()
-			nm_setStatus("Traveling", "Beesmas Feast" ((A_Index > 1) ? " (Attempt 2)" : ""))
-
-			nm_gotoCollect("feast")
-
-			searchRet := nm_imgSearch("e_button.png",30,"high")
-			If (searchRet[1] = 0) {
-				sendinput {%SC_E% down}
-				Sleep, 100
-				sendinput {%SC_E% up}
-				Sleep, 3000
-				sendinput {%RotLeft%}
-
-				movement := "
-				(LTrim Join`r`n
-				" nm_Walk(3, FwdKey, RightKey) "
-				" nm_Walk(1, RightKey) "
-				Loop, 2 {
-					" nm_Walk(5, BackKey) "
-					" nm_Walk(1.5, LeftKey) "
-					" nm_Walk(5, FwdKey) "
-					" nm_Walk(1.5, LeftKey) "
-				}
-				" nm_Walk(5, BackKey) "
-				)"
-				nm_createWalk(movement)
-				KeyWait, F14, D T5 L
-				KeyWait, F14, T60 L
-				nm_endWalk()
-
-				nm_setStatus("Collected", "Beesmas Feast")
-				break
-			}
-		}
-		LastFeast:=nowUnix()
-		IniWrite, %LastFeast%, settings\nm_config.ini, Collect, LastFeast
-	}
-	;Gingerbread House
-	if (GingerbreadCheck && (nowUnix()-LastGingerbread)>7200) { ;2 hours
-		loop, 2 {
-			nm_Reset()
-			nm_setStatus("Traveling", "Gingerbread House" ((A_Index > 1) ? " (Attempt 2)" : ""))
-
-			nm_gotoCollect("gingerbread")
-
-			searchRet := nm_imgSearch("e_button.png",30,"high")
-			If (searchRet[1] = 0) {
-				sendinput {%SC_E% down}
-				Sleep, 100
-				sendinput {%SC_E% up}
-				Sleep, 3000
-				nm_setStatus("Collected", "Gingerbread House")
-				break
-			}
-		}
-		LastGingerbread:=nowUnix()
-		IniWrite, %LastGingerbread%, settings\nm_config.ini, Collect, LastGingerbread
-	}
-	;Snow Machine
-	if (SnowMachineCheck && (nowUnix()-LastSnowMachine)>7200) { ;2 hours
-		loop, 2 {
-			nm_Reset()
-			nm_setStatus("Traveling", "Snow Machine" ((A_Index > 1) ? " (Attempt 2)" : ""))
-
-			nm_gotoCollect("snowmachine")
-
-			searchRet := nm_imgSearch("e_button.png",30,"high")
-			If (searchRet[1] = 0) {
-				sendinput {%SC_E% down}
-				Sleep, 100
-				sendinput {%SC_E% up}
-				nm_setStatus("Collected", "Snow Machine")
-
-				movement := "
-				(LTrim Join`r`n
-				" nm_Walk(18, LeftKey) "
-				" nm_Walk(7, RightKey) "
-				" nm_Walk(11, FwdKey) "
-				" nm_Walk(2, LeftKey) "
-				Sleep, 1000
-				)"
-				nm_createWalk(movement)
-				KeyWait, F14, D T5 L
-				KeyWait, F14, T30 L
-				nm_endWalk()
-
-				if (HoneystormCheck && (nm_imgSearch("e_button.png",30,"high")[1] = 0)) {
+				searchRet := nm_imgSearch("e_button.png",30,"high")
+				If (searchRet[1] = 0) {
 					sendinput {%SC_E% down}
 					Sleep, 100
 					sendinput {%SC_E% up}
-					nm_setStatus("Collected", "Honeystorm")
-					LastHoneystorm:=nowUnix()
-					IniWrite, %LastHoneystorm%, settings\nm_config.ini, Collect, LastHoneystorm
+					Sleep, 500
+
+					movement := "
+					(LTrim Join`r`n
+					" nm_Walk(8, FwdKey) "
+					" nm_Walk(2.5, BackKey) "
+					" nm_Walk(3, RightKey) "
+					Send {" SC_Space " down}
+					HyperSleep(500)
+					Send {" SC_Space " up}
+					DllCall(""GetSystemTimeAsFileTime"", ""int64p"", s)
+					" nm_Walk(3, RightKey) "
+					DllCall(""GetSystemTimeAsFileTime"", ""int64p"", t)
+					Sleep, 600-(t-s)//10000
+					" nm_Walk(9, LeftKey) "
+					Send {" SC_Space " down}
+					HyperSleep(500)
+					Send {" SC_Space " up}
+					DllCall(""GetSystemTimeAsFileTime"", ""int64p"", s)
+					" nm_Walk(3, LeftKey) "
+					DllCall(""GetSystemTimeAsFileTime"", ""int64p"", t)
+					Sleep, 600-(t-s)//10000
+					" nm_Walk(6, RightKey) "
+					)"
+					nm_createWalk(movement)
+					KeyWait, F14, D T5 L
+					KeyWait, F14, T60 L
+					nm_endWalk()
+
+					nm_setStatus("Collected", "Stockings")
+					break
 				}
+			}
+			LastStockings:=nowUnix()
+			IniWrite, %LastStockings%, settings\nm_config.ini, Collect, LastStockings
+		}
+		;Beesmas Feast
+		if (FeastCheck && (nowUnix()-LastFeast)>5400) { ;1.5 hours
+			loop, 2 {
+				nm_Reset()
+				nm_setStatus("Traveling", "Beesmas Feast" ((A_Index > 1) ? " (Attempt 2)" : ""))
 
-				movement := "
-				(LTrim Join`r`n
-				" nm_Walk(11, FwdKey) "
-				loop 2 {
-					loop 3 {
-					" nm_Walk(20, LeftKey) "
-					" nm_Walk(3, FwdKey) "
-					" nm_Walk(20, RightKey) "
-					" nm_Walk(3, FwdKey) "
+				nm_gotoCollect("feast")
+
+				searchRet := nm_imgSearch("e_button.png",30,"high")
+				If (searchRet[1] = 0) {
+					sendinput {%SC_E% down}
+					Sleep, 100
+					sendinput {%SC_E% up}
+					Sleep, 3000
+					sendinput {%RotLeft%}
+
+					movement := "
+					(LTrim Join`r`n
+					" nm_Walk(3, FwdKey, RightKey) "
+					" nm_Walk(1, RightKey) "
+					Loop, 2 {
+						" nm_Walk(5, BackKey) "
+						" nm_Walk(1.5, LeftKey) "
+						" nm_Walk(5, FwdKey) "
+						" nm_Walk(1.5, LeftKey) "
 					}
-					" nm_Walk(1.5, FwdKey) "
-					loop 3 {
-					" nm_Walk(20, LeftKey) "
-					" nm_Walk(3, BackKey) "
-					" nm_Walk(20, RightKey) "
-					" nm_Walk(3, BackKey) "
-					}
+					" nm_Walk(5, BackKey) "
+					)"
+					nm_createWalk(movement)
+					KeyWait, F14, D T5 L
+					KeyWait, F14, T60 L
+					nm_endWalk()
+
+					nm_setStatus("Collected", "Beesmas Feast")
+					break
 				}
-				)"
-				nm_createWalk(movement)
-				KeyWait, F14, D T5 L
-				KeyWait, F14, T35 L
-				nm_endWalk()
-
-				break
 			}
+			LastFeast:=nowUnix()
+			IniWrite, %LastFeast%, settings\nm_config.ini, Collect, LastFeast
 		}
-		LastSnowMachine:=nowUnix()
-		IniWrite, %LastSnowMachine%, settings\nm_config.ini, Collect, LastSnowMachine
-	}
-	;Candles
-	if (CandlesCheck && (nowUnix()-LastCandles)>14400) { ;4 hours
-		loop, 2 {
-			nm_Reset()
-			nm_setStatus("Traveling", "Candles" ((A_Index > 1) ? " (Attempt 2)" : ""))
+		;Gingerbread House
+		if (GingerbreadCheck && (nowUnix()-LastGingerbread)>7200) { ;2 hours
+			loop, 2 {
+				nm_Reset()
+				nm_setStatus("Traveling", "Gingerbread House" ((A_Index > 1) ? " (Attempt 2)" : ""))
 
-			nm_gotoCollect("candles")
+				nm_gotoCollect("gingerbread")
 
-			searchRet := nm_imgSearch("e_button.png",30,"high")
-			If (searchRet[1] = 0) {
-				sendinput {%SC_E% down}
-				Sleep, 100
-				sendinput {%SC_E% up}
-				Sleep, 4000
-
-				movement := "
-				(LTrim Join`r`n
-				" nm_Walk(4, FwdKey) "
-				" nm_Walk(6, RightKey) "
-				" nm_Walk(10, LeftKey) "
-				)"
-				nm_createWalk(movement)
-				KeyWait, F14, D T5 L
-				KeyWait, F14, T60 L
-				nm_endWalk()
-
-				nm_setStatus("Collected", "Candles")
-				break
+				searchRet := nm_imgSearch("e_button.png",30,"high")
+				If (searchRet[1] = 0) {
+					sendinput {%SC_E% down}
+					Sleep, 100
+					sendinput {%SC_E% up}
+					Sleep, 3000
+					nm_setStatus("Collected", "Gingerbread House")
+					break
+				}
 			}
+			LastGingerbread:=nowUnix()
+			IniWrite, %LastGingerbread%, settings\nm_config.ini, Collect, LastGingerbread
 		}
-		LastCandles:=nowUnix()
-		IniWrite, %LastCandles%, settings\nm_config.ini, Collect, LastCandles
-	}
-	;Samovar
-	if (SamovarCheck && (nowUnix()-LastSamovar)>21600) { ;6 hours
-		loop, 2 {
-			nm_Reset()
-			nm_setStatus("Traveling", "Samovar" ((A_Index > 1) ? " (Attempt 2)" : ""))
+		;Snow Machine
+		if (SnowMachineCheck && (nowUnix()-LastSnowMachine)>7200) { ;2 hours
+			loop, 2 {
+				nm_Reset()
+				nm_setStatus("Traveling", "Snow Machine" ((A_Index > 1) ? " (Attempt 2)" : ""))
 
-			nm_gotoCollect("samovar")
+				nm_gotoCollect("snowmachine")
 
-			searchRet := nm_imgSearch("e_button.png",30,"high")
-			If (searchRet[1] = 0) {
-				sendinput {%SC_E% down}
-				Sleep, 100
-				sendinput {%SC_E% up}
-				Sleep, 5000
+				searchRet := nm_imgSearch("e_button.png",30,"high")
+				If (searchRet[1] = 0) {
+					sendinput {%SC_E% down}
+					Sleep, 100
+					sendinput {%SC_E% up}
+					nm_setStatus("Collected", "Snow Machine")
 
-				movement := "
-				(LTrim Join`r`n
-				" nm_Walk(4, FwdKey, RightKey) "
-				" nm_Walk(1, RightKey) "
-				Loop, 3 {
+					movement := "
+					(LTrim Join`r`n
+					" nm_Walk(18, LeftKey) "
+					" nm_Walk(7, RightKey) "
+					" nm_Walk(11, FwdKey) "
+					" nm_Walk(2, LeftKey) "
+					Sleep, 1000
+					)"
+					nm_createWalk(movement)
+					KeyWait, F14, D T5 L
+					KeyWait, F14, T30 L
+					nm_endWalk()
+
+					if (HoneystormCheck && (nm_imgSearch("e_button.png",30,"high")[1] = 0)) {
+						sendinput {%SC_E% down}
+						Sleep, 100
+						sendinput {%SC_E% up}
+						nm_setStatus("Collected", "Honeystorm")
+						LastHoneystorm:=nowUnix()
+						IniWrite, %LastHoneystorm%, settings\nm_config.ini, Collect, LastHoneystorm
+					}
+
+					movement := "
+					(LTrim Join`r`n
+					" nm_Walk(11, FwdKey) "
+					loop 2 {
+						loop 3 {
+						" nm_Walk(20, LeftKey) "
+						" nm_Walk(3, FwdKey) "
+						" nm_Walk(20, RightKey) "
+						" nm_Walk(3, FwdKey) "
+						}
+						" nm_Walk(1.5, FwdKey) "
+						loop 3 {
+						" nm_Walk(20, LeftKey) "
+						" nm_Walk(3, BackKey) "
+						" nm_Walk(20, RightKey) "
+						" nm_Walk(3, BackKey) "
+						}
+					}
+					)"
+					nm_createWalk(movement)
+					KeyWait, F14, D T5 L
+					KeyWait, F14, T35 L
+					nm_endWalk()
+
+					break
+				}
+			}
+			LastSnowMachine:=nowUnix()
+			IniWrite, %LastSnowMachine%, settings\nm_config.ini, Collect, LastSnowMachine
+		}
+		;Candles
+		if (CandlesCheck && (nowUnix()-LastCandles)>14400) { ;4 hours
+			loop, 2 {
+				nm_Reset()
+				nm_setStatus("Traveling", "Candles" ((A_Index > 1) ? " (Attempt 2)" : ""))
+
+				nm_gotoCollect("candles")
+
+				searchRet := nm_imgSearch("e_button.png",30,"high")
+				If (searchRet[1] = 0) {
+					sendinput {%SC_E% down}
+					Sleep, 100
+					sendinput {%SC_E% up}
+					Sleep, 4000
+
+					movement := "
+					(LTrim Join`r`n
+					" nm_Walk(4, FwdKey) "
+					" nm_Walk(6, RightKey) "
+					" nm_Walk(10, LeftKey) "
+					)"
+					nm_createWalk(movement)
+					KeyWait, F14, D T5 L
+					KeyWait, F14, T60 L
+					nm_endWalk()
+
+					nm_setStatus("Collected", "Candles")
+					break
+				}
+			}
+			LastCandles:=nowUnix()
+			IniWrite, %LastCandles%, settings\nm_config.ini, Collect, LastCandles
+		}
+		;Samovar
+		if (SamovarCheck && (nowUnix()-LastSamovar)>21600) { ;6 hours
+			loop, 2 {
+				nm_Reset()
+				nm_setStatus("Traveling", "Samovar" ((A_Index > 1) ? " (Attempt 2)" : ""))
+
+				nm_gotoCollect("samovar")
+
+				searchRet := nm_imgSearch("e_button.png",30,"high")
+				If (searchRet[1] = 0) {
+					sendinput {%SC_E% down}
+					Sleep, 100
+					sendinput {%SC_E% up}
+					Sleep, 5000
+
+					movement := "
+					(LTrim Join`r`n
+					" nm_Walk(4, FwdKey, RightKey) "
+					" nm_Walk(1, RightKey) "
+					Loop, 3 {
+						" nm_Walk(6, BackKey) "
+						" nm_Walk(1.25, LeftKey) "
+						" nm_Walk(6, FwdKey) "
+						" nm_Walk(1.25, LeftKey) "
+					}
 					" nm_Walk(6, BackKey) "
-					" nm_Walk(1.25, LeftKey) "
-					" nm_Walk(6, FwdKey) "
-					" nm_Walk(1.25, LeftKey) "
+					)"
+					nm_createWalk(movement)
+					KeyWait, F14, D T5 L
+					KeyWait, F14, T60 L
+					nm_endWalk()
+
+					nm_setStatus("Collected", "Samovar")
+					break
 				}
-				" nm_Walk(6, BackKey) "
-				)"
-				nm_createWalk(movement)
-				KeyWait, F14, D T5 L
-				KeyWait, F14, T60 L
-				nm_endWalk()
-
-				nm_setStatus("Collected", "Samovar")
-				break
 			}
+			LastSamovar:=nowUnix()
+			IniWrite, %LastSamovar%, settings\nm_config.ini, Collect, LastSamovar
 		}
-		LastSamovar:=nowUnix()
-		IniWrite, %LastSamovar%, settings\nm_config.ini, Collect, LastSamovar
-	}
-	;Lid Art
-	if (LidArtCheck && (nowUnix()-LastLidArt)>28800) { ;8 hours
-		loop, 2 {
-			nm_Reset()
-			nm_setStatus("Traveling", "Lid Art" ((A_Index > 1) ? " (Attempt 2)" : ""))
+		;Lid Art
+		if (LidArtCheck && (nowUnix()-LastLidArt)>28800) { ;8 hours
+			loop, 2 {
+				nm_Reset()
+				nm_setStatus("Traveling", "Lid Art" ((A_Index > 1) ? " (Attempt 2)" : ""))
 
-			nm_gotoCollect("lidart")
+				nm_gotoCollect("lidart")
 
-			searchRet := nm_imgSearch("e_button.png",30,"high")
-			If (searchRet[1] = 0) {
-				sendinput {%SC_E% down}
-				Sleep, 100
-				sendinput {%SC_E% up}
-				Sleep, 5000
+				searchRet := nm_imgSearch("e_button.png",30,"high")
+				If (searchRet[1] = 0) {
+					sendinput {%SC_E% down}
+					Sleep, 100
+					sendinput {%SC_E% up}
+					Sleep, 5000
 
-				movement := "
-				(LTrim Join`r`n
-				" nm_Walk(3, FwdKey, RightKey) "
-				Loop, 2 {
+					movement := "
+					(LTrim Join`r`n
+					" nm_Walk(3, FwdKey, RightKey) "
+					Loop, 2 {
+						" nm_Walk(4.5, BackKey) "
+						" nm_Walk(1.25, LeftKey) "
+						" nm_Walk(4.5, FwdKey) "
+						" nm_Walk(1.25, LeftKey) "
+					}
 					" nm_Walk(4.5, BackKey) "
-					" nm_Walk(1.25, LeftKey) "
-					" nm_Walk(4.5, FwdKey) "
-					" nm_Walk(1.25, LeftKey) "
+					)"
+					nm_createWalk(movement)
+					KeyWait, F14, D T5 L
+					KeyWait, F14, T60 L
+					nm_endWalk()
+
+					nm_setStatus("Collected", "Lid Art")
+					break
 				}
-				" nm_Walk(4.5, BackKey) "
-				)"
-				nm_createWalk(movement)
-				KeyWait, F14, D T5 L
-				KeyWait, F14, T60 L
-				nm_endWalk()
-
-				nm_setStatus("Collected", "Lid Art")
-				break
 			}
+			LastLidArt:=nowUnix()
+			IniWrite, %LastLidArt%, settings\nm_config.ini, Collect, LastLidArt
 		}
-		LastLidArt:=nowUnix()
-		IniWrite, %LastLidArt%, settings\nm_config.ini, Collect, LastLidArt
-	}
-	;Gummy Beacon
-	if (GummyBeaconCheck && (nowUnix()-LastGummyBeacon)>28800 && (MoveMethod != "Walk")) { ;8 hours
-		loop, 2 {
-			nm_Reset()
-			nm_setStatus("Traveling", "Gummy Beacon" ((A_Index > 1) ? " (Attempt 2)" : ""))
+		;Gummy Beacon
+		if (GummyBeaconCheck && (nowUnix()-LastGummyBeacon)>28800 && (MoveMethod != "Walk")) { ;8 hours
+			loop, 2 {
+				nm_Reset()
+				nm_setStatus("Traveling", "Gummy Beacon" ((A_Index > 1) ? " (Attempt 2)" : ""))
 
-			nm_gotoCollect("gummybeacon")
+				nm_gotoCollect("gummybeacon")
 
-			searchRet := nm_imgSearch("e_button.png",30,"high")
-			If (searchRet[1] = 0) {
-				sendinput {%SC_E% down}
-				Sleep, 100
-				sendinput {%SC_E% up}
-				Sleep, 500
-				nm_setStatus("Collected", "Gummy Beacon")
-				break
+				searchRet := nm_imgSearch("e_button.png",30,"high")
+				If (searchRet[1] = 0) {
+					sendinput {%SC_E% down}
+					Sleep, 100
+					sendinput {%SC_E% up}
+					Sleep, 500
+					nm_setStatus("Collected", "Gummy Beacon")
+					break
+				}
 			}
+			LastGummyBeacon:=nowUnix()
+			IniWrite, %LastGummyBeacon%, settings\nm_config.ini, Collect, LastGummyBeacon
 		}
-		LastGummyBeacon:=nowUnix()
-		IniWrite, %LastGummyBeacon%, settings\nm_config.ini, Collect, LastGummyBeacon
-	}
-	;Robo Bear Party De-level
-	if (RBPDelevelCheck && (nowUnix()-LastRBPDelevel)>10800 && (MoveMethod != "Walk")) { ;3 hours
-		loop, 2 {
-			nm_Reset()
-			nm_setStatus("Traveling", "RBP De-Level" ((A_Index > 1) ? " (Attempt 2)" : ""))
+		;Robo Bear Party De-level
+		if (RBPDelevelCheck && (nowUnix()-LastRBPDelevel)>10800 && (MoveMethod != "Walk")) { ;3 hours
+			loop, 2 {
+				nm_Reset()
+				nm_setStatus("Traveling", "RBP De-Level" ((A_Index > 1) ? " (Attempt 2)" : ""))
 
-			nm_gotoCollect("rbpdelevel")
+				nm_gotoCollect("rbpdelevel")
 
-			searchRet := nm_imgSearch("e_button.png",30,"high")
-			If (searchRet[1] = 0) {
-				sendinput {%SC_E% down}
-				Sleep, 100
-				sendinput {%SC_E% up}
-				Sleep, 500
-				nm_setStatus("Collected", "RBP De-Level")
-				break
+				searchRet := nm_imgSearch("e_button.png",30,"high")
+				If (searchRet[1] = 0) {
+					sendinput {%SC_E% down}
+					Sleep, 100
+					sendinput {%SC_E% up}
+					Sleep, 500
+					nm_setStatus("Collected", "RBP De-Level")
+					break
+				}
 			}
+			LastRBPDelevel:=nowUnix()
+			IniWrite, %LastRBPDelevel%, settings\nm_config.ini, Collect, LastRBPDelevel
 		}
-		LastRBPDelevel:=nowUnix()
-		IniWrite, %LastRBPDelevel%, settings\nm_config.ini, Collect, LastRBPDelevel
 	}
+
 	;OTHER
 	;Honeystorm
 	if (HoneystormCheck && (nowUnix()-LastHoneystorm)>14400) { ;4 hours
@@ -9470,7 +9509,7 @@ nm_Bugrun(){
 	global BuckoRhinoBeetles, BuckoMantis, RileyLadybugs, RileyScorpions, RileyAll
 	global CurrentAction, PreviousAction
 	global GatherFieldBoostedStart, LastGlitter
-	global BeesmasGatherInterruptCheck, StockingsCheck, LastStockings, FeastCheck, LastFeast, RBPDelevelCheck, LastRBPDelevel, GingerbreadCheck, LastGingerbread, SnowMachineCheck, LastSnowMachine, CandlesCheck, LastCandles, SamovarCheck, LastSamovar, LidArtCheck, LastLidArt, GummyBeaconCheck, LastGummyBeacon
+	global beesmasActive, BeesmasGatherInterruptCheck, StockingsCheck, LastStockings, FeastCheck, LastFeast, RBPDelevelCheck, LastRBPDelevel, GingerbreadCheck, LastGingerbread, SnowMachineCheck, LastSnowMachine, CandlesCheck, LastCandles, SamovarCheck, LastSamovar, LidArtCheck, LastLidArt, GummyBeaconCheck, LastGummyBeacon
 	global MondoBuffCheck, PMondoGuid, LastGuid, MondoAction, LastMondoBuff
 	global BugrunSpiderCheck, BugrunSpiderLoot, LastBugrunSpider, BugrunLadybugsCheck, BugrunLadybugsLoot, LastBugrunLadybugs, BugrunRhinoBeetlesCheck, BugrunRhinoBeetlesLoot, LastBugrunRhinoBeetles, BugrunMantisCheck, BugrunMantisLoot, LastBugrunMantis, BugrunWerewolfCheck, BugrunWerewolfLoot, LastBugrunWerewolf, BugrunScorpionsCheck, BugrunScorpionsLoot, LastBugrunScorpions, intialHealthCheck
 	global CocoCrabCheck, LastCocoCrab, StumpSnailCheck, LastStumpSnail, CommandoCheck, LastCommando, TunnelBearCheck, TunnelBearBabyCheck, KingBeetleCheck, KingBeetleBabyCheck, LastTunnelBear, LastKingBeetle, InputSnailHealth, SnailTime, InputChickHealth, ChickTime, SprinklerType
@@ -9486,7 +9525,7 @@ nm_Bugrun(){
 	if((nowUnix()-GatherFieldBoostedStart<900) || (nowUnix()-LastGlitter<900) || nm_boostBypassCheck()){
 		return
 	}
-	if ((BeesmasGatherInterruptCheck) && ((StockingsCheck && (nowUnix()-LastStockings)>3600) || (FeastCheck && (nowUnix()-LastFeast)>5400) || (RBPDelevelCheck && (nowUnix()-LastRBPDelevel)>10800) || (GingerbreadCheck && (nowUnix()-LastGingerbread)>7200) || (SnowMachineCheck && (nowUnix()-LastSnowMachine)>7200) || (CandlesCheck && (nowUnix()-LastCandles)>14400) || (SamovarCheck && (nowUnix()-LastSamovar)>21600) || (LidArtCheck && (nowUnix()-LastLidArt)>28800) || (GummyBeaconCheck && (nowUnix()-LastGummyBeacon)>28800)))
+	if (beesmasActive && BeesmasGatherInterruptCheck && ((StockingsCheck && (nowUnix()-LastStockings)>3600) || (FeastCheck && (nowUnix()-LastFeast)>5400) || (RBPDelevelCheck && (nowUnix()-LastRBPDelevel)>10800) || (GingerbreadCheck && (nowUnix()-LastGingerbread)>7200) || (SnowMachineCheck && (nowUnix()-LastSnowMachine)>7200) || (CandlesCheck && (nowUnix()-LastCandles)>14400) || (SamovarCheck && (nowUnix()-LastSamovar)>21600) || (LidArtCheck && (nowUnix()-LastLidArt)>28800) || (GummyBeaconCheck && (nowUnix()-LastGummyBeacon)>28800)))
 		return
 
 	nm_setShiftLock(0)
@@ -12035,7 +12074,7 @@ nm_GoGather(){
 	global PlanterMode, gotoPlanterField
 	global QuestLadybugs, QuestRhinoBeetles, QuestSpider, QuestMantis, QuestScorpions, QuestWerewolf
 	global PolarQuestGatherInterruptCheck, BuckoQuestGatherInterruptCheck, RileyQuestGatherInterruptCheck, BugrunInterruptCheck, LastBugrunLadybugs, LastBugrunRhinoBeetles, LastBugrunSpider, LastBugrunMantis, LastBugrunScorpions, LastBugrunWerewolf, BlackQuestCheck, BlackQuestComplete, QuestGatherField, BuckoQuestCheck, BuckoQuestComplete, RileyQuestCheck, RileyQuestComplete, PolarQuestCheck, PolarQuestComplete, RotateQuest, QuestGatherMins, QuestGatherReturnBy, BuckoRhinoBeetles, BuckoMantis, RileyLadybugs, RileyScorpions, RileyAll, GameFrozenCounter, HiveSlot, BugrunLadybugsCheck, BugrunRhinoBeetlesCheck, BugrunSpiderCheck, BugrunMantisCheck, BugrunScorpionsCheck, BugrunWerewolfCheck, MonsterRespawnTime
-	global BeesmasGatherInterruptCheck, StockingsCheck, LastStockings, FeastCheck, LastFeast, RBPDelevelCheck, LastRBPDelevel, GingerbreadCheck, LastGingerbread, SnowMachineCheck, LastSnowMachine, CandlesCheck, LastCandles, SamovarCheck, LastSamovar, LidArtCheck, LastLidArt, GummyBeaconCheck, LastGummyBeacon
+	global beesmasActive, BeesmasGatherInterruptCheck, StockingsCheck, LastStockings, FeastCheck, LastFeast, RBPDelevelCheck, LastRBPDelevel, GingerbreadCheck, LastGingerbread, SnowMachineCheck, LastSnowMachine, CandlesCheck, LastCandles, SamovarCheck, LastSamovar, LidArtCheck, LastLidArt, GummyBeaconCheck, LastGummyBeacon
 	global GatherStartTime, TotalGatherTime, SessionGatherTime, ConvertStartTime, TotalConvertTime, SessionConvertTime
 	global bitmaps
 	FormatTime, utc_min, %A_NowUTC%, m
@@ -12045,7 +12084,7 @@ nm_GoGather(){
 			return
 		}
 		;BEESMAS GatherInterruptCheck
-		if (BeesmasGatherInterruptCheck && ((StockingsCheck && (nowUnix()-LastStockings)>3600) || (FeastCheck && (nowUnix()-LastFeast)>5400) || (RBPDelevelCheck && (nowUnix()-LastRBPDelevel)>10800) || (GingerbreadCheck && (nowUnix()-LastGingerbread)>7200) || (SnowMachineCheck && (nowUnix()-LastSnowMachine)>7200) || (CandlesCheck && (nowUnix()-LastCandles)>14400) || (SamovarCheck && (nowUnix()-LastSamovar)>21600) || (LidArtCheck && (nowUnix()-LastLidArt)>28800) || (GummyBeaconCheck && (nowUnix()-LastGummyBeacon)>28800)))
+		if (beesmasActive && BeesmasGatherInterruptCheck && ((StockingsCheck && (nowUnix()-LastStockings)>3600) || (FeastCheck && (nowUnix()-LastFeast)>5400) || (RBPDelevelCheck && (nowUnix()-LastRBPDelevel)>10800) || (GingerbreadCheck && (nowUnix()-LastGingerbread)>7200) || (SnowMachineCheck && (nowUnix()-LastSnowMachine)>7200) || (CandlesCheck && (nowUnix()-LastCandles)>14400) || (SamovarCheck && (nowUnix()-LastSamovar)>21600) || (LidArtCheck && (nowUnix()-LastLidArt)>28800) || (GummyBeaconCheck && (nowUnix()-LastGummyBeacon)>28800)))
 			return
 		;MONDO
 		if((MondoBuffCheck && utc_min>=0 && utc_min<14 && (nowUnix()-LastMondoBuff)>960 && (MondoAction="Buff" || MondoAction="Kill")) || (MondoBuffCheck && utc_min>=0 && utc_min<12 && (nowUnix()-LastGuid)<60 && PMondoGuid && MondoAction="Guid") || (MondoBuffCheck  && (utc_min>=0 && utc_min<=8) && (nowUnix()-LastMondoBuff)>960 && PMondoGuid && MondoAction="Tag"))
@@ -12410,7 +12449,7 @@ nm_GoGather(){
 			interruptReason := "Kill Bugs"
 			break
 		}
-		if (BeesmasGatherInterruptCheck) && ((StockingsCheck && (nowUnix()-LastStockings)>3600) || (FeastCheck && (nowUnix()-LastFeast)>5400) || (RBPDelevelCheck && (nowUnix()-LastRBPDelevel)>10800) || (GingerbreadCheck && (nowUnix()-LastGingerbread)>7200) || (SnowMachineCheck && (nowUnix()-LastSnowMachine)>7200) || (CandlesCheck && (nowUnix()-LastCandles)>14400) || (SamovarCheck && (nowUnix()-LastSamovar)>21600) || (LidArtCheck && (nowUnix()-LastLidArt)>28800) || (GummyBeaconCheck && (nowUnix()-LastGummyBeacon)>28800)){
+		if (beesmasActive && BeesmasGatherInterruptCheck && ((StockingsCheck && (nowUnix()-LastStockings)>3600) || (FeastCheck && (nowUnix()-LastFeast)>5400) || (RBPDelevelCheck && (nowUnix()-LastRBPDelevel)>10800) || (GingerbreadCheck && (nowUnix()-LastGingerbread)>7200) || (SnowMachineCheck && (nowUnix()-LastSnowMachine)>7200) || (CandlesCheck && (nowUnix()-LastCandles)>14400) || (SamovarCheck && (nowUnix()-LastSamovar)>21600) || (LidArtCheck && (nowUnix()-LastLidArt)>28800) || (GummyBeaconCheck && (nowUnix()-LastGummyBeacon)>28800))){
 			interruptReason := "Beesmas Machine"
 			break
 		}
@@ -15559,6 +15598,7 @@ nm_locateVB(){
 nm_hotbar(boost:=0){
 	global state, fieldOverrideReason, GatherStartTime, ActiveHotkeys, bitmaps
 		, HotkeyMax2, HotkeyMax3, HotkeyMax4, HotkeyMax5, HotkeyMax6, HotkeyMax7
+		, beesmasActive
 	;whileNames:=["Always", "Attacking", "Gathering", "At Hive"]
 	;ActiveHotkeys.push([val, slot, HBSecs, LastHotkey%slot%])
 	for key, val in ActiveHotkeys {
@@ -15618,7 +15658,7 @@ nm_hotbar(boost:=0){
 			break
 		}
 		;snowflake
-		else if(ActiveHotkeys[key][1]="Snowflake" && (nowUnix()-ActiveHotkeys[key][4])>ActiveHotkeys[key][3]) {
+		else if(beesmasActive && (ActiveHotkeys[key][1]="Snowflake") && (nowUnix()-ActiveHotkeys[key][4])>ActiveHotkeys[key][3]) {
 			WinGetClientPos(_x, _y, _w, _h, "ahk_id " GetRobloxHWND())
 			;check that roblox window exists
 			if (_w > 0) {
@@ -19873,7 +19913,6 @@ nm_UpdateGUIVar(var)
 {
 	global
 	local k, hCtrl, val
-	static fieldnamelist:="|Bamboo|Blue Flower|Cactus|Clover|Coconut|Dandelion|Mountain Top|Mushroom|Pepper|Pine Tree|Pineapple|Pumpkin|Rose|Spider|Strawberry|Stump|Sunflower|"
 
 	GuiControlGet, k, Name, %var%
 	switch % k
