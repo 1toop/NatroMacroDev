@@ -12317,6 +12317,8 @@ nm_GoGather(){
 		TCLRKey:=LeftKey
 		AFCLRKey:=RightKey
 	}
+	;set FDC switch
+	FDCEnabled := (FieldDriftCheck && (FieldPattern != "Stationary"))
 
 	;gather loop
 	WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " GetRobloxHWND())
@@ -12338,7 +12340,7 @@ nm_GoGather(){
 		}
 		nm_gather(FieldPattern, A_Index, FieldPatternSize, FieldPatternReps, FacingFieldCorner)
 		nm_autoFieldBoost(FieldName)
-		FieldDriftCheck ? nm_fieldDriftCompensation()
+		FDCEnabled ? nm_fieldDriftCompensation()
 		nm_fieldBoostGlitter()
 		;high priority interrupts
 		if(VBState=1 || (dccheck := DisconnectCheck()) || youDied) {
