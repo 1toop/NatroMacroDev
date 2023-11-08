@@ -3159,9 +3159,9 @@ mp_HarvestPlanter(PlanterIndex) {
 				mp_UpdateCycles()
 			}
 
-			PlanterName%PlanterIndex% := ""
-			PlanterField%PlanterIndex% := ""
-			PlanterNectar%PlanterIndex% := ""
+			PlanterName%PlanterIndex% := "None"
+			PlanterField%PlanterIndex% := "None"
+			PlanterNectar%PlanterIndex% := "None"
 			PlanterGlitterC%PlanterIndex% := 0
 			PlanterGlitter%PlanterIndex% := 0
 			PlanterHarvestFull%PlanterIndex% := ""
@@ -3240,9 +3240,9 @@ mp_HarvestPlanter(PlanterIndex) {
 			mp_UpdateCycles()
 		}
 
-		PlanterName%PlanterIndex% := ""
-		PlanterField%PlanterIndex% := ""
-		PlanterNectar%PlanterIndex% := ""
+		PlanterName%PlanterIndex% := "None"
+		PlanterField%PlanterIndex% := "None"
+		PlanterNectar%PlanterIndex% := "None"
 		PlanterGlitterC%PlanterIndex% := 0
 		PlanterGlitter%PlanterIndex% := 0
 		PlanterHarvestFull%PlanterIndex% := ""
