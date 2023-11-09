@@ -6302,7 +6302,7 @@ nm_MoveMethod(hCtrl){
 }
 nm_SprinklerType(hCtrl){
 	global SprinklerType, hSTLeft, hSTRight
-	static val := ["None", "Basic", "Silver", "Gold", "Diamond", "Supreme"], l := val.Length()
+	static val := ["None", "Basic", "Silver", "Golden", "Diamond", "Supreme"], l := val.Length()
 
 	switch % SprinklerType
 	{
@@ -6312,7 +6312,7 @@ nm_SprinklerType(hCtrl){
 		i := 2
 		case "Silver":
 		i := 3
-		case "Gold":
+		case "Golden":
 		i := 4
 		case "Diamond":
 		i := 5
