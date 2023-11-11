@@ -602,12 +602,12 @@ config["Boost"] := {"FieldBoostStacks":0
 	, "HotbarTime5":900
 	, "HotbarTime6":900
 	, "HotbarTime7":900
-	, "HotkeyMax2":0
-	, "HotkeyMax3":0
-	, "HotkeyMax4":0
-	, "HotkeyMax5":0
-	, "HotkeyMax6":0
-	, "HotkeyMax7":0
+	, "HotbarMax2":0
+	, "HotbarMax3":0
+	, "HotbarMax4":0
+	, "HotbarMax5":0
+	, "HotbarMax6":0
+	, "HotbarMax7":0
 	, "LastHotkey2":1
 	, "LastHotkey3":1
 	, "LastHotkey4":1
@@ -1897,10 +1897,10 @@ Gui, Font, w700
 Gui, Add, Text, x5 y241 w80 +left -Wrap +BackgroundTrans,Current Field:
 Gui, Add, Text, x177 y241 w30 +left +BackgroundTrans,Status:
 Gui, Font, s8 cDefault Norm, Tahoma
-Gui, Add, Button, x82 y240 w10 h15 gnm_currentFieldUp, <
-Gui, Add, Button, x165 y240 w10 h15 gnm_currentFieldDown, >
+Gui, Add, Button, x82 y240 w10 h15 vcurrentFieldUp gnm_currentFieldUp Disabled, <
+Gui, Add, Button, x165 y240 w10 h15 vcurrentFieldDown gnm_currentFieldDown Disabled, >
 Gui, Add, Text, x92 y240 w73 +center +BackgroundTrans +border vCurrentField,%CurrentField%
-Gui, Add, Text, x220 y240 w275 +left +BackgroundTrans vstate hwndhwndstate +border, %state%
+Gui, Add, Text, x220 y240 w275 +left +BackgroundTrans vstate hwndhwndstate +border, %state%: %objective%
 Gui, Add, Text, x435 y263 gnm_showAdvancedSettings vVersionText, v%versionID%
 GuiControlGet, pos, Pos, VersionText
 ; shift elements to left if macro version is not latest
@@ -1913,30 +1913,27 @@ if (outdated_flag = 1)
 }
 GuiControl, Move, VersionText, % "x" 495-posW
 hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["githubgui"])
-Gui, Add, Picture, % "+BackgroundTrans x" 495-posW-20 " y262 w16 h16 gGitHubRepoLink vImageGitHubLink", HBITMAP:*%hBM%
+Gui, Add, Picture, % "+BackgroundTrans x" 495-posW-20 " y262 w16 h16 vImageGitHubLink", HBITMAP:*%hBM%
 DllCall("DeleteObject", "ptr", hBM)
-Gui, Font, s8 w700 c0046ee
+Gui, Font, s8 w700
 w := 255-posW-12
-hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["discordgui"])
-Gui, Add, Picture, % "+BackgroundTrans x" 215 " y262 w21 h16 gDiscordLink vImageDiscordLink", HBITMAP:*%hBM%
-DllCall("DeleteObject", "ptr", hBM)
-Gdip_DisposeImage(bitmaps["discordgui"])
-Gui, Add, Text, % "x" 215+27 " y256 +Center gDiscordLink vTextDiscordLink", Join`nDiscord
-hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["robloxgui"])
-Gui, Add, Picture, % "+BackgroundTrans x" 205+w//3+w//8.4 " y262 w16 h16 gRobloxLink vImageRobloxLink", HBITMAP:*%hBM%
-DllCall("DeleteObject", "ptr", hBM)
-Gdip_DisposeImage(bitmaps["robloxgui"])
-Gui, Add, Text, % "x" 205+w//3+w//8.4+22 " y256 +Center gRobloxLink vTextRobloxLink", Join`nGroup
-hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["paypalgui"])
-Gui, Add, Picture, % "+BackgroundTrans x" 195+2*w//3+w//5.4 " y262 w14 h16 gDonateLink vImageDonateLink", HBITMAP:*%hBM%
-DllCall("DeleteObject", "ptr", hBM)
-Gdip_DisposeImage(bitmaps["paypalgui"])
-Gui, Add, Text, % "x" 195+2*w//3+w//5.4+20 " y263 gDonateLink vTextDonateLink", Donate
+pBM := Gdip_BitmapConvertGray(bitmaps["discordgui"]), hBM := Gdip_CreateHBITMAPFromBitmap(pBM)
+Gui, Add, Picture, % "+BackgroundTrans x" 215 " y262 w21 h16 vImageDiscordLink", HBITMAP:*%hBM%
+Gdip_DisposeImage(pBM), DllCall("DeleteObject", "ptr", hBM)
+Gui, Add, Text, % "x" 215+27 " y256 +Center vTextDiscordLink", Join`nDiscord
+pBM := Gdip_BitmapConvertGray(bitmaps["robloxgui"]), hBM := Gdip_CreateHBITMAPFromBitmap(pBM)
+Gui, Add, Picture, % "+BackgroundTrans x" 205+w//3+w//8.4 " y262 w16 h16 vImageRobloxLink", HBITMAP:*%hBM%
+Gdip_DisposeImage(pBM), DllCall("DeleteObject", "ptr", hBM)
+Gui, Add, Text, % "x" 205+w//3+w//8.4+22 " y256 +Center vTextRobloxLink", Join`nGroup
+pBM := Gdip_BitmapConvertGray(bitmaps["paypalgui"]), hBM := Gdip_CreateHBITMAPFromBitmap(pBM)
+Gui, Add, Picture, % "+BackgroundTrans x" 195+2*w//3+w//5.4 " y262 w14 h16 vImageDonateLink", HBITMAP:*%hBM%
+Gdip_DisposeImage(pBM), DllCall("DeleteObject", "ptr", hBM)
+Gui, Add, Text, % "x" 195+2*w//3+w//5.4+20 " y263 vTextDonateLink", Donate
 Gui, Font, s8 cDefault Norm, Tahoma
 ;control buttons
-Gui, Add, Button, x5 y260 w65 h20 -Wrap vStartButton gstart, % " Start (" StartHotkey ")"
-Gui, Add, Button, x75 y260 w65 h20 -Wrap vPauseButton gpause, % " Pause (" PauseHotkey ")"
-Gui, Add, Button, x145 y260 w65 h20 -Wrap vStopButton gstop, % " Stop (" StopHotkey ")"
+Gui, Add, Button, x5 y260 w65 h20 -Wrap vStartButton gstart Disabled, % " Start (" StartHotkey ")"
+Gui, Add, Button, x75 y260 w65 h20 -Wrap vPauseButton gpause Disabled, % " Pause (" PauseHotkey ")"
+Gui, Add, Button, x145 y260 w65 h20 -Wrap vStopButton gstop Disabled, % " Stop (" StopHotkey ")"
 
 ;ADD TABS
 Gui, Add, Tab, x0 y-1 w500 h240 -Wrap hwndhTab vTab gnm_TabSelect, % "Gather|Collect/Kill|Boost|Quest|Planters|Status|Settings|Misc|Credits" ((BuffDetectReset = 1) ? "|Advanced" : "")
@@ -1972,28 +1969,23 @@ Gui, Add, DropDownList, xp yp+60 wp vFieldName2 gnm_FieldSelect2 Disabled, % LTr
 SetLoadingProgress(6)
 Gui, Add, DropDownList, xp yp+60 wp vFieldName3 gnm_FieldSelect3 Disabled, % LTrim(StrReplace("|None" fieldnamelist, "|" FieldName3 "|", "|" FieldName3 "||"), "|")
 SetLoadingProgress(9)
-hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["savefield"])
-Gui, Add, Picture, x2 y86 w18 h18 gnm_SaveFieldDefault hwndhSaveFieldDefault1, HBITMAP:*%hBM%
-DllCall("DeleteObject", "ptr", hBM)
-hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps[(FieldName2 = "None") ? "savefielddisabled" : "savefield"])
-Gui, Add, Picture, xp yp+60 wp hp gnm_SaveFieldDefault hwndhSaveFieldDefault2, HBITMAP:*%hBM%
-DllCall("DeleteObject", "ptr", hBM)
-hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps[(FieldName3 = "None") ? "savefielddisabled" : "savefield"])
-Gui, Add, Picture, xp yp+60 wp hp gnm_SaveFieldDefault hwndhSaveFieldDefault3, HBITMAP:*%hBM%
+hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["savefielddisabled"])
+Gui, Add, Picture, x2 y86 w18 h18 gnm_SaveFieldDefault hwndhSaveFieldDefault1 Disabled, HBITMAP:*%hBM%
+Gui, Add, Picture, xp yp+60 wp hp gnm_SaveFieldDefault hwndhSaveFieldDefault2 Disabled, HBITMAP:*%hBM%
+Gui, Add, Picture, xp yp+60 wp hp gnm_SaveFieldDefault hwndhSaveFieldDefault3 Disabled, HBITMAP:*%hBM%
 DllCall("DeleteObject", "ptr", hBM)
 Gui, Add, Checkbox, x65 y83 w50 +BackgroundTrans +Center vFieldDriftCheck1 gnm_SaveGather Checked%FieldDriftCheck1% Disabled,Drift`nComp
 Gui, Add, Checkbox, xp yp+60 wp +BackgroundTrans +Center vFieldDriftCheck2 gnm_SaveGather Checked%FieldDriftCheck2% Disabled,Drift`nComp
 Gui, Add, Checkbox, xp yp+60 wp +BackgroundTrans +Center vFieldDriftCheck3 gnm_SaveGather Checked%FieldDriftCheck3% Disabled,Drift`nComp
-Gui, Add, Button, x115 y89 w9 h14 gnm_FDCHelp, ?
-Gui, Add, Button, xp yp+60 w9 h14 gnm_FDCHelp, ?
-Gui, Add, Button, xp yp+60 w9 h14 gnm_FDCHelp, ?
+Gui, Add, Button, x115 y89 w9 h14 gnm_FDCHelp vFDCHelp1 Disabled, ?
+Gui, Add, Button, xp yp+60 w9 h14 gnm_FDCHelp vFDCHelp2 Disabled, ?
+Gui, Add, Button, xp yp+60 w9 h14 gnm_FDCHelp vFDCHelp3 Disabled, ?
 Gui, Add, Button, x22 y82 h14 w40 Disabled vCopyGather1 gnm_CopyGatherSettings, Copy
 Gui, Add, Button, xp yp+15 hp wp Disabled vPasteGather1 gnm_PasteGatherSettings, Paste
 Gui, Add, Button, xp yp+45 hp wp Disabled vCopyGather2 gnm_CopyGatherSettings, Copy
 Gui, Add, Button, xp yp+15 hp wp Disabled vPasteGather2 gnm_PasteGatherSettings, Paste
 Gui, Add, Button, xp yp+45 hp wp Disabled vCopyGather3 gnm_CopyGatherSettings, Copy
 Gui, Add, Button, xp yp+15 hp wp Disabled vPasteGather3 gnm_PasteGatherSettings, Paste
-
 Gui, Add, DropDownList, x129 y57 w112 vFieldPattern1 gnm_SaveGather Disabled, % LTrim(StrReplace(patternlist "Stationary|", "|" FieldPattern1 "|", "|" FieldPattern1 "||"), "|")
 SetLoadingProgress(12)
 Gui, Add, DropDownList, xp yp+60 wp vFieldPattern2 gnm_SaveGather Disabled, % LTrim(StrReplace(patternlist "Stationary|", "|" FieldPattern2 "|", "|" FieldPattern2 "||"), "|")
@@ -2116,26 +2108,26 @@ Gui, Add, GroupBox, x335 y108 w160 h60, Discord Tools
 Gui, Add, GroupBox, x335 y168 w160 h62, Bugs and Suggestions
 Gui, Font, s9 cDefault Norm, Tahoma
 ;hive tools
-Gui, Add, Button, x10 y40 w150 h40 gnm_BasicEggHatcher, Gifted Basic Bee`nAuto-Hatcher
-Gui, Add, Button, x10 y82 w150 h40 gnm_BitterberryFeeder, Bitterberry`nAuto-Feeder
+Gui, Add, Button, x10 y40 w150 h40 vBasicEggHatcherButton gnm_BasicEggHatcher Disabled, Gifted Basic Bee`nAuto-Hatcher
+Gui, Add, Button, x10 y82 w150 h40 vBitterberryFeederButton gnm_BitterberryFeeder Disabled, Bitterberry`nAuto-Feeder
 Gui, Add, Button, x10 y124 w150 h40 Disabled, Auto-Mutator`n(coming soon!)
 ;other tools
-Gui, Add, Button, x10 y184 w150 h42 gnm_GenerateBeeList, Export Hive Bee List`n(for Hive Builder)
+Gui, Add, Button, x10 y184 w150 h42 vGenerateBeeListButton gnm_GenerateBeeList Disabled, Export Hive Bee List`n(for Hive Builder)
 ;calculators
-Gui, Add, Button, x175 y40 w150 h40 gnm_TicketShopCalculatorButton, Ticket Shop Calculator`n(Google Sheets)
-Gui, Add, Button, x175 y82 w150 h40 gnm_SSACalculatorButton, SSA Calculator`n(Google Sheets)
-Gui, Add, Button, x175 y124 w150 h40 gnm_BondCalculatorButton, Bond Calculator`n(Google Sheets)
+Gui, Add, Button, x175 y40 w150 h40 vTicketShopCalculatorButton gnm_TicketShopCalculatorButton Disabled, Ticket Shop Calculator`n(Google Sheets)
+Gui, Add, Button, x175 y82 w150 h40 vSSACalculatorButton gnm_SSACalculatorButton Disabled, SSA Calculator`n(Google Sheets)
+Gui, Add, Button, x175 y124 w150 h40 vBondCalculatorButton gnm_BondCalculatorButton Disabled, Bond Calculator`n(Google Sheets)
 ;autoclicker
-Gui, Add, Button, x175 y184 w150 h42 gnm_autoclickerbutton, AutoClicker`nSettings
+Gui, Add, Button, x175 y184 w150 h42 vAutoClickerGUI gnm_AutoClickerButton Disabled, AutoClicker`nSettings
 ;macro tools
-Gui, Add, Button, x340 y40 w150 h20 gnm_HotkeyGUI, Change Hotkeys
-Gui, Add, Button, x340 y62 w150 h20 gnm_DebugLogGUI, Debug Log Options
-Gui, Add, Button, x340 y84 w150 h20 gnm_AutoStartManager, Auto-Start Manager
+Gui, Add, Button, x340 y40 w150 h20 vHotkeyGUI gnm_HotkeyGUI Disabled, Change Hotkeys
+Gui, Add, Button, x340 y62 w150 h20 vDebugLogGUI gnm_DebugLogGUI Disabled, Debug Log Options
+Gui, Add, Button, x340 y84 w150 h20 vAutoStartManagerGUI gnm_AutoStartManager Disabled, Auto-Start Manager
 ;discord tools
-Gui, Add, Button, x340 y124 w150 h40 gnm_NightAnnouncementGUI, Night Detection`nAnnouncement
+Gui, Add, Button, x340 y124 w150 h40 vNightAnnouncementGUI gnm_NightAnnouncementGUI Disabled, Night Detection`nAnnouncement
 ;reporting
-Gui, Add, Button, x340 y184 w150 h20 gnm_ReportBugButton, Report Bugs
-Gui, Add, Button, x340 y206 w150 h20 gnm_MakeSuggestionButton, Make Suggestions
+Gui, Add, Button, x340 y184 w150 h20 vReportBugButton gnm_ReportBugButton Disabled, Report Bugs
+Gui, Add, Button, x340 y206 w150 h20 vMakeSuggestionButton gnm_MakeSuggestionButton Disabled, Make Suggestions
 Gui, Font, s8 cDefault Norm, Tahoma
 
 ;STATUS TAB
@@ -2147,16 +2139,16 @@ Gui, Add, GroupBox, x5 y23 w240 h210, Status Log
 Gui, Add, GroupBox, x250 y23 w245 h160, Stats
 Gui, Add, GroupBox, x250 y185 w245 h48, Discord Integration
 Gui, Font, s8 cDefault Norm, Tahoma
-Gui, Add, Checkbox, x85 y23 vStatusLogReverse gnm_StatusLogReverseCheck Checked%StatusLogReverse%, Reverse Order
-Gui, Add, Text, x10 y37 w230 r15 +BackgroundTrans -Wrap vstatuslog, Status Log:
+Gui, Add, Checkbox, x85 y23 vStatusLogReverse gnm_StatusLogReverseCheck Checked%StatusLogReverse% Disabled, Reverse Order
+Gui, Add, Text, x10 y37 w230 r15 +BackgroundTrans -Wrap vstatuslog
 Gui, font, w700
 Gui, Add, Text, x255 y40, Total
 Gui, Add, Text, x375 y40, Session
 Gui, Font, s8 cDefault Norm, Tahoma
 Gui, Add, Text, x255 y55 w119 h120 -Wrap vTotalStats
 Gui, Add, Text, x375 y55 w119 h120 -Wrap vSessionStats
-Gui, Add, Button, x290 y39 w50 h15 vResetTotalStats gnm_ResetTotalStats, Reset
-Gui, Add, Button, x265 y202 w215 h24 gnm_WebhookGUI, Change Discord Settings
+Gui, Add, Button, x290 y39 w50 h15 vResetTotalStats gnm_ResetTotalStats Disabled, Reset
+Gui, Add, Button, x265 y202 w215 h24 vWebhookGUI gnm_WebhookGUI Disabled, Change Discord Settings
 nm_setStats()
 SetLoadingProgress(28)
 
@@ -2174,13 +2166,13 @@ Gui, Add, GroupBox, x335 y25 w160 h210, Character
 Gui, Font, s8 cDefault Norm, Tahoma
 
 ;gui settings
-Gui, Add, Checkbox, x10 y73 vAlwaysOnTop gnm_AlwaysOnTop Checked%AlwaysOnTop%, Always On Top
+Gui, Add, Checkbox, x10 y73 vAlwaysOnTop gnm_AlwaysOnTop Checked%AlwaysOnTop% Disabled, Always On Top
 Gui, Add, Text, x10 y40 w70 +left +BackgroundTrans,GUI Theme:
 nm_importStyles()
 Gui, Add, DropDownList, x75 y34 w72 h100 vGuiTheme gnm_guiThemeSelect Disabled, % LTrim(StrReplace(StylesList, "|" GuiTheme "|", "|" GuiTheme "||"), "|")
 Gui, Add, Text, x10 y57 w100 +left +BackgroundTrans,GUI Transparency:
 Gui, Add, Text, x104 y57 w20 +Center +BackgroundTrans vGuiTransparency, %GuiTransparency%
-Gui, Add, UpDown, xp+22 yp-1 h16 -16 Range0-14 vGuiTransparencyUpDown gnm_guiTransparencySet, % GuiTransparency//5
+Gui, Add, UpDown, xp+22 yp-1 h16 -16 Range0-14 vGuiTransparencyUpDown gnm_guiTransparencySet Disabled, % GuiTransparency//5
 SetLoadingProgress(29)
 
 ;hive settings
@@ -2193,50 +2185,50 @@ Gui, Add, UpDown, Range1-6 vHiveSlot gnm_saveConfig Disabled, %HiveSlot%
 Gui, Add, Text, x10 y125 w110 +left +BackgroundTrans,My Hive Has:
 Gui, Add, Edit, x75 y124 w18 h16 Limit2 number +BackgroundTrans vHiveBees gnm_HiveBees Disabled, %HiveBees%
 Gui, Add, Text, x98 y125 w110 +left +BackgroundTrans,Bees
-Gui, Add, Button, x150 y124 w10 h15 gnm_HiveBeesHelp, ?
+Gui, Add, Button, x150 y124 w10 h15 vHiveBeesHelp gnm_HiveBeesHelp Disabled, ?
 Gui, Add, Text, x9 y142 w110 +left +BackgroundTrans,Wait
 Gui, Add, Edit, x33 y141 w18 h16 Limit2 number +BackgroundTrans vConvertDelay gnm_saveConfig Disabled, %ConvertDelay%
 Gui, Add, Text, x54 y142 w110 +left +BackgroundTrans,seconds after convert
 
 ;reset settings
-Gui, Add, Button, x20 y183 w130 h22 gnm_ResetFieldDefaultGUI, Reset Field Defaults
-Gui, Add, Button, x20 y207 w130 h22 gnm_ResetConfig, Reset All Settings
+Gui, Add, Button, x20 y183 w130 h22 vResetFieldDefaultsButton gnm_ResetFieldDefaultGUI Disabled, Reset Field Defaults
+Gui, Add, Button, x20 y207 w130 h22 vResetAllButton gnm_ResetConfig Disabled, Reset All Settings
 
 ;input settings
 Gui, Add, Text, x176 y40 w100 +left +BackgroundTrans,Add Key Delay (ms):
-Gui, Add, Edit, x276 y38 w47 h18 limit4 number vKeyDelayEdit gnm_saveKeyDelay
+Gui, Add, Edit, x276 y38 w47 h18 limit4 number vKeyDelayEdit gnm_saveKeyDelay Disabled
 Gui, Add, UpDown, Range0-9999 vKeyDelay gnm_saveKeyDelay Disabled, % KeyDelay
 
 ;reconnect settings
-Gui, Add, Button, x248 y64 w40 h16 vTestReconnectButton gnm_testReconnect, Test
+Gui, Add, Button, x248 y64 w40 h16 vTestReconnectButton gnm_testReconnect Disabled, Test
 Gui, Add, Text, x178 y82 +BackgroundTrans,Private Server Link:
 Gui, Add, Edit, x176 yp+15 w148 h16 +BackgroundTrans vPrivServer gnm_ServerLink Disabled, %PrivServer%
 Gui, Add, Text, x178 yp+21 +BackgroundTrans, Join Method:
 Gui, Add, Text, x254 yp w48 vReconnectMethod +Center +BackgroundTrans, %ReconnectMethod%
-Gui, Add, Button, xp-12 yp-1 w12 h15 gnm_ReconnectMethod hwndhRMLeft, <
-Gui, Add, Button, xp+59 yp w12 h15 gnm_ReconnectMethod hwndhRMRight, >
-Gui, Add, Button, x315 yp w10 h15 gnm_ReconnectMethodHelp, ?
+Gui, Add, Button, xp-12 yp-1 w12 h15 gnm_ReconnectMethod hwndhRMLeft Disabled, <
+Gui, Add, Button, xp+59 yp w12 h15 gnm_ReconnectMethod hwndhRMRight Disabled, >
+Gui, Add, Button, x315 yp w10 h15 vReconnectMethodHelp gnm_ReconnectMethodHelp Disabled, ?
 Gui, Add, Text, x178 yp+21 +BackgroundTrans,Daily Reconnect (optional):
 Gui, Add, Text, x178 yp+18 +BackgroundTrans, Reconnect every
-Gui, Add, Edit, x264 yp-1 w18 h16 Number Limit2 vReconnectInterval gnm_setReconnectInterval, %ReconnectInterval%
+Gui, Add, Edit, x264 yp-1 w18 h16 Number Limit2 vReconnectInterval gnm_setReconnectInterval Disabled, %ReconnectInterval%
 Gui, Add, Text, x287 yp+1 +BackgroundTrans, hours
 Gui, Add, Text, x196 yp+18 +BackgroundTrans, starting at
-Gui, Add, Edit, x250 yp-1 w18 h16 Number Limit2 vReconnectHour gnm_setReconnectHour, %ReconnectHour%
-Gui, Add, Edit, x275 yp w18 h16 Number Limit2 vReconnectMin gnm_setReconnectMin, %ReconnectMin%
+Gui, Add, Edit, x250 yp-1 w18 h16 Number Limit2 vReconnectHour gnm_setReconnectHour Disabled, %ReconnectHour%
+Gui, Add, Edit, x275 yp w18 h16 Number Limit2 vReconnectMin gnm_setReconnectMin Disabled, %ReconnectMin%
 Gui, font, w1000 s11
 Gui, Add, Text, x269 yp-3 +BackgroundTrans, :
 Gui, font, s6 w700
 Gui, Add, Text, x295 yp+6 +BackgroundTrans, UTC
 Gui, Font, s8 cDefault Norm, Tahoma
-Gui, Add, Button, x315 yp-3 w10 h15 gnm_ReconnectTimeHelp, ?
-Gui, Add, CheckBox, x176 yp+24 w88 h15 vReconnectMessage gnm_saveConfig +BackgroundTrans Checked%ReconnectMessage%, Natro so broke
+Gui, Add, Button, x315 yp-3 w10 h15 vReconnectTimeHelp gnm_ReconnectTimeHelp Disabled, ?
+Gui, Add, CheckBox, x176 yp+24 w88 h15 vReconnectMessage gnm_saveConfig +BackgroundTrans Checked%ReconnectMessage% Disabled, Natro so broke
 hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["weary"])
 Gui, Add, Picture, +BackgroundTrans x269 yp-2 w20 h20, HBITMAP:*%hBM%
 DllCall("DeleteObject", "ptr", hBM)
 Gdip_DisposeImage(bitmaps["weary"])
-Gui, Add, Button, x315 yp+2 w10 h15 gnm_NatroSoBrokeHelp, ?
-Gui, Add, CheckBox, x176 yp+18 w132 h15 vPublicFallback gnm_saveConfig +BackgroundTrans Checked%PublicFallback%, Fallback to Public Server
-Gui, Add, Button, x315 yp w10 h15 gnm_PublicFallbackHelp, ?
+Gui, Add, Button, x315 yp+2 w10 h15 vNatroSoBrokeHelp gnm_NatroSoBrokeHelp Disabled, ?
+Gui, Add, CheckBox, x176 yp+18 w132 h15 vPublicFallback gnm_saveConfig +BackgroundTrans Checked%PublicFallback% Disabled, Fallback to Public Server
+Gui, Add, Button, x315 yp w10 h15 vPublicFallbackHelp gnm_PublicFallbackHelp Disabled, ?
 
 ;character settings
 Gui, Add, Text, x345 y40 w110 +left +BackgroundTrans,Movement Speed:
@@ -2244,28 +2236,28 @@ Gui, Font, s6
 Gui, Add, Text, x345 y55 w80 +right +BackgroundTrans,(WITHOUT HASTE)
 Gui, Font, s8 cDefault Norm, Tahoma
 Gui, Add, Edit, x438 y43 w43 r1 limit5 vMoveSpeedNum gnm_moveSpeed Disabled, %MoveSpeedNum%
-Gui, Add, CheckBox, x345 y68 w125 h15 vNewWalk gnm_saveConfig +BackgroundTrans Checked%NewWalk%, MoveSpeed Correction
-Gui, Add, Button, x475 y68 w10 h15 gnm_NewWalkHelp, ?
+Gui, Add, CheckBox, x345 y68 w125 h15 vNewWalk gnm_saveConfig +BackgroundTrans Checked%NewWalk% Disabled, MoveSpeed Correction
+Gui, Add, Button, x475 y68 w10 h15 vNewWalkHelp gnm_NewWalkHelp Disabled, ?
 Gui, Add, Text, x338 y90 w85 +Center +BackgroundTrans,Move Method:
 Gui, Add, Text, x434 yp w48 vMoveMethod +Center +BackgroundTrans,%MoveMethod%
-Gui, Add, Button, x422 y89 w12 h16 gnm_MoveMethod hwndhMMLeft, <
-Gui, Add, Button, x480 y89 w12 h16 gnm_MoveMethod hwndhMMRight, >
+Gui, Add, Button, x422 y89 w12 h16 gnm_MoveMethod hwndhMMLeft Disabled, <
+Gui, Add, Button, x480 y89 w12 h16 gnm_MoveMethod hwndhMMRight Disabled, >
 Gui, Add, Text, x338 y111 w85 +Center +BackgroundTrans,Sprinkler Type:
 Gui, Add, Text, x434 yp w48 vSprinklerType +Center +BackgroundTrans,%SprinklerType%
-Gui, Add, Button, x422 y110 w12 h16 gnm_SprinklerType hwndhSTLeft, <
-Gui, Add, Button, x480 y110 w12 h16 gnm_SprinklerType hwndhSTRight, >
+Gui, Add, Button, x422 y110 w12 h16 gnm_SprinklerType hwndhSTLeft Disabled, <
+Gui, Add, Button, x480 y110 w12 h16 gnm_SprinklerType hwndhSTRight Disabled, >
 Gui, Add, Text, x338 y132 w85 +Center +BackgroundTrans,Convert Balloon:
 Gui, Add, Text, x434 yp w48 vConvertBalloon +Center +BackgroundTrans,%ConvertBalloon%
-Gui, Add, Button, x422 y131 w12 h16 gnm_ConvertBalloon hwndhCBLeft, <
-Gui, Add, Button, x480 y131 w12 h16 gnm_ConvertBalloon hwndhCBRight, >
+Gui, Add, Button, x422 y131 w12 h16 gnm_ConvertBalloon hwndhCBLeft Disabled, <
+Gui, Add, Button, x480 y131 w12 h16 gnm_ConvertBalloon hwndhCBRight Disabled, >
 Gui, Add, Text, x370 y147 w110 +left +BackgroundTrans,\____\___
-Gui, Add, Edit, % "x422 y150 w30 h18 number Limit3 +BackgroundTrans vConvertMins gnm_saveConfig" ((ConvertBalloon = "Every") ? "" : " Disabled") , %ConvertMins%
+Gui, Add, Edit, x422 y150 w30 h18 number Limit3 +BackgroundTrans vConvertMins gnm_saveConfig Disabled, %ConvertMins%
 Gui, Add, Text, x456 y152, Mins
 Gui, Add, Text, x345 y170 w110 +left +BackgroundTrans,Multiple Reset:
 Gui, Add, Slider, x415 y168 w78 h16 vMultiReset gnm_saveConfig Thick16 Disabled ToolTipTop Range0-3 Page1 TickInterval1, %MultiReset%
-Gui, Add, CheckBox, x345 y186 vGatherDoubleReset gnm_saveConfig +BackgroundTrans Checked%GatherDoubleReset%, Gather Double Reset
-Gui, Add, CheckBox, x345 y201 vDisableToolUse gnm_saveConfig +BackgroundTrans Checked%DisableToolUse%, Disable Tool Use
-Gui, Add, CheckBox, x345 y216 vAnnounceGuidingStar gnm_saveConfig +BackgroundTrans Checked%AnnounceGuidingStar%, Announce Guiding Star
+Gui, Add, CheckBox, x345 y186 vGatherDoubleReset gnm_saveConfig +BackgroundTrans Checked%GatherDoubleReset% Disabled, Gather Double Reset
+Gui, Add, CheckBox, x345 y201 vDisableToolUse gnm_saveConfig +BackgroundTrans Checked%DisableToolUse% Disabled, Disable Tool Use
+Gui, Add, CheckBox, x345 y216 vAnnounceGuidingStar gnm_saveConfig +BackgroundTrans Checked%AnnounceGuidingStar% Disabled, Announce Guiding Star
 SetLoadingProgress(30)
 
 ;COLLECT/Kill TAB
@@ -2282,12 +2274,12 @@ Gui, Add, Checkbox, x15 y57 +BackgroundTrans vClockCheck gnm_saveCollect Checked
 Gui, Add, Checkbox, x15 y76 w52 +BackgroundTrans vMondoBuffCheck gnm_saveCollect Checked%MondoBuffCheck% Disabled, Mondo
 MondoActionList := ["Buff", "Kill"], PMondoGuid ? MondoActionList.Push("Tag", "Guid")
 Gui, Add, Text, xp+66 yp w30 vMondoAction +Center +BackgroundTrans,%MondoAction%
-Gui, Add, Button, xp-12 yp-1 w12 h16 gnm_MondoAction hwndhMALeft, <
-Gui, Add, Button, xp+41 yp w12 h16 gnm_MondoAction hwndhMARight, >
+Gui, Add, Button, xp-12 yp-1 w12 h16 gnm_MondoAction hwndhMALeft Disabled, <
+Gui, Add, Button, xp+41 yp w12 h16 gnm_MondoAction hwndhMARight Disabled, >
 Gui, Add, Checkbox, x15 y95 w35 +BackgroundTrans vAntPassCheck gnm_saveCollect Checked%AntPassCheck% Disabled, Ant
 Gui, Add, Text, xp+47 yp w49 vAntPassAction +Center +BackgroundTrans,%AntPassAction%
-Gui, Add, Button, xp-12 yp-1 w12 h16 gnm_AntPassAction hwndhAPALeft, <
-Gui, Add, Button, xp+60 yp w12 h16 gnm_AntPassAction hwndhAPARight, >
+Gui, Add, Button, xp-12 yp-1 w12 h16 gnm_AntPassAction hwndhAPALeft Disabled, <
+Gui, Add, Button, xp+60 yp w12 h16 gnm_AntPassAction hwndhAPARight Disabled, >
 Gui, Add, Checkbox, x15 y114 +BackgroundTrans vRoboPassCheck gnm_saveCollect Checked%RoboPassCheck% Disabled, Robo Pass
 Gui, Add, Checkbox, x15 y133 +BackgroundTrans vHoneystormCheck gnm_saveCollect Checked%HoneystormCheck% Disabled, Honeystorm
 ;dispensers
@@ -2328,12 +2320,12 @@ try AsyncHttpRequest("GET", "https://raw.githubusercontent.com/NatroTeam/.github
 Gui, Font, w700
 Gui, Add, GroupBox, x10 y42 w134 h188 vBugRunGroupBox Hidden, Bug Run
 Gui, Font, s8 cDefault Norm, Tahoma
-Gui, Add, Checkbox, x76 y43 vBugRunCheck gnm_BugRunCheck Checked%BugRunCheck% Hidden, Select All
+Gui, Add, Checkbox, x76 y43 vBugRunCheck gnm_BugRunCheck Checked%BugRunCheck% Disabled Hidden, Select All
 Gui, Add, Text, x16 y62 +BackgroundTrans Hidden vTextMonsterRespawnPercent, % "–       %"
-Gui, Add, Text, x52 y55 w80 +BackgroundTrans +Center Hidden vTextMonsterRespawn, Monster Respawn Time
-Gui, Add, Edit, x24 y61 w18 h16 Limit2 number +BackgroundTrans vMonsterRespawnTime gnm_MonsterRespawnTime Hidden, %MonsterRespawnTime%
-Gui, Add, Button, x128 y63 w12 h14 gnm_MonsterRespawnTimeHelp vMonsterRespawnTimeHelp Hidden, ?
-Gui, Add, Checkbox, x16 y82 w125 h15 +BackgroundTrans vBugrunInterruptCheck gnm_saveCollect Checked%BugrunInterruptCheck% Hidden, Allow Gather Interrupt
+Gui, Add, Text, x52 y55 w80 +BackgroundTrans +Center vTextMonsterRespawn Hidden, Monster Respawn Time
+Gui, Add, Edit, x24 y61 w18 h16 Limit2 number +BackgroundTrans vMonsterRespawnTime gnm_MonsterRespawnTime Disabled Hidden, %MonsterRespawnTime%
+Gui, Add, Button, x128 y63 w12 h14 gnm_MonsterRespawnTimeHelp vMonsterRespawnTimeHelp Disabled Hidden, ?
+Gui, Add, Checkbox, x16 y82 w125 h15 +BackgroundTrans vBugrunInterruptCheck gnm_saveCollect Checked%BugrunInterruptCheck% Disabled Hidden, Allow Gather Interrupt
 Gui, Add, text, x16 y100 +BackgroundTrans Hidden vTextLoot, Loot
 Gui, Add, text, x49 y100 +BackgroundTrans Hidden vTextKill, Kill
 Gui, Add, Text, x15 y114 w114 h1 0x7 Hidden vTextLineBugRun1
@@ -2355,19 +2347,19 @@ Gui, Font, w700
 Gui, Add, GroupBox, x149 y42 w341 h60 vStingersGroupBox Hidden, Stingers
 Gui, Font, s8 cDefault Norm, Tahoma
 Gui, Add, Checkbox, x217 y43 +BackgroundTrans vStingerCheck gnm_saveStingers Checked%StingerCheck% Disabled Hidden, Kill Vicious Bee
-Gui, Add, Checkbox, % "x315 y43 vStingerDailyBonusCheck gnm_saveStingers Checked" StingerDailyBonusCheck " Hidden Disabled" !StingerCheck, Only Daily Bonus
+Gui, Add, Checkbox, x315 y43 vStingerDailyBonusCheck gnm_saveStingers Checked%StingerDailyBonusCheck% Hidden Disabled, Only Daily Bonus
 Gui, Add, Text, x168 y69 +BackgroundTrans Hidden vTextFields, Fields:
-Gui, Add, Checkbox, % "x220 y62 vStingerCloverCheck gnm_saveStingers Checked" StingerCloverCheck " Hidden Disabled" !StingerCheck, Clover
-Gui, Add, Checkbox, % "x220 y80 vStingerSpiderCheck gnm_saveStingers Checked" StingerSpiderCheck " Hidden Disabled" !StingerCheck, Spider
-Gui, Add, Checkbox, % "x305 y62 vStingerCactusCheck gnm_saveStingers Checked" StingerCactusCheck " Hidden Disabled" !StingerCheck, Cactus
-Gui, Add, Checkbox, % "x305 y80 vStingerRoseCheck gnm_saveStingers Checked" StingerRoseCheck " Hidden Disabled" !StingerCheck, Rose
-Gui, Add, Checkbox, % "x390 y62 vStingerMountainTopCheck gnm_saveStingers Checked" StingerMountainTopCheck " Hidden Disabled" !StingerCheck, Mountain Top
-Gui, Add, Checkbox, % "x390 y80 vStingerPepperCheck gnm_saveStingers Checked" StingerPepperCheck " Hidden Disabled" !StingerCheck, Pepper
+Gui, Add, Checkbox, x220 y62 vStingerCloverCheck gnm_saveStingers Checked%StingerCloverCheck% Hidden Disabled, Clover
+Gui, Add, Checkbox, x220 y80 vStingerSpiderCheck gnm_saveStingers Checked%StingerSpiderCheck% Hidden Disabled, Spider
+Gui, Add, Checkbox, x305 y62 vStingerCactusCheck gnm_saveStingers Checked%StingerCactusCheck% Hidden Disabled, Cactus
+Gui, Add, Checkbox, x305 y80 vStingerRoseCheck gnm_saveStingers Checked%StingerRoseCheck% Hidden Disabled, Rose
+Gui, Add, Checkbox, x390 y62 vStingerMountainTopCheck gnm_saveStingers Checked%StingerMountainTopCheck% Hidden Disabled, Mountain Top
+Gui, Add, Checkbox, x390 y80 vStingerPepperCheck gnm_saveStingers Checked%StingerPepperCheck% Hidden Disabled, Pepper
 ;bosses
 Gui, Font, w700
 Gui, Add, GroupBox, x149 y104 w341 h126 vBossesGroupBox Hidden, Bosses
 Gui, Font, s8 cDefault Norm, Tahoma
-Gui, Add, Button, x209 y104 w12 h14 gnm_BossConfigHelp vBossConfigHelp Hidden, ?
+Gui, Add, Button, x209 y104 w12 h14 gnm_BossConfigHelp vBossConfigHelp Disabled Hidden, ?
 Gui, Add, Checkbox, x152 y123 +BackgroundTrans vKingBeetleCheck gnm_saveCollect Checked%KingBeetleCheck% Disabled Hidden, King Beetle
 Gui, Add, Checkbox, xp yp+21 +BackgroundTrans vTunnelBearCheck gnm_saveCollect Checked%TunnelBearCheck% Disabled Hidden, Tunnel Bear
 Gui, Add, Checkbox, xp yp+21 +BackgroundTrans vCocoCrabCheck gnm_CocoCrabCheck Checked%CocoCrabCheck% Disabled Hidden, Coco Crab
@@ -2398,22 +2390,22 @@ DllCall("DeleteObject", "ptr", hBM)
 Gdip_DisposeImage(bitmaps["supremeshellamu"])
 Gui, Add, Text, x410 y123 w56 vKingBeetleAmuletModeText Hidden, % (KingBeetleAmuletMode = 1) ? " Keep Old" : "Do Nothing"
 Gui, Add, Text, x269 y186 w53 vShellAmuletModeText Hidden, % (ShellAmuletMode = 1) ? " Keep Old" : "Do Nothing"
-Gui, Add, Text, x246 y207 vChickLevelTextLabel Hidden, Level:
-Gui, Add, Text, x276 y207 w30 vChickLevelText +Center Hidden, ?
-Gui, Add, UpDown, w10 h16 vChickLevel gnm_setChickHealth Range3-25 Hidden, 10
+Gui, Add, Text, x242 y207 h16 vChickLevelTextLabel Hidden, Level:
+Gui, Add, Text, x272 yp-1 w34 h16 0x200 vChickLevelText +Center Hidden, ?
+Gui, Add, UpDown, w10 h16 vChickLevel gnm_setChickHealth Range3-25 Disabled Hidden, 10
 GuiControl, , ChickLevelText, ? ; no point in storing this value, have it undefined on start
 Gui, Add, Text, x325 y186 vSnailHPText Hidden, HP:
 Gui, Add, Text, xp yp+21 vChickHPText Hidden, HP:
-Gui, Add, Edit, x343 y184 w60 h18 +BackgroundTrans Number Limit8 gnm_setSnailHealth vSnailHealthEdit Hidden, % Round(30000000*InputSnailHealth/100)
-Gui, Add, Edit, xp yp+21 w60 h18 +BackgroundTrans Number Limit8 gnm_setChickHealth vChickHealthEdit Hidden
+Gui, Add, Edit, x343 y184 w60 h18 +BackgroundTrans Number Limit8 gnm_setSnailHealth vSnailHealthEdit Disabled Hidden, % Round(30000000*InputSnailHealth/100)
+Gui, Add, Edit, xp yp+21 w60 h18 +BackgroundTrans Number Limit8 gnm_setChickHealth vChickHealthEdit Disabled Hidden
 Gui, Font, s7
 Gui, Add, Text, % "x405 y188 w40 vSnailHealthText Hidden c" Format("0x{1:02x}{2:02x}{3:02x}", Round(Min(3*(100-InputSnailHealth), 150)), Round(Min(3*InputSnailHealth, 150)), 0), % InputSnailHealth "%"
 Gui, Add, Text, % "xp yp+21 w40 vChickHealthText Hidden c" Format("0x{1:02x}{2:02x}{3:02x}", Round(Min(3*(100-InputChickHealth), 150)), Round(Min(3*InputChickHealth, 150)), 0), % InputChickHealth "%"
 Gui, Font, s8
 Gui, Add, Text, x448 y186 w22 vSnailTimeText +Center Hidden, % (SnailTime = "Kill") ? SnailTime : SnailTime "m"
-Gui, Add, UpDown, xp+22 yp-1 w10 h16 -16 Range1-4 vSnailTimeUpDown gnm_SnailTime Hidden, % (SnailTime = "Kill") ? 4 : SnailTime//5
+Gui, Add, UpDown, xp+22 yp-1 w10 h16 -16 Range1-4 vSnailTimeUpDown gnm_SnailTime Disabled Hidden, % (SnailTime = "Kill") ? 4 : SnailTime//5
 Gui, Add, Text, x448 y207 w22 vChickTimeText +Center Hidden, % (ChickTime = "Kill") ? ChickTime : ChickTime "m"
-Gui, Add, UpDown, xp+22 yp-1 w10 h16 -16 Range1-4 vChickTimeUpDown gnm_ChickTime Hidden, % (ChickTime = "Kill") ? 4 : ChickTime//5
+Gui, Add, UpDown, xp+22 yp-1 w10 h16 -16 Range1-4 vChickTimeUpDown gnm_ChickTime Disabled Hidden, % (ChickTime = "Kill") ? 4 : ChickTime//5
 SetLoadingProgress(31)
 
 ;BOOST TAB
@@ -2429,21 +2421,21 @@ Gui, Font, s8 cDefault Norm, Tahoma
 Gui, Add, Text, x20 y41 +BackgroundTrans, Free Booster Order:
 Gui, Add, Text, x+6 yp +BackgroundTrans Section, 1:
 Gui, Add, Text, x+14 yp w50 vFieldBooster1 +Center +BackgroundTrans, %FieldBooster1%
-Gui, Add, Button, xp-12 yp-1 w12 h16 gnm_FieldBooster hwndhFB1Left, <
-Gui, Add, Button, xp+61 yp w12 h16 gnm_FieldBooster hwndhFB1Right, >
+Gui, Add, Button, xp-12 yp-1 w12 h16 gnm_FieldBooster hwndhFB1Left Disabled, <
+Gui, Add, Button, xp+61 yp w12 h16 gnm_FieldBooster hwndhFB1Right Disabled, >
 Gui, Add, Text, xs+96 ys +BackgroundTrans, 2:
 Gui, Add, Text, x+14 yp w50 vFieldBooster2 +Center +BackgroundTrans, %FieldBooster2%
-Gui, Add, Button, xp-12 yp-1 w12 h16 gnm_FieldBooster hwndhFB2Left, <
-Gui, Add, Button, xp+61 yp w12 h16 gnm_FieldBooster hwndhFB2Right, >
+Gui, Add, Button, xp-12 yp-1 w12 h16 gnm_FieldBooster hwndhFB2Left Disabled, <
+Gui, Add, Button, xp+61 yp w12 h16 gnm_FieldBooster hwndhFB2Right Disabled, >
 Gui, Add, Text, xs+192 ys +BackgroundTrans, 3:
 Gui, Add, Text, x+14 yp w50 vFieldBooster3 +Center +BackgroundTrans, %FieldBooster3%
-Gui, Add, Button, xp-12 yp-1 w12 h16 gnm_FieldBooster hwndhFB3Left, <
-Gui, Add, Button, xp+61 yp w12 h16 gnm_FieldBooster hwndhFB3Right, >
+Gui, Add, Button, xp-12 yp-1 w12 h16 gnm_FieldBooster hwndhFB3Left Disabled, <
+Gui, Add, Button, xp+61 yp w12 h16 gnm_FieldBooster hwndhFB3Right Disabled, >
 Gui, Add, Text, xs+292 ys-7 left +BackgroundTrans, Separate By:
 Gui, Add, Text, xp+3 y+0 w12 vFieldBoosterMins +Center, %FieldBoosterMins%
-Gui, Add, UpDown, xp+14 yp-1 h16 -16 Range0-12 vFieldBoosterMinsUpDown gnm_FieldBoosterMins, % FieldBoosterMins//5
+Gui, Add, UpDown, xp+14 yp-1 h16 -16 Range0-12 vFieldBoosterMinsUpDown gnm_FieldBoosterMins Disabled, % FieldBoosterMins//5
 Gui, Add, Text, xp+20 yp+1 w100 left +BackgroundTrans, Mins
-Gui, Add, CheckBox, x20 y62 +center vBoostChaserCheck gnm_BoostChaserCheck Checked%BoostChaserCheck%, Gather in`nBoosted Field
+Gui, Add, CheckBox, x20 y62 +center vBoostChaserCheck gnm_BoostChaserCheck Checked%BoostChaserCheck% Disabled, Gather in`nBoosted Field
 ;hotbar
 Loop, 6
 {
@@ -2453,13 +2445,13 @@ Loop, 6
 	Gui, Add, Text, % "x113 y" 95 + 20 * A_Index " cRed vHBOffText" i, <-- OFF
 	Gui, Add, Text, % "x106 y" 95 + 20 * A_Index " w120 vHBText" i " Hidden"
 	Gui, Add, Text, % "x108 y" 95 + 20 * A_Index " w62 vHBTimeText" i " gnm_HotkeyEditTime +Center Hidden"
-	Gui, Add, UpDown, % "x170 y" 94 + 20 * A_Index " w10 h16 -16 Range1-99999 vHotbarTime" i " gnm_saveBoost Hidden", % HotbarTime%i%
+	Gui, Add, UpDown, % "x170 y" 94 + 20 * A_Index " w10 h16 -16 Range1-99999 vHotbarTime" i " gnm_saveBoost Hidden Disabled", % HotbarTime%i%
 	Gui, Add, Text, % "x188 y" 94 + 20 * A_Index " w62 vHBConditionText" i " +Center Hidden"
-	Gui, Add, UpDown, % "x250 y" 94 + 20 * A_Index " w10 h16 -16 Range1-100 vHotkeyMax" i " gnm_saveBoost Hidden", % HotkeyMax%i%
+	Gui, Add, UpDown, % "x250 y" 94 + 20 * A_Index " w10 h16 -16 Range1-100 vHotbarMax" i " gnm_saveBoost Hidden Disabled", % HotbarMax%i%
 	SetLoadingProgress(31+A_Index)
 }
 nm_HotbarWhile()
-Gui, Add, Button, x120 y61 w90 h30 vAutoFieldBoostButton gnm_autoFieldBoostButton, % (AutoFieldBoostActive ? "Auto Field Boost`n[ON]" : "Auto Field Boost`n[OFF]")
+Gui, Add, Button, x120 y61 w90 h30 vAutoFieldBoostButton gnm_autoFieldBoostButton Disabled, % (AutoFieldBoostActive ? "Auto Field Boost`n[ON]" : "Auto Field Boost`n[OFF]")
 Gui, Font, w700
 Gui, Font, s8 cDefault Norm, Tahoma
 
@@ -2477,26 +2469,26 @@ Gui, Add, Text, x165 y145 cRED, Not Yet Implemented
 Gui, Add, GroupBox, x330 y23 w165 h108, Bucko Bee
 Gui, Add, GroupBox, x330 y131 w165 h108, Riley Bee
 Gui, Font, s8 cDefault Norm, Tahoma
-Gui, Add, Checkbox, x80 y23 vPolarQuestCheck gnm_savequest Checked%PolarQuestCheck%, Enable
-Gui, Add, Checkbox, x15 y37 vPolarQuestGatherInterruptCheck gnm_savequest Checked%PolarQuestGatherInterruptCheck%, Allow Gather Interrupt
+Gui, Add, Checkbox, x80 y23 vPolarQuestCheck gnm_savequest Checked%PolarQuestCheck% Disabled, Enable
+Gui, Add, Checkbox, x15 y37 vPolarQuestGatherInterruptCheck gnm_savequest Checked%PolarQuestGatherInterruptCheck% Disabled, Allow Gather Interrupt
 Gui, Add, Text, x8 y51 w145 h78 vPolarQuestProgress, % StrReplace(PolarQuestProgress, "|", "`n")
-Gui, Add, Checkbox, x80 y131 vHoneyQuestCheck gnm_savequest Checked%HoneyQuestCheck%, Enable
+Gui, Add, Checkbox, x80 y131 vHoneyQuestCheck gnm_savequest Checked%HoneyQuestCheck% Disabled, Enable
 Gui, Add, Text, x8 y145 w143 h20 vHoneyQuestProgress, % StrReplace(HoneyQuestProgress, "|", "`n")
 Gui, Add, Text, x8 y184 +BackgroundTrans, Quest Gather Limit:
 Gui, Add, Text, x100 y183 w36 h16 0x201 +Center
-Gui, Add, UpDown, Range1-999 vQuestGatherMins gnm_savequest, %QuestGatherMins%
+Gui, Add, UpDown, Range1-999 vQuestGatherMins gnm_savequest Disabled, %QuestGatherMins%
 Gui, Add, Text, x137 y184 +BackgroundTrans, Min
 Gui, Add, Text, x8 y201 +BackgroundTrans, Return to hive by:
 Gui, Add, Text, x110 yp w33 vQuestGatherReturnBy +Center +BackgroundTrans,%QuestGatherReturnBy%
-Gui, Add, Button, x98 yp-1 w12 h16 gnm_QuestGatherReturnBy hwndhQGRBLeft, <
-Gui, Add, Button, x142 yp w12 h16 gnm_QuestGatherReturnBy hwndhQGRBRight, >
-Gui, Add, Checkbox, x235 y23 vBlackQuestCheck gnm_BlackQuestCheck Checked%BlackQuestCheck%, Enable
+Gui, Add, Button, x98 yp-1 w12 h16 gnm_QuestGatherReturnBy hwndhQGRBLeft Disabled, <
+Gui, Add, Button, x142 yp w12 h16 gnm_QuestGatherReturnBy hwndhQGRBRight Disabled, >
+Gui, Add, Checkbox, x235 y23 vBlackQuestCheck gnm_BlackQuestCheck Checked%BlackQuestCheck% Disabled, Enable
 Gui, Add, Text, x163 y38 w158 h92 vBlackQuestProgress, % StrReplace(BlackQuestProgress, "|", "`n")
-Gui, Add, Checkbox, x410 y23 vBuckoQuestCheck gnm_BuckoQuestCheck Checked%BuckoQuestCheck%, Enable
-Gui, Add, Checkbox, x340 y37 vBuckoQuestGatherInterruptCheck gnm_BuckoQuestCheck Checked%BuckoQuestGatherInterruptCheck%, Allow Gather Interrupt
+Gui, Add, Checkbox, x410 y23 vBuckoQuestCheck gnm_BuckoQuestCheck Checked%BuckoQuestCheck% Disabled, Enable
+Gui, Add, Checkbox, x340 y37 vBuckoQuestGatherInterruptCheck gnm_BuckoQuestCheck Checked%BuckoQuestGatherInterruptCheck% Disabled, Allow Gather Interrupt
 Gui, Add, Text, x333 y51 w158 h78 vBuckoQuestProgress, % StrReplace(BuckoQuestProgress, "|", "`n")
-Gui, Add, Checkbox, x410 y131 vRileyQuestCheck gnm_RileyQuestCheck Checked%RileyQuestCheck%, Enable
-Gui, Add, Checkbox, x340 y145 vRileyQuestGatherInterruptCheck gnm_RileyQuestCheck Checked%RileyQuestGatherInterruptCheck%, Allow Gather Interrupt
+Gui, Add, Checkbox, x410 y131 vRileyQuestCheck gnm_RileyQuestCheck Checked%RileyQuestCheck% Disabled, Enable
+Gui, Add, Checkbox, x340 y145 vRileyQuestGatherInterruptCheck gnm_RileyQuestCheck Checked%RileyQuestGatherInterruptCheck% Disabled, Allow Gather Interrupt
 Gui, Add, Text, x333 y159 w158 h78 vRileyQuestProgress, % StrReplace(RileyQuestProgress, "|", "`n")
 Gui, Font, w700
 Gui, Font, s8 cDefault Norm, Tahoma
@@ -2505,15 +2497,15 @@ Gui, Font, s8 cDefault Norm, Tahoma
 ;------------------------
 Gui, Tab, Planters
 ;GuiControl,focus, Tab
-Gui, Add, Slider, x364 y24 w130 h19 vPlanterMode gba_PlanterSwitch Range0-2 Thick16 TickInterval1 Page1 +BackgroundTrans, %PlanterMode%
+Gui, Add, Slider, x364 y24 w130 h19 vPlanterMode gba_PlanterSwitch Range0-2 Thick16 TickInterval1 Page1 +BackgroundTrans Disabled, %PlanterMode%
 Gui, Add, Text, x366 y43 h20 cRed +Center +BackgroundTrans, OFF
 Gui, Add, Text, x410 y43 h20 c0xFF9200 +Center +BackgroundTrans, MANUAL
 Gui, Add, Text, x478 y43 h20 cGreen +Center +BackgroundTrans, +
 ;Planters+ Start
 Gui, Add, Text, % "x23 y27 w40 h20 +left +BackgroundTrans vTextPresets" ((PlanterMode = 2) ? "" : " Hidden"), Presets:
 Gui, Add, Text, % "x+14 yp w40 vNPreset +Center +BackgroundTrans" ((PlanterMode = 2) ? "" : " Hidden"), %NPreset%
-Gui, Add, Button, % "xp-12 yp-1 w12 h16 gnm_NectarPreset hwndhNPLeft" ((PlanterMode = 2) ? "" : " Hidden"), <
-Gui, Add, Button, % "xp+51 yp w12 h16 gnm_NectarPreset hwndhNPRight" ((PlanterMode = 2) ? "" : " Hidden"), >
+Gui, Add, Button, % "xp-12 yp-1 w12 h16 gnm_NectarPreset hwndhNPLeft Disabled" ((PlanterMode = 2) ? "" : " Hidden"), <
+Gui, Add, Button, % "xp+51 yp w12 h16 gnm_NectarPreset hwndhNPRight Disabled" ((PlanterMode = 2) ? "" : " Hidden"), >
 Gui, Add, Text, % "x18 y47 w80 h20 +center +BackgroundTrans vTextNP" ((PlanterMode = 2) ? "" : " Hidden"), Nectar Priority
 Gui, Add, Text, % "x104 y47 w47 h30 +center +BackgroundTrans vTextMin" ((PlanterMode = 2) ? "" : " Hidden"), Min `%
 Gui, Add, Text, % "x10 y62 w137 h1 0x7 vTextLine1" ((PlanterMode = 2) ? "" : " Hidden")
@@ -2523,61 +2515,61 @@ Gui, Add, Text, % "x10 yp+20 +BackgroundTrans vText3" ((PlanterMode = 2) ? "" : 
 Gui, Add, Text, % "x10 yp+20 +BackgroundTrans vText4" ((PlanterMode = 2) ? "" : " Hidden"), 4
 Gui, Add, Text, % "x10 yp+20 +BackgroundTrans vText5" ((PlanterMode = 2) ? "" : " Hidden"), 5
 Gui, Add, Text, % "x32 y70 w64 vN1priority +Center +BackgroundTrans Section" ((PlanterMode = 2) ? "" : " Hidden"), %N1priority%
-Gui, Add, Button, % "xp-12 yp-1 w12 h16 gnm_NectarPriority hwndhNP1Left" ((PlanterMode = 2) ? "" : " Hidden"), <
-Gui, Add, Button, % "xp+75 yp w12 h16 gnm_NectarPriority hwndhNP1Right" ((PlanterMode = 2) ? "" : " Hidden"), >
+Gui, Add, Button, % "xp-12 yp-1 w12 h16 gnm_NectarPriority hwndhNP1Left Disabled" ((PlanterMode = 2) ? "" : " Hidden"), <
+Gui, Add, Button, % "xp+75 yp w12 h16 gnm_NectarPriority hwndhNP1Right Disabled" ((PlanterMode = 2) ? "" : " Hidden"), >
 Gui, Add, Text, % "xs ys+20 w64 vN2priority +Center +BackgroundTrans" ((PlanterMode = 2) ? "" : " Hidden"), %N2priority%
-Gui, Add, Button, % "xp-12 yp-1 w12 h16 gnm_NectarPriority hwndhNP2Left" ((PlanterMode = 2) ? "" : " Hidden"), <
-Gui, Add, Button, % "xp+75 yp w12 h16 gnm_NectarPriority hwndhNP2Right" ((PlanterMode = 2) ? "" : " Hidden"), >
+Gui, Add, Button, % "xp-12 yp-1 w12 h16 gnm_NectarPriority hwndhNP2Left Disabled" ((PlanterMode = 2) ? "" : " Hidden"), <
+Gui, Add, Button, % "xp+75 yp w12 h16 gnm_NectarPriority hwndhNP2Right Disabled" ((PlanterMode = 2) ? "" : " Hidden"), >
 Gui, Add, Text, % "xs ys+40 w64 vN3priority +Center +BackgroundTrans" ((PlanterMode = 2) ? "" : " Hidden"), %N3priority%
-Gui, Add, Button, % "xp-12 yp-1 w12 h16 gnm_NectarPriority hwndhNP3Left" ((PlanterMode = 2) ? "" : " Hidden"), <
-Gui, Add, Button, % "xp+75 yp w12 h16 gnm_NectarPriority hwndhNP3Right" ((PlanterMode = 2) ? "" : " Hidden"), >
+Gui, Add, Button, % "xp-12 yp-1 w12 h16 gnm_NectarPriority hwndhNP3Left Disabled" ((PlanterMode = 2) ? "" : " Hidden"), <
+Gui, Add, Button, % "xp+75 yp w12 h16 gnm_NectarPriority hwndhNP3Right Disabled" ((PlanterMode = 2) ? "" : " Hidden"), >
 Gui, Add, Text, % "xs ys+60 w64 vN4priority +Center +BackgroundTrans" ((PlanterMode = 2) ? "" : " Hidden"), %N4priority%
-Gui, Add, Button, % "xp-12 yp-1 w12 h16 gnm_NectarPriority hwndhNP4Left" ((PlanterMode = 2) ? "" : " Hidden"), <
-Gui, Add, Button, % "xp+75 yp w12 h16 gnm_NectarPriority hwndhNP4Right" ((PlanterMode = 2) ? "" : " Hidden"), >
+Gui, Add, Button, % "xp-12 yp-1 w12 h16 gnm_NectarPriority hwndhNP4Left Disabled" ((PlanterMode = 2) ? "" : " Hidden"), <
+Gui, Add, Button, % "xp+75 yp w12 h16 gnm_NectarPriority hwndhNP4Right Disabled" ((PlanterMode = 2) ? "" : " Hidden"), >
 Gui, Add, Text, % "xs ys+80 w64 vN5priority +Center +BackgroundTrans" ((PlanterMode = 2) ? "" : " Hidden"), %N5priority%
-Gui, Add, Button, % "xp-12 yp-1 w12 h16 gnm_NectarPriority hwndhNP5Left" ((PlanterMode = 2) ? "" : " Hidden"), <
-Gui, Add, Button, % "xp+75 yp w12 h16 gnm_NectarPriority hwndhNP5Right" ((PlanterMode = 2) ? "" : " Hidden"), >
+Gui, Add, Button, % "xp-12 yp-1 w12 h16 gnm_NectarPriority hwndhNP5Left Disabled" ((PlanterMode = 2) ? "" : " Hidden"), <
+Gui, Add, Button, % "xp+75 yp w12 h16 gnm_NectarPriority hwndhNP5Right Disabled" ((PlanterMode = 2) ? "" : " Hidden"), >
 Gui, Add, Text, % "x113 y70 w12 vN1minPercent +Center Section" ((PlanterMode = 2) ? "" : " Hidden"), %N1minPercent%
-Gui, Add, UpDown, % "xp+14 yp-1 h16 -16 Range1-9 vN1minPercentUpDown gnm_NectarMinPercent" ((PlanterMode = 2) ? "" : " Hidden"), % N1minPercent//10
+Gui, Add, UpDown, % "xp+14 yp-1 h16 -16 Range1-9 vN1minPercentUpDown gnm_NectarMinPercent Disabled" ((PlanterMode = 2) ? "" : " Hidden"), % N1minPercent//10
 Gui, Add, Text, % "xs ys+20 w12 vN2minPercent +Center" ((PlanterMode = 2) ? "" : " Hidden"), %N2minPercent%
-Gui, Add, UpDown, % "xp+14 yp-1 h16 -16 Range1-9 vN2minPercentUpDown gnm_NectarMinPercent" ((PlanterMode = 2) ? "" : " Hidden"), % N2minPercent//10
+Gui, Add, UpDown, % "xp+14 yp-1 h16 -16 Range1-9 vN2minPercentUpDown gnm_NectarMinPercent Disabled" ((PlanterMode = 2) ? "" : " Hidden"), % N2minPercent//10
 Gui, Add, Text, % "xs ys+40 w12 vN3minPercent +Center" ((PlanterMode = 2) ? "" : " Hidden"), %N3minPercent%
-Gui, Add, UpDown, % "xp+14 yp-1 h16 -16 Range1-9 vN3minPercentUpDown gnm_NectarMinPercent" ((PlanterMode = 2) ? "" : " Hidden"), % N3minPercent//10
+Gui, Add, UpDown, % "xp+14 yp-1 h16 -16 Range1-9 vN3minPercentUpDown gnm_NectarMinPercent Disabled" ((PlanterMode = 2) ? "" : " Hidden"), % N3minPercent//10
 Gui, Add, Text, % "xs ys+60 w12 vN4minPercent +Center" ((PlanterMode = 2) ? "" : " Hidden"), %N4minPercent%
-Gui, Add, UpDown, % "xp+14 yp-1 h16 -16 Range1-9 vN4minPercentUpDown gnm_NectarMinPercent" ((PlanterMode = 2) ? "" : " Hidden"), % N4minPercent//10
+Gui, Add, UpDown, % "xp+14 yp-1 h16 -16 Range1-9 vN4minPercentUpDown gnm_NectarMinPercent Disabled" ((PlanterMode = 2) ? "" : " Hidden"), % N4minPercent//10
 Gui, Add, Text, % "xs ys+80 w12 vN5minPercent +Center" ((PlanterMode = 2) ? "" : " Hidden"), %N5minPercent%
-Gui, Add, UpDown, % "xp+14 yp-1 h16 -16 Range1-9 vN5minPercentUpDown gnm_NectarMinPercent" ((PlanterMode = 2) ? "" : " Hidden"), % N5minPercent//10
+Gui, Add, UpDown, % "xp+14 yp-1 h16 -16 Range1-9 vN5minPercentUpDown gnm_NectarMinPercent Disabled" ((PlanterMode = 2) ? "" : " Hidden"), % N5minPercent//10
 Gui, Add, Text, % "x10 y171 w137 h1 0x7 vTextLine2" ((PlanterMode = 2) ? "" : " Hidden")
 Gui, Add, Text, % "x5 y178 w70 h20 +right +BackgroundTrans vTextHarvest" ((PlanterMode = 2) ? "" : " Hidden"), Harvest Every
-Gui, Add, Checkbox, % "x103 y194 w40 +BackgroundTrans vAutomaticHarvestInterval gba_AutoHarvestSwitch_ Checked" AutomaticHarvestInterval ((PlanterMode = 2) ? "" : " Hidden"), Auto
-Gui, Add, Checkbox, % "x28 y194 +BackgroundTrans vHarvestFullGrown gba_HarvestFullGrownSwitch_ Checked" HarvestFullGrown ((PlanterMode = 2) ? "" : " Hidden"), Full Grown
-Gui, Add, Checkbox, % "x2 y211 +BackgroundTrans vgotoPlanterField gba_gotoPlanterFieldSwitch_ Checked" gotoPlanterField ((PlanterMode = 2) ? "" : " Hidden"), Only Gather in Planter Field
-Gui, Add, Checkbox, % "x2 y224 w150 h14 +BackgroundTrans vgatherFieldSipping gba_gatherFieldSippingSwitch_ Checked" gatherFieldSipping ((PlanterMode = 2) ? "" : " Hidden"), Gather Field Nectar Sipping
+Gui, Add, Checkbox, % "x103 y194 w40 +BackgroundTrans vAutomaticHarvestInterval gba_AutoHarvestSwitch_ Disabled Checked" AutomaticHarvestInterval ((PlanterMode = 2) ? "" : " Hidden"), Auto
+Gui, Add, Checkbox, % "x28 y194 +BackgroundTrans vHarvestFullGrown gba_HarvestFullGrownSwitch_ Disabled Checked" HarvestFullGrown ((PlanterMode = 2) ? "" : " Hidden"), Full Grown
+Gui, Add, Checkbox, % "x2 y211 w150 h13 +BackgroundTrans vgotoPlanterField gba_gotoPlanterFieldSwitch_ Disabled Checked" gotoPlanterField ((PlanterMode = 2) ? "" : " Hidden"), Only Gather in Planter Field
+Gui, Add, Checkbox, % "x2 y224 w150 h13 +BackgroundTrans vgatherFieldSipping gba_gatherFieldSippingSwitch_ Disabled Checked" gatherFieldSipping ((PlanterMode = 2) ? "" : " Hidden"), Gather Field Nectar Sipping
 Gui, Add, Text, % "x80 y178 w32 h20 cRed +left vAutoText +BackgroundTrans" (((PlanterMode = 2) && AutomaticHarvestInterval) ? "" : " Hidden"), [Auto]
 Gui, Add, Text, % "x80 y178 w32 h20 cRed +left vFullText +BackgroundTrans" (((PlanterMode = 2) && HarvestFullGrown) ? "" : " Hidden"), [Full]
-Gui, Add, Edit, % "x80 y174 w32 h20 limit2 Number vHarvestInterval gba_harvestInterval" (((PlanterMode = 2) && !HarvestFullGrown && !AutomaticHarvestInterval) ? "" : " Hidden"), %HarvestInterval%
+Gui, Add, Edit, % "x80 y174 w32 h20 limit2 Number vHarvestInterval gba_harvestInterval Disabled" (((PlanterMode = 2) && !HarvestFullGrown && !AutomaticHarvestInterval) ? "" : " Hidden"), %HarvestInterval%
 Gui, Add, Text, % "x115 y178 w70 h20 +left +BackgroundTrans vTextHours" ((PlanterMode = 2) ? "" : " Hidden"), Hours
 Gui, Add, Text, % "x10 y209 w137 h1 0x7 vTextLine3" ((PlanterMode = 2) ? "" : " Hidden")
-Gui, Add, Button, % "x261 y24 w96 h18 -Wrap vTimersButton gba_showPlanterTimers" ((PlanterMode = 2) ? "" : " Hidden"), % " Show Timers (" TimersHotkey ")"
+Gui, Add, Button, % "x261 y24 w96 h18 -Wrap vTimersButton gba_showPlanterTimers Disabled" ((PlanterMode = 2) ? "" : " Hidden"), % " Show Timers (" TimersHotkey ")"
 Gui, Add, Text, % "x147 y28 w1 h182 0x7 vTextLine4" ((PlanterMode = 2) ? "" : " Hidden")
 Gui, Add, Text, % "x147 y27 w108 h20 +Center +BackgroundTrans vTextAllowedPlanters" ((PlanterMode = 2) ? "" : " Hidden"), Allowed Planters
 Gui, Add, Text, % "x255 y43 w100 h20 +Center +BackgroundTrans vTextAllowedFields" ((PlanterMode = 2) ? "" : " Hidden"), Allowed Fields
 Gui, Add, Text, % "x147 y42 w108 h1 0x7 vTextLine5" ((PlanterMode = 2) ? "" : " Hidden")
-Gui, Add, Checkbox, % "x152 y47 vPlasticPlanterCheck gba_saveConfig_ Checked" PlasticPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Plastic
-Gui, Add, Checkbox, % "xp y61 vCandyPlanterCheck gba_saveConfig_ Checked" CandyPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Candy
-Gui, Add, Checkbox, % "xp y75 vBlueClayPlanterCheck gba_saveConfig_ Checked" BlueClayPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Blue Clay
-Gui, Add, Checkbox, % "xp y89 vRedClayPlanterCheck gba_saveConfig_ Checked" RedClayPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Red Clay
-Gui, Add, Checkbox, % "xp y103 vTackyPlanterCheck gba_saveConfig_ Checked" TackyPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Tacky
-Gui, Add, Checkbox, % "xp y117 vPesticidePlanterCheck gba_saveConfig_ Checked" PesticidePlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Pesticide
-Gui, Add, Checkbox, % "xp y131 vHeatTreatedPlanterCheck gba_saveConfig_ Checked" HeatTreatedPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Heat-Treated
-Gui, Add, Checkbox, % "xp y145 vHydroponicPlanterCheck gba_saveConfig_ Checked" HydroponicPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Hydroponic
-Gui, Add, Checkbox, % "xp y159 vPetalPlanterCheck gba_saveConfig_ Checked" PetalPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Petal
-Gui, Add, Checkbox, % "xp y173 w100 h13 vPlanterOfPlentyCheck gba_saveConfig_ Checked" PlanterOfPlentyCheck ((PlanterMode = 2) ? "" : " Hidden"), Planter of Plenty
-Gui, Add, Checkbox, % "xp y187 vPaperPlanterCheck gba_saveConfig_ Checked" PaperPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Paper
-Gui, Add, Checkbox, % "xp y201 vTicketPlanterCheck gba_saveConfig_ Checked" TicketPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Ticket
-Gui, Add, Text, % "x152 y217 w80 h20 +left +BackgroundTrans vTextMax" ((PlanterMode = 2) ? "" : " Hidden"), Max Planters
-Gui, Add, Edit, % "x219 y215 w34 h18 vMaxAllowedPlantersEdit +BackgroundTrans gnm_saveAutoClicker Number" ((PlanterMode = 2) ? "" : " Hidden")
-Gui, Add, UpDown, % "vMaxAllowedPlanters gba_maxAllowedPlantersSwitch Range0-3" ((PlanterMode = 2) ? "" : " Hidden"), %MaxAllowedPlanters%
+Gui, Add, Checkbox, % "x152 y45 vPlasticPlanterCheck gba_saveConfig_ Disabled Checked" PlasticPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Plastic
+Gui, Add, Checkbox, % "xp yp+14 vCandyPlanterCheck gba_saveConfig_ Disabled Checked" CandyPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Candy
+Gui, Add, Checkbox, % "xp yp+14 vBlueClayPlanterCheck gba_saveConfig_ Disabled Checked" BlueClayPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Blue Clay
+Gui, Add, Checkbox, % "xp yp+14 vRedClayPlanterCheck gba_saveConfig_ Disabled Checked" RedClayPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Red Clay
+Gui, Add, Checkbox, % "xp yp+14 vTackyPlanterCheck gba_saveConfig_ Disabled Checked" TackyPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Tacky
+Gui, Add, Checkbox, % "xp yp+14 vPesticidePlanterCheck gba_saveConfig_ Disabled Checked" PesticidePlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Pesticide
+Gui, Add, Checkbox, % "xp yp+14 vHeatTreatedPlanterCheck gba_saveConfig_ Disabled Checked" HeatTreatedPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Heat-Treated
+Gui, Add, Checkbox, % "xp yp+14 vHydroponicPlanterCheck gba_saveConfig_ Disabled Checked" HydroponicPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Hydroponic
+Gui, Add, Checkbox, % "xp yp+14 vPetalPlanterCheck gba_saveConfig_ Disabled Checked" PetalPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Petal
+Gui, Add, Checkbox, % "xp yp+14 w100 h13 vPlanterOfPlentyCheck gba_saveConfig_ Disabled Checked" PlanterOfPlentyCheck ((PlanterMode = 2) ? "" : " Hidden"), Planter of Plenty
+Gui, Add, Checkbox, % "xp yp+14 vPaperPlanterCheck gba_saveConfig_ Disabled Checked" PaperPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Paper
+Gui, Add, Checkbox, % "xp yp+14 vTicketPlanterCheck gba_saveConfig_ Disabled Checked" TicketPlanterCheck ((PlanterMode = 2) ? "" : " Hidden"), Ticket
+Gui, Add, Text, % "x155 y217 w80 h20 +BackgroundTrans vTextMax" ((PlanterMode = 2) ? "" : " Hidden"), Max Planters
+Gui, Add, Edit, % "x219 y215 w34 h18 vMaxAllowedPlantersEdit +BackgroundTrans gnm_saveAutoClicker Number Disabled" ((PlanterMode = 2) ? "" : " Hidden")
+Gui, Add, UpDown, % "vMaxAllowedPlanters gba_maxAllowedPlantersSwitch Range0-3 Disabled" ((PlanterMode = 2) ? "" : " Hidden"), %MaxAllowedPlanters%
 Gui, Add, Text, % "x255 y28 w1 h204 0x7 vTextLine6" ((PlanterMode = 2) ? "" : " Hidden")
 Gui, Add, Text, % "x255 y58 w240 h1 0x7 vTextLine7" ((PlanterMode = 2) ? "" : " Hidden")
 Gui, Font, s7
@@ -2588,26 +2580,26 @@ Gui, Add, Text, % "x375 y61 w100 h20 +Center +BackgroundTrans vTextZone4" ((Plan
 Gui, Add, Text, % "x375 y128 w100 h20 +Center +BackgroundTrans vTextZone5" ((PlanterMode = 2) ? "" : " Hidden"), -- 25 bee zone --
 Gui, Add, Text, % "x375 y153 w100 h20 +Center +BackgroundTrans vTextZone6" ((PlanterMode = 2) ? "" : " Hidden"), -- 35 bee zone --
 Gui, Font, s8 cDefault Norm, Tahoma
-Gui, Add, Checkbox, % "x258 y72 vDandelionFieldCheck gba_saveConfig_ Checked" DandelionFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Dandelion (COM)
-Gui, Add, Checkbox, % "xp y86 vSunflowerFieldCheck gba_saveConfig_ Checked" SunflowerFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Sunflower (SAT)
-Gui, Add, Checkbox, % "xp y100 vMushroomFieldCheck gba_saveConfig_ Checked" MushroomFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Mushroom (MOT)
-Gui, Add, Checkbox, % "xp y114 vBlueFlowerFieldCheck gba_saveConfig_ Checked" BlueFlowerFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Blue Flower (REF)
-Gui, Add, Checkbox, % "xp y128 vCloverFieldCheck gba_saveConfig_ Checked" CloverFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Clover (INV)
-Gui, Add, Checkbox, % "xp y153 vSpiderFieldCheck gba_saveConfig_ Checked" SpiderFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Spider (MOT)
-Gui, Add, Checkbox, % "xp y167 vStrawberryFieldCheck gba_saveConfig_ Checked" StrawberryFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Strawberry (REF)
-Gui, Add, Checkbox, % "xp y181 vBambooFieldCheck gba_saveConfig_ Checked" BambooFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Bamboo (COM)
-Gui, Add, Checkbox, % "xp y206 w93 h13 vPineappleFieldCheck gba_saveConfig_ Checked" PineappleFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Pineapple (SAT)
-Gui, Add, Checkbox, % "xp y220 vStumpFieldCheck gba_saveConfig_ Checked" StumpFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Stump (MOT)
-Gui, Add, Checkbox, % "xp+122 y72 vCactusFieldCheck gba_saveConfig_ Checked" CactusFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Cactus (INV)
-Gui, Add, Checkbox, % "xp y86 vPumpkinFieldCheck gba_saveConfig_ Checked" PumpkinFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Pumpkin (SAT)
-Gui, Add, Checkbox, % "xp y100 vPineTreeFieldCheck gba_saveConfig_ Checked" PineTreeFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Pine Tree (COM)
-Gui, Add, Checkbox, % "xp y114 vRoseFieldCheck gba_saveConfig_ Checked" RoseFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Rose (MOT)
-Gui, Add, Checkbox, % "xp y139 vMountainTopFieldCheck gba_saveConfig_ Checked" MountainTopFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Mountain Top (INV)
-Gui, Add, Checkbox, % "xp y164 vCoconutFieldCheck gba_saveConfig_ Checked" CoconutFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Coconut (REF)
-Gui, Add, Checkbox, % "xp y178 vPepperFieldCheck gba_saveConfig_ Checked" PepperFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Pepper (INV)
+Gui, Add, Checkbox, % "x258 y72 vDandelionFieldCheck gba_saveConfig_ Disabled Checked" DandelionFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Dandelion (COM)
+Gui, Add, Checkbox, % "xp y86 vSunflowerFieldCheck gba_saveConfig_ Disabled Checked" SunflowerFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Sunflower (SAT)
+Gui, Add, Checkbox, % "xp y100 vMushroomFieldCheck gba_saveConfig_ Disabled Checked" MushroomFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Mushroom (MOT)
+Gui, Add, Checkbox, % "xp y114 vBlueFlowerFieldCheck gba_saveConfig_ Disabled Checked" BlueFlowerFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Blue Flower (REF)
+Gui, Add, Checkbox, % "xp y128 vCloverFieldCheck gba_saveConfig_ Disabled Checked" CloverFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Clover (INV)
+Gui, Add, Checkbox, % "xp y153 vSpiderFieldCheck gba_saveConfig_ Disabled Checked" SpiderFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Spider (MOT)
+Gui, Add, Checkbox, % "xp y167 vStrawberryFieldCheck gba_saveConfig_ Disabled Checked" StrawberryFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Strawberry (REF)
+Gui, Add, Checkbox, % "xp y181 vBambooFieldCheck gba_saveConfig_ Disabled Checked" BambooFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Bamboo (COM)
+Gui, Add, Checkbox, % "xp y206 w93 h13 vPineappleFieldCheck gba_saveConfig_ Disabled Checked" PineappleFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Pineapple (SAT)
+Gui, Add, Checkbox, % "xp y220 vStumpFieldCheck gba_saveConfig_ Disabled Checked" StumpFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Stump (MOT)
+Gui, Add, Checkbox, % "xp+122 y72 vCactusFieldCheck gba_saveConfig_ Disabled Checked" CactusFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Cactus (INV)
+Gui, Add, Checkbox, % "xp y86 vPumpkinFieldCheck gba_saveConfig_ Disabled Checked" PumpkinFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Pumpkin (SAT)
+Gui, Add, Checkbox, % "xp y100 vPineTreeFieldCheck gba_saveConfig_ Disabled Checked" PineTreeFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Pine Tree (COM)
+Gui, Add, Checkbox, % "xp y114 vRoseFieldCheck gba_saveConfig_ Disabled Checked" RoseFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Rose (MOT)
+Gui, Add, Checkbox, % "xp y139 vMountainTopFieldCheck gba_saveConfig_ Disabled Checked" MountainTopFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Mountain Top (INV)
+Gui, Add, Checkbox, % "xp y164 vCoconutFieldCheck gba_saveConfig_ Disabled Checked" CoconutFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Coconut (REF)
+Gui, Add, Checkbox, % "xp y178 vPepperFieldCheck gba_saveConfig_ Disabled Checked" PepperFieldCheck ((PlanterMode = 2) ? "" : " Hidden"), Pepper (INV)
 Gui, Add, Text, % "x354 y196 w144 h36 0x7 vTextBox1" ((PlanterMode = 2) ? "" : " Hidden")
-Gui, Add, Checkbox, % "x358 y200 w138 h13 vConvertFullBagHarvest gba_saveConfig_ Checked" ConvertFullBagHarvest ((PlanterMode = 2) ? "" : " Hidden"), Convert Full Bag Harvest
-Gui, Add, Checkbox, % "x358 y216 w138 h13 vGatherPlanterLoot gba_saveConfig_ Checked" GatherPlanterLoot ((PlanterMode = 2) ? "" : " Hidden"), Gather Planter Loot
+Gui, Add, Checkbox, % "x358 y200 w138 h13 vConvertFullBagHarvest gba_saveConfig_ Disabled Checked" ConvertFullBagHarvest ((PlanterMode = 2) ? "" : " Hidden"), Convert Full Bag Harvest
+Gui, Add, Checkbox, % "x358 y216 w138 h13 vGatherPlanterLoot gba_saveConfig_ Disabled Checked" GatherPlanterLoot ((PlanterMode = 2) ? "" : " Hidden"), Gather Planter Loot
 SetLoadingProgress(38)
 ;Manual Planters Start
 
@@ -2623,10 +2615,10 @@ Loop, 3 {
     i := A_Index
     Gui, Add, Text, % ((i = 1) ? "x5 y40" : "xs ys+29") " +Center Section vMSlot" i "PlanterText" (PlanterMode == 1 ? "" : " Hidden"), S%i% Planters:
     Loop, 9 {
-        Gui, Add, DropDownList, % "x" ((Mod(A_Index, 3) = 1) ? "s+62" : "p+50") " ys-3 w92 vMSlot" i "Cycle" A_Index "Planter gmp_SaveConfig" (((PlanterMode == 1) && (A_Index < 4)) ? "" : " Hidden"), % (MSlot%i%Cycle%A_Index%Planter ? StrReplace(MPlanterListText, MSlot%i%Cycle%A_Index%Planter, MSlot%i%Cycle%A_Index%Planter "|") : "|" MPlanterListText)
-		Gui, Add, DropDownList, % "x" ((Mod(A_Index, 3) = 1) ? "s+62" : "p") " ys+17 w92 vMSlot" i "Cycle" A_Index "Field gmp_SaveConfig" (((PlanterMode == 1) && (A_Index < 4)) ? "" : " Hidden"), % (MSlot%i%Cycle%A_Index%Field ? StrReplace(MFieldListText, MSlot%i%Cycle%A_Index%Field, MSlot%i%Cycle%A_Index%Field "|") : "|" MFieldListText)
-		Gui, Add, CheckBox, % "x" ((Mod(A_Index, 3) = 1) ? "s+62" : "p") " ys+41 w46 vMSlot" i "Cycle" A_Index "Glitter gmp_SaveConfig" (((PlanterMode == 1) && (A_Index < 4)) ? "" : " Hidden") " Checked" MSlot%i%Cycle%A_Index%Glitter, Glitter
-		Gui, Add, DropDownList, % "x" ((Mod(A_Index, 3) = 1) ? "s+108" : "p+46") " ys+38 w46 vMSlot" i "Cycle" A_Index "AutoFull gmp_SaveConfig" (((PlanterMode == 1) && (A_Index < 4)) ? "" : " Hidden"), % StrReplace("Full|Timed|", MSlot%i%Cycle%A_Index%AutoFull, MSlot%i%Cycle%A_Index%AutoFull "|")
+        Gui, Add, DropDownList, % "x" ((Mod(A_Index, 3) = 1) ? "s+62" : "p+50") " ys-3 w92 vMSlot" i "Cycle" A_Index "Planter gmp_SaveConfig Disabled" (((PlanterMode == 1) && (A_Index < 4)) ? "" : " Hidden"), % (MSlot%i%Cycle%A_Index%Planter ? StrReplace(MPlanterListText, MSlot%i%Cycle%A_Index%Planter, MSlot%i%Cycle%A_Index%Planter "|") : "|" MPlanterListText)
+		Gui, Add, DropDownList, % "x" ((Mod(A_Index, 3) = 1) ? "s+62" : "p") " ys+17 w92 vMSlot" i "Cycle" A_Index "Field gmp_SaveConfig Disabled" (((PlanterMode == 1) && (A_Index < 4)) ? "" : " Hidden"), % (MSlot%i%Cycle%A_Index%Field ? StrReplace(MFieldListText, MSlot%i%Cycle%A_Index%Field, MSlot%i%Cycle%A_Index%Field "|") : "|" MFieldListText)
+		Gui, Add, CheckBox, % "x" ((Mod(A_Index, 3) = 1) ? "s+62" : "p") " ys+41 w46 vMSlot" i "Cycle" A_Index "Glitter gmp_SaveConfig Disabled" (((PlanterMode == 1) && (A_Index < 4)) ? "" : " Hidden") " Checked" MSlot%i%Cycle%A_Index%Glitter, Glitter
+		Gui, Add, DropDownList, % "x" ((Mod(A_Index, 3) = 1) ? "s+108" : "p+46") " ys+38 w46 vMSlot" i "Cycle" A_Index "AutoFull gmp_SaveConfig Disabled" (((PlanterMode == 1) && (A_Index < 4)) ? "" : " Hidden"), % StrReplace("Full|Timed|", MSlot%i%Cycle%A_Index%AutoFull, MSlot%i%Cycle%A_Index%AutoFull "|")
 		SetLoadingProgress(17.25+i*20.25+A_Index*2.25)
 	}
     Gui, Add, Text, % "xs ys+20 +Center Section vMSlot" i "FieldText" (PlanterMode == 1 ? "" : " Hidden"), S%i% Fields:
@@ -2637,9 +2629,9 @@ Loop, 3 {
 
 Loop, 3 {
 	Gui, Add, Text, % ((A_Index = 1) ? "x360 y63" : "xs ys+35") "w200 +BackgroundTrans Section vMSlot" A_Index "CycleText" (PlanterMode == 1 ? "" : " Hidden"), % "Slot " A_Index " currently at cycle #" PlanterManualCycle%A_Index%
-	Gui, Add, Button, % "xs+25 ys+17 w20 h16 vMSlot" A_Index "Left gmp_Slot" A_Index "ChangeLeft" (PlanterMode == 1 ? "" : " Hidden"), <
+	Gui, Add, Button, % "xs+25 ys+17 w20 h16 vMSlot" A_Index "Left gmp_Slot" A_Index "ChangeLeft Disabled" (PlanterMode == 1 ? "" : " Hidden"), <
 	Gui, Add, Text, % "x+4 yp+1 h16 vMSlot" A_Index "ChangeText" (PlanterMode == 1 ? "" : " Hidden"), Change
-	Gui, Add, Button, % "x+4 yp-1 w20 h16 vMSlot" A_Index "Right gmp_Slot" A_Index "ChangeRight" (PlanterMode == 1 ? "" : " Hidden"), >
+	Gui, Add, Button, % "x+4 yp-1 w20 h16 vMSlot" A_Index "Right gmp_Slot" A_Index "ChangeRight Disabled" (PlanterMode == 1 ? "" : " Hidden"), >
 }
 
 Gui, Add, Text, % "x355 y23 h215 w1 0x7 vMSectionSeparatorLine" (PlanterMode == 1 ? "" : " Hidden")
@@ -2647,40 +2639,42 @@ Gui, Add, Text, % "x355 y58 h1 w150 0x7 vMSliderSeparatorLine" (PlanterMode == 1
 
 ;; check plants button
 Gui, Add, Text, % "xs ys+50 +Center vMHarvestText Section" (PlanterMode == 1 ? "" : " Hidden"), Harvest
-Gui, Add, DropdownList, % "xp+41 yp-3 w94 vMHarvestInterval gmp_SaveConfig" (PlanterMode == 1 ? "" : " Hidden"), % StrReplace("Every 30 Minutes|Every Hour|Every 2 Hours|Every 3 Hours|Every 4 Hours|Every 5 Hours|Every 6 Hours|", MHarvestInterval, MHarvestInterval "|")
+Gui, Add, DropdownList, % "xp+41 yp-3 w94 vMHarvestInterval gmp_SaveConfig Disabled" (PlanterMode == 1 ? "" : " Hidden"), % StrReplace("Every 30 Minutes|Every Hour|Every 2 Hours|Every 3 Hours|Every 4 Hours|Every 5 Hours|Every 6 Hours|", MHarvestInterval, MHarvestInterval "|")
 SetLoadingProgress(99)
 
 ; page movement
 Gui, Add, Button, % "xs+25 ys+24 w20 h20 hwndMPageLeftHWND vMPageLeft gmp_UpdatePage Disabled" (PlanterMode == 1 ? "" : " Hidden"), <
 Gui, Add, Text, % "x+4 yp+3 +Center vMPageNumberText" (PlanterMode == 1 ? "" : " Hidden"), % "Page: " (MPageIndex := 1)
-Gui, Add, Button, % "x+4 yp-3 w20 h20 hwndMPageRightHWND vMPageRight gmp_UpdatePage " (PlanterMode == 1 ? "" : " Hidden"), >
+Gui, Add, Button, % "x+4 yp-3 w20 h20 hwndMPageRightHWND vMPageRight gmp_UpdatePage Disabled" (PlanterMode == 1 ? "" : " Hidden"), >
 
-mp_UpdatePage(hwnd)
+mp_UpdatePage(hwnd:=0)
 {
 	Global MPageIndex, MPageLeftHWND, MPageRightHWND
 	Static ManualPlantersOptions := ["Planter","Field","Glitter","AutoFull"], LastPageIndex := 1
 
-	MPageIndex += ((hwnd == MPageLeftHWND) ? -1 : 1)
+	MPageIndex += ((hwnd == MPageLeftHWND) ? -1 : (hwnd == MPageRightHWND) ? 1 : 0)
 
 	GuiControl, % ((MPageIndex == 1) ? "Disable" : "Enable"), % MPageLeftHWND
 	GuiControl, % ((MPageIndex == 3) ? "Disable" : "Enable"), % MPageRightHWND
-	GuiControl, Text, MPageNumberText, Page: %MPageIndex%
 
-	Loop, 3 {
-		GuiControl, Text, MHeader%A_Index%Text, % "Cycle #" ((MPageIndex - 1) * 3 + A_Index)
-		i := A_Index
-		for k,v in ManualPlantersOptions {
-			Loop, 3 {
-				GuiControl, Hide, % "MSlot" A_Index "Cycle" (3 * (LastPageIndex - 1) + i) v
-				GuiControl, Show, % "MSlot" A_Index "Cycle" (3 * (MPageIndex - 1) + i) v
+	If hwnd {
+		GuiControl, Text, MPageNumberText, Page: %MPageIndex%
+
+		Loop, 3 {
+			GuiControl, Text, MHeader%A_Index%Text, % "Cycle #" ((MPageIndex - 1) * 3 + A_Index)
+			i := A_Index
+			for k,v in ManualPlantersOptions {
+				Loop, 3 {
+					GuiControl, Hide, % "MSlot" A_Index "Cycle" (3 * (LastPageIndex - 1) + i) v
+					GuiControl, Show, % "MSlot" A_Index "Cycle" (3 * (MPageIndex - 1) + i) v
+				}
 			}
 		}
-	}
 
-	LastPageIndex := MPageIndex
+		LastPageIndex := MPageIndex
+	}
 }
 
-mp_UpdateControls()
 mp_UpdateControls() {
 	global
 	local i, j
@@ -3292,14 +3286,13 @@ SetLoadingProgress(100)
 DetectHiddenWindows, Off
 
 ;unlock tabs
-nm_FieldUnlock()
-nm_TabCollectUnLock()
-nm_TabBoostUnLock()
-nm_TabPlantersUnLock()
-nm_TabSettingsUnLock()
+nm_LockTabs(0)
 nm_setStatus()
 Gui, Show, NA, Natro Macro
 GuiControl,focus, Tab
+GuiControl, Enable, StartButton
+GuiControl, Enable, PauseButton
+GuiControl, Enable, StopButton
 
 ;enable hotkeys
 Hotkey, %StartHotkey%, start, UseErrorLevel On
@@ -3352,6 +3345,79 @@ nm_Start(){
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; GUI FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+nm_LockTabs(lock:=1){
+	static tabs := ["Gather","Collect","Boost","Quest","Planters","Status","Settings","Misc"]
+	global bitmaps
+
+	;controls outside tabs
+	Gui, Font, s8 cDefault w700 Tahoma
+	if (lock = 1)
+	{
+		GuiControl, Disable, CurrentFieldUp
+		GuiControl, Disable, CurrentFieldDown
+
+		GuiControl, Font, TextDiscordLink
+		GuiControl, -g, TextDiscordLink
+		pBM := Gdip_BitmapConvertGray(bitmaps["discordgui"]), hBM := Gdip_CreateHBITMAPFromBitmap(pBM)
+		GuiControl, , ImageDiscordLink, HBITMAP:*%hBM%
+		Gdip_DisposeImage(pBM), DllCall("DeleteObject", "Ptr", hBM)
+		GuiControl, -g, ImageDiscordLink
+
+		GuiControl, Font, TextRobloxLink
+		GuiControl, -g, TextRobloxLink
+		pBM := Gdip_BitmapConvertGray(bitmaps["robloxgui"]), hBM := Gdip_CreateHBITMAPFromBitmap(pBM)
+		GuiControl, , ImageRobloxLink, HBITMAP:*%hBM%
+		Gdip_DisposeImage(pBM), DllCall("DeleteObject", "Ptr", hBM)
+		GuiControl, -g, ImageRobloxLink
+		
+		GuiControl, Font, TextDonateLink
+		GuiControl, -g, TextDonateLink
+		pBM := Gdip_BitmapConvertGray(bitmaps["paypalgui"]), hBM := Gdip_CreateHBITMAPFromBitmap(pBM)
+		GuiControl, , ImageDonateLink, HBITMAP:*%hBM%
+		Gdip_DisposeImage(pBM), DllCall("DeleteObject", "Ptr", hBM)
+		GuiControl, -g, ImageDonateLink
+
+		GuiControl, -g, ImageGitHubLink
+		
+		c := "Lock"
+	}
+	else
+	{
+		GuiControl, Enable, CurrentFieldUp
+		GuiControl, Enable, CurrentFieldDown
+
+		Gui, Font, c0046ee
+
+		GuiControl, Font, TextDiscordLink
+		GuiControl, +gDiscordLink, TextDiscordLink
+		hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["discordgui"])
+		GuiControl, , ImageDiscordLink, HBITMAP:*%hBM%
+		DllCall("DeleteObject", "Ptr", hBM)
+		GuiControl, +gDiscordLink, ImageDiscordLink
+
+		GuiControl, Font, TextRobloxLink
+		GuiControl, +gRobloxLink, TextRobloxLink
+		hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["robloxgui"])
+		GuiControl, , ImageRobloxLink, HBITMAP:*%hBM%
+		DllCall("DeleteObject", "Ptr", hBM)
+		GuiControl, +gRobloxLink, ImageRobloxLink
+		
+		GuiControl, Font, TextDonateLink
+		GuiControl, +gDonateLink, TextDonateLink
+		hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["paypalgui"])
+		GuiControl, , ImageDonateLink, HBITMAP:*%hBM%
+		DllCall("DeleteObject", "Ptr", hBM)
+		GuiControl, +gDonateLink, ImageDonateLink
+
+		GuiControl, -g, ImageGitHubLink
+
+		c := "UnLock"
+	}
+	Gui, Font, cDefault Norm
+
+	for i,tab in tabs
+		nm_Tab%tab%%c%()
+}
 AsyncHttpRequest(method, url, func:="", headers:="")
 {
 	req := ComObjCreate("Msxml2.XMLHTTP")
@@ -3373,7 +3439,7 @@ nm_BeesmasHandler(req)
 	{
 		switch Trim(req.responseText, " `t`r`n")
 		{
-			case 1:
+			case 0:
 			beesmasActive := 1
 
 			GuiControl, , BeesmasGroupBox, Beesmas (Active)
@@ -4039,6 +4105,7 @@ nm_FieldSelect1(hCtrl:=0){
 }
 nm_TabGatherLock(){
 	global
+	local hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["savefielddisabled"])
 	GuiControl, Disable, FieldName1
 	GuiControl, Disable, FieldPattern1
 	GuiControl, Disable, FieldPatternSize1UpDown
@@ -4057,6 +4124,11 @@ nm_TabGatherLock(){
 	GuiControl, Disable, % hFRT1Right
 	GuiControl, Disable, % hFSL1Left
 	GuiControl, Disable, % hFSL1Right
+	GuiControl, Disable, FDCHelp1
+	GuiControl, Disable, CopyGather1
+	GuiControl, Disable, PasteGather1
+	GuiControl, Disable, % hSaveFieldDefault1
+	GuiControl, , % hSaveFieldDefault1, HBITMAP:*%hBM%
 	GuiControl, Disable, FieldName2
 	GuiControl, Disable, FieldPattern2
 	GuiControl, Disable, FieldPatternSize2UpDown
@@ -4075,6 +4147,11 @@ nm_TabGatherLock(){
 	GuiControl, Disable, % hFRT2Right
 	GuiControl, Disable, % hFSL2Left
 	GuiControl, Disable, % hFSL2Right
+	GuiControl, Disable, FDCHelp2
+	GuiControl, Disable, CopyGather2
+	GuiControl, Disable, PasteGather2
+	GuiControl, Disable, % hSaveFieldDefault2
+	GuiControl, , % hSaveFieldDefault2, HBITMAP:*%hBM%
 	GuiControl, Disable, FieldName3
 	GuiControl, Disable, FieldPattern3
 	GuiControl, Disable, FieldPatternSize3UpDown
@@ -4093,9 +4170,15 @@ nm_TabGatherLock(){
 	GuiControl, Disable, % hFRT3Right
 	GuiControl, Disable, % hFSL3Left
 	GuiControl, Disable, % hFSL3Right
+	GuiControl, Disable, FDCHelp3
+	GuiControl, Disable, CopyGather3
+	GuiControl, Disable, PasteGather3
+	GuiControl, Disable, % hSaveFieldDefault3
+	GuiControl, , % hSaveFieldDefault3, HBITMAP:*%hBM%
 }
-nm_FieldUnlock(){
+nm_TabGatherUnLock(){
 	global
+	local hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["savefield"])
 	GuiControl, Enable, FieldName1
 	GuiControl, Enable, FieldName2
 	GuiControl, Enable, FieldPattern1
@@ -4115,9 +4198,12 @@ nm_FieldUnlock(){
 	GuiControl, Enable, % hFRT1Right
 	GuiControl, Enable, % hFSL1Left
 	GuiControl, Enable, % hFSL1Right
+	GuiControl, Enable, FDCHelp1
 	GuiControl, Enable, CopyGather1
 	GuiControl, Enable, PasteGather1
 	GuiControl, Enable, PasteGather2
+	GuiControl, Enable, % hSaveFieldDefault1
+	GuiControl, , % hSaveFieldDefault1, HBITMAP:*%hBM%
 	if(FieldName2!="none"){
 		GuiControl, Enable, FieldName3
 		GuiControl, Enable, FieldPattern2
@@ -4137,8 +4223,11 @@ nm_FieldUnlock(){
 		GuiControl, Enable, % hFRT2Right
 		GuiControl, Enable, % hFSL2Left
 		GuiControl, Enable, % hFSL2Right
+		GuiControl, Enable, FDCHelp2
 		GuiControl, Enable, CopyGather2
 		GuiControl, Enable, PasteGather3
+		GuiControl, Enable, % hSaveFieldDefault2
+		GuiControl, , % hSaveFieldDefault2, HBITMAP:*%hBM%
 	}
 	if(FieldName3!="none"){
 		GuiControl, Enable, FieldPattern3
@@ -4158,8 +4247,12 @@ nm_FieldUnlock(){
 		GuiControl, Enable, % hFRT3Right
 		GuiControl, Enable, % hFSL3Left
 		GuiControl, Enable, % hFSL3Right
+		GuiControl, Enable, FDCHelp3
 		GuiControl, Enable, CopyGather3
+		GuiControl, Enable, % hSaveFieldDefault3
+		GuiControl, , % hSaveFieldDefault3, HBITMAP:*%hBM%
 	}
+	DllCall("DeleteObject", "ptr", hBM)
 }
 nm_FieldSelect2(hCtrl:=0){
 	global
@@ -4185,8 +4278,10 @@ nm_FieldSelect2(hCtrl:=0){
 		GuiControl, Enable, % hFRT2Right
 		GuiControl, Enable, % hFSL2Left
 		GuiControl, Enable, % hFSL2Right
+		GuiControl, Enable, FDCHelp2
 		GuiControl, Enable, CopyGather2
 		GuiControl, Enable, PasteGather3
+		GuiControl, Enable, % hSaveFieldDefault2
 		hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["savefield"])
 		GuiControl, , % hSaveFieldDefault2, HBITMAP:*%hBM%
 		DllCall("DeleteObject", "ptr", hBM)
@@ -4213,8 +4308,10 @@ nm_FieldSelect2(hCtrl:=0){
 		GuiControl, Disable, % hFRT2Right
 		GuiControl, Disable, % hFSL2Left
 		GuiControl, Disable, % hFSL2Right
+		GuiControl, Disable, FDCHelp2
 		GuiControl, Disable, CopyGather2
 		GuiControl, Disable, PasteGather3
+		GuiControl, Disable, % hSaveFieldDefault2
 		hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["savefielddisabled"])
 		GuiControl, , % hSaveFieldDefault2, HBITMAP:*%hBM%
 		DllCall("DeleteObject", "ptr", hBM)
@@ -4251,7 +4348,9 @@ nm_FieldSelect3(hCtrl:=0){
 		GuiControl, Enable, % hFRT3Right
 		GuiControl, Enable, % hFSL3Left
 		GuiControl, Enable, % hFSL3Right
+		GuiControl, Enable, FDCHelp3
 		GuiControl, Enable, CopyGather3
+		GuiControl, Enable, % hSaveFieldDefault3
 		hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["savefield"])
 		GuiControl, , % hSaveFieldDefault3, HBITMAP:*%hBM%
 		DllCall("DeleteObject", "ptr", hBM)
@@ -4278,7 +4377,9 @@ nm_FieldSelect3(hCtrl:=0){
 		GuiControl, Disable, % hFRT3Right
 		GuiControl, Disable, % hFSL3Left
 		GuiControl, Disable, % hFSL3Right
+		GuiControl, Disable, FDCHelp3
 		GuiControl, Disable, CopyGather3
+		GuiControl, Disable, % hSaveFieldDefault3
 		hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["savefielddisabled"])
 		GuiControl, , % hSaveFieldDefault3, HBITMAP:*%hBM%
 		DllCall("DeleteObject", "ptr", hBM)
@@ -4612,6 +4713,7 @@ nm_BugrunCheck(){
 }
 nm_TabCollectLock(){
 	global
+	;collect
 	GuiControl, disable, ClockCheck
 	GuiControl, disable, MondoBuffCheck
 	GuiControl, disable, % hMALeft
@@ -4639,7 +4741,11 @@ nm_TabCollectLock(){
 	GuiControl, disable, SamovarCheck
 	GuiControl, disable, LidArtCheck
 	GuiControl, disable, GummyBeaconCheck
+	;kill
+	GuiControl, disable, BugRunCheck
 	GuiControl, disable, MonsterRespawnTime
+	GuiControl, disable, MonsterRespawnTimeHelp
+	GuiControl, disable, BugrunInterruptCheck
 	GuiControl, disable, BugrunLadybugsCheck
 	GuiControl, disable, BugrunRhinoBeetlesCheck
 	GuiControl, disable, BugrunSpiderCheck
@@ -4653,6 +4759,13 @@ nm_TabCollectLock(){
 	GuiControl, disable, BugrunScorpionsLoot
 	GuiControl, disable, BugrunWerewolfLoot
 	GuiControl, disable, StingerCheck
+	GuiControl, disable, StingerDailyBonusCheck
+	GuiControl, disable, StingerCloverCheck
+	GuiControl, disable, StingerSpiderCheck
+	GuiControl, disable, StingerCactusCheck
+	GuiControl, disable, StingerRoseCheck
+	GuiControl, disable, StingerMountainTopCheck
+	GuiControl, disable, StingerPepperCheck
 	GuiControl, disable, TunnelBearCheck
 	GuiControl, disable, TunnelBearBabyCheck
 	GuiControl, disable, KingBeetleCheck
@@ -4661,14 +4774,16 @@ nm_TabCollectLock(){
 	GuiControl, disable, CocoCrabCheck
 	GuiControl, disable, StumpSnailCheck
 	GuiControl, disable, ShellAmuletMode
-	GuiControl, disable, CommandoCheck
-	GuiControl, disable, InputSnailHealthButton
+	GuiControl, disable, SnailHealthEdit
 	GuiControl, disable, SnailTimeUpDown
-	GuiControl, disable, InputChickHealthButton
+	GuiControl, disable, CommandoCheck
+	GuiControl, disable, ChickLevel
+	GuiControl, disable, ChickHealthEdit
 	GuiControl, disable, ChickTimeUpDown
 }
 nm_TabCollectUnLock(){
 	global
+	;collect
 	GuiControl, enable, ClockCheck
 	GuiControl, enable, MondoBuffCheck
 	GuiControl, enable, % hMALeft
@@ -4685,7 +4800,7 @@ nm_TabCollectUnLock(){
 	GuiControl, enable, CoconutDisCheck
 	GuiControl, enable, RoyalJellyDisCheck
 	GuiControl, enable, GlueDisCheck
-	if beesmasActive
+	if (beesmasActive = 1)
 	{
 		GuiControl, enable, BeesmasGatherInterruptCheck
 		GuiControl, enable, StockingsCheck
@@ -4699,7 +4814,11 @@ nm_TabCollectUnLock(){
 		GuiControl, enable, LidArtCheck
 		GuiControl, enable, GummyBeaconCheck
 	}
+	;kill
+	GuiControl, enable, BugRunCheck
 	GuiControl, enable, MonsterRespawnTime
+	GuiControl, enable, MonsterRespawnTimeHelp
+	GuiControl, enable, BugrunInterruptCheck
 	GuiControl, enable, BugrunLadybugsCheck
 	GuiControl, enable, BugrunRhinoBeetlesCheck
 	GuiControl, enable, BugrunSpiderCheck
@@ -4713,6 +4832,16 @@ nm_TabCollectUnLock(){
 	GuiControl, enable, BugrunScorpionsLoot
 	GuiControl, enable, BugrunWerewolfLoot
 	GuiControl, enable, StingerCheck
+	if (StingerCheck = 1)
+	{
+		GuiControl, enable, StingerDailyBonusCheck
+		GuiControl, enable, StingerCloverCheck
+		GuiControl, enable, StingerSpiderCheck
+		GuiControl, enable, StingerCactusCheck
+		GuiControl, enable, StingerRoseCheck
+		GuiControl, enable, StingerMountainTopCheck
+		GuiControl, enable, StingerPepperCheck
+	}
 	GuiControl, enable, TunnelBearCheck
 	GuiControl, enable, TunnelBearBabyCheck
 	GuiControl, enable, KingBeetleCheck
@@ -4721,11 +4850,12 @@ nm_TabCollectUnLock(){
 	GuiControl, enable, CocoCrabCheck
 	GuiControl, enable, StumpSnailCheck
 	GuiControl, enable, ShellAmuletMode
-	GuiControl, enable, CommandoCheck
-	GuiControl, enable, InputSnailHealthButton
+	GuiControl, enable, SnailHealthEdit
 	GuiControl, enable, SnailTimeUpDown
-	GuiControl, enable, InputChickHealthButton
-	GuiControl, enable,	ChickTimeUpDown
+	GuiControl, enable, CommandoCheck
+	GuiControl, enable, ChickLevel
+	GuiControl, enable, ChickHealthEdit
+	GuiControl, enable, ChickTimeUpDown
 }
 nm_saveBoost(){
 	global
@@ -4766,6 +4896,8 @@ nm_TabBoostLock(){
 	GuiControl, disable, % hFB3Left
 	GuiControl, disable, % hFB3Right
 	GuiControl, disable, FieldBoosterMinsUpDown
+	GuiControl, disable, BoostChaserCheck
+	GuiControl, disable, AutoFieldBoostButton
 	GuiControl, disable, HotbarWhile2
 	GuiControl, disable, HotbarWhile3
 	GuiControl, disable, HotbarWhile4
@@ -4778,11 +4910,21 @@ nm_TabBoostLock(){
 	GuiControl, disable, HotbarTime5
 	GuiControl, disable, HotbarTime6
 	GuiControl, disable, HotbarTime7
+	GuiControl, disable, HotbarMax2
+	GuiControl, disable, HotbarMax3
+	GuiControl, disable, HotbarMax4
+	GuiControl, disable, HotbarMax5
+	GuiControl, disable, HotbarMax6
+	GuiControl, disable, HotbarMax7
 }
 nm_TabBoostUnLock(){
 	global
+	GuiControl, enable, % hFB1Left
+	GuiControl, enable, % hFB1Right
 	nm_FieldBooster()
 	GuiControl, enable, FieldBoosterMinsUpDown
+	GuiControl, enable, BoostChaserCheck
+	GuiControl, enable, AutoFieldBoostButton
 	GuiControl, enable, HotbarWhile2
 	GuiControl, enable, HotbarWhile3
 	GuiControl, enable, HotbarWhile4
@@ -4795,6 +4937,12 @@ nm_TabBoostUnLock(){
 	GuiControl, enable, HotbarTime5
 	GuiControl, enable, HotbarTime6
 	GuiControl, enable, HotbarTime7
+	GuiControl, enable, HotbarMax2
+	GuiControl, enable, HotbarMax3
+	GuiControl, enable, HotbarMax4
+	GuiControl, enable, HotbarMax5
+	GuiControl, enable, HotbarMax6
+	GuiControl, enable, HotbarMax7
 }
 nm_FieldBooster(hCtrl:=""){
 	global
@@ -4882,7 +5030,7 @@ nm_HotbarWhile(hCtrl:=0){
 				GuiControl, hide, HotbarTime%i%
 				GuiControl, hide, HBTimeText%i%
 				GuiControl, hide, HBConditionText%i%
-				GuiControl, hide, HotkeyMax%i%
+				GuiControl, hide, HotbarMax%i%
 				GuiControl, show, HBText%i%
 
 				case "whirligig":
@@ -4890,7 +5038,7 @@ nm_HotbarWhile(hCtrl:=0){
 				GuiControl, hide, HotbarTime%i%
 				GuiControl, hide, HBTimeText%i%
 				GuiControl, hide, HBConditionText%i%
-				GuiControl, hide, HotkeyMax%i%
+				GuiControl, hide, HotbarMax%i%
 				GuiControl, show, HBText%i%
 
 				case "enzymes":
@@ -4898,7 +5046,7 @@ nm_HotbarWhile(hCtrl:=0){
 				GuiControl, hide, HotbarTime%i%
 				GuiControl, hide, HBTimeText%i%
 				GuiControl, hide, HBConditionText%i%
-				GuiControl, hide, HotkeyMax%i%
+				GuiControl, hide, HotbarMax%i%
 				GuiControl, show, HBText%i%
 
 				case "glitter":
@@ -4906,7 +5054,7 @@ nm_HotbarWhile(hCtrl:=0){
 				GuiControl, hide, HotbarTime%i%
 				GuiControl, hide, HBTimeText%i%
 				GuiControl, hide, HBConditionText%i%
-				GuiControl, hide, HotkeyMax%i%
+				GuiControl, hide, HotbarMax%i%
 				GuiControl, show, HBText%i%
 
 				case "snowflake":
@@ -4921,20 +5069,20 @@ nm_HotbarWhile(hCtrl:=0){
 						GuiControl, hide, HotbarTime%i%
 						GuiControl, hide, HBTimeText%i%
 						GuiControl, hide, HBConditionText%i%
-						GuiControl, hide, HotkeyMax%i%
+						GuiControl, hide, HotbarMax%i%
 					}
 				}
 				else
 				{
-					GuiControlGet, HotkeyMax%i%
+					GuiControlGet, HotbarMax%i%
 					GuiControlGet, HotbarTime%i%
-					GuiControl,,HBConditionText%i%, % "Until: " HotkeyMax%i% "%"
+					GuiControl,,HBConditionText%i%, % "Until: " HotbarMax%i% "%"
 					GuiControl,,HBTimeText%i%, % nm_DurationFromSeconds(HotbarTime%i%)
 					GuiControl, hide, HBText%i%
 					GuiControl, show, HotbarTime%i%
 					GuiControl, show, HBTimeText%i%
 					GuiControl, show, HBConditionText%i%
-					GuiControl, show, HotkeyMax%i%
+					GuiControl, show, HotbarMax%i%
 				}
 
 				case "never":
@@ -4942,14 +5090,14 @@ nm_HotbarWhile(hCtrl:=0){
 				GuiControl, hide, HotbarTime%i%
 				GuiControl, hide, HBTimeText%i%
 				GuiControl, hide, HBConditionText%i%
-				GuiControl, hide, HotkeyMax%i%
+				GuiControl, hide, HotbarMax%i%
 
 				default:
 				GuiControlGet, HotbarTime%i%
 				GuiControl,,HBTimeText%i%, % nm_DurationFromSeconds(HotbarTime%i%)
 				GuiControl, hide, HBText%i%
 				GuiControl, hide, HBConditionText%i%
-				GuiControl, hide, HotkeyMax%i%
+				GuiControl, hide, HotbarMax%i%
 				GuiControl, show, HotbarTime%i%
 				GuiControl, show, HBTimeText%i%
 			}
@@ -5039,6 +5187,34 @@ nm_CocoCrabCheck(){
 	IniWrite, %CocoCrabCheck%, settings\nm_config.ini, Collect, CocoCrabCheck
 	if CocoCrabCheck
 		msgbox,0x1030,Coconut Crab, Being able to kill Coco Crab with the macro depends heavily on your hive level, attack, number of bees, and server lag!
+}
+nm_TabQuestLock(){
+	global
+	GuiControl, disable, PolarQuestCheck
+	GuiControl, disable, PolarQuestGatherInterruptCheck
+	GuiControl, disable, BuckoQuestCheck
+	GuiControl, disable, BuckoQuestGatherInterruptCheck
+	GuiControl, disable, RileyQuestCheck
+	GuiControl, disable, RileyQuestGatherInterruptCheck
+	GuiControl, disable, HoneyQuestCheck
+	GuiControl, disable, BlackQuestCheck
+	GuiControl, disable, QuestGatherMins
+	GuiControl, disable, % hQGRBLeft
+	GuiControl, disable, % hQGRBRight
+}
+nm_TabQuestUnLock(){
+	global
+	GuiControl, enable, PolarQuestCheck
+	GuiControl, enable, PolarQuestGatherInterruptCheck
+	GuiControl, enable, BuckoQuestCheck
+	GuiControl, enable, BuckoQuestGatherInterruptCheck
+	GuiControl, enable, RileyQuestCheck
+	GuiControl, enable, RileyQuestGatherInterruptCheck
+	GuiControl, enable, HoneyQuestCheck
+	GuiControl, enable, BlackQuestCheck
+	GuiControl, enable, QuestGatherMins
+	GuiControl, enable, % hQGRBLeft
+	GuiControl, enable, % hQGRBRight
 }
 nm_ResetTotalStats(){
 	global TotalRuntime:=0
@@ -7802,6 +7978,7 @@ nm_TabPlantersLock(){
 	global
 	GuiControl, disable, PlanterMode
 	;planters+
+	GuiControl, disable, TimersButton
 	GuiControl, disable, % hNPLeft
 	GuiControl, disable, % hNPRight
 	Loop, 5 {
@@ -7852,7 +8029,19 @@ nm_TabPlantersLock(){
 	GuiControl, disable, CoconutFieldCheck
 	GuiControl, disable, PepperFieldCheck
 	;manual
-	Static ManualPlantersControls := ["MHarvestInterval", "MSlot1Cycle1Planter", "MSlot1Cycle2Planter", "MSlot1Cycle3Planter", "MSlot1Cycle4Planter", "MSlot1Cycle5Planter", "MSlot1Cycle6Planter", "MSlot1Cycle7Planter", "MSlot1Cycle8Planter", "MSlot1Cycle9Planter", "MSlot1Cycle1Field", "MSlot1Cycle2Field", "MSlot1Cycle3Field", "MSlot1Cycle4Field", "MSlot1Cycle5Field", "MSlot1Cycle6Field", "MSlot1Cycle7Field", "MSlot1Cycle8Field", "MSlot1Cycle9Field", "MSlot1Cycle1Glitter", "MSlot1Cycle2Glitter", "MSlot1Cycle3Glitter", "MSlot1Cycle4Glitter", "MSlot1Cycle5Glitter", "MSlot1Cycle6Glitter", "MSlot1Cycle7Glitter", "MSlot1Cycle8Glitter", "MSlot1Cycle9Glitter", "MSlot1Cycle1AutoFull", "MSlot1Cycle2AutoFull", "MSlot1Cycle3AutoFull", "MSlot1Cycle4AutoFull", "MSlot1Cycle5AutoFull", "MSlot1Cycle6AutoFull", "MSlot1Cycle7AutoFull", "MSlot1Cycle8AutoFull", "MSlot1Cycle9AutoFull", "MSlot2Cycle1Planter", "MSlot2Cycle2Planter", "MSlot2Cycle3Planter", "MSlot2Cycle4Planter", "MSlot2Cycle5Planter", "MSlot2Cycle6Planter", "MSlot2Cycle7Planter", "MSlot2Cycle8Planter", "MSlot2Cycle9Planter", "MSlot2Cycle1Field", "MSlot2Cycle2Field", "MSlot2Cycle3Field", "MSlot2Cycle4Field", "MSlot2Cycle5Field", "MSlot2Cycle6Field", "MSlot2Cycle7Field", "MSlot2Cycle8Field", "MSlot2Cycle9Field", "MSlot2Cycle1Glitter", "MSlot2Cycle2Glitter", "MSlot2Cycle3Glitter", "MSlot2Cycle4Glitter", "MSlot2Cycle5Glitter", "MSlot2Cycle6Glitter", "MSlot2Cycle7Glitter", "MSlot2Cycle8Glitter", "MSlot2Cycle9Glitter", "MSlot2Cycle1AutoFull", "MSlot2Cycle2AutoFull", "MSlot2Cycle3AutoFull", "MSlot2Cycle4AutoFull", "MSlot2Cycle5AutoFull", "MSlot2Cycle6AutoFull", "MSlot2Cycle7AutoFull", "MSlot2Cycle8AutoFull", "MSlot2Cycle9AutoFull", "MSlot3Cycle1Planter", "MSlot3Cycle2Planter", "MSlot3Cycle3Planter", "MSlot3Cycle4Planter", "MSlot3Cycle5Planter", "MSlot3Cycle6Planter", "MSlot3Cycle7Planter", "MSlot3Cycle8Planter", "MSlot3Cycle9Planter", "MSlot3Cycle1Field", "MSlot3Cycle2Field", "MSlot3Cycle3Field", "MSlot3Cycle4Field", "MSlot3Cycle5Field", "MSlot3Cycle6Field", "MSlot3Cycle7Field", "MSlot3Cycle8Field", "MSlot3Cycle9Field", "MSlot3Cycle1Glitter", "MSlot3Cycle2Glitter", "MSlot3Cycle3Glitter", "MSlot3Cycle4Glitter", "MSlot3Cycle5Glitter", "MSlot3Cycle6Glitter", "MSlot3Cycle7Glitter", "MSlot3Cycle8Glitter", "MSlot3Cycle9Glitter", "MSlot3Cycle1AutoFull", "MSlot3Cycle2AutoFull", "MSlot3Cycle3AutoFull", "MSlot3Cycle4AutoFull", "MSlot3Cycle5AutoFull", "MSlot3Cycle6AutoFull", "MSlot3Cycle7AutoFull", "MSlot3Cycle8AutoFull", "MSlot3Cycle9AutoFull", "MHeader1Text", "MHeader2Text", "MHeader3Text", "MSlot1PlanterText", "MSlot2PlanterText", "MSlot3PlanterText", "MSlot1FieldText", "MSlot2FieldText", "MSlot3FieldText", "MSlot1SettingsText", "MSlot2SettingsText", "MSlot3SettingsText", "MSlot1SeparatorLine", "MSlot2SeparatorLine", "MSlot1CycleText", "MSlot2CycleText", "MSlot3CycleText", "MSlot1Left", "MSlot2Left", "MSlot3Left", "MSlot1Right", "MSlot2Right", "MSlot3Right", "MSlot1ChangeText", "MSlot2ChangeText", "MSlot3ChangeText", "MSectionSeparatorLine", "MSliderSeparatorLine", "MHarvestText", "MHarvestInterval", "MPageLeft", "MPageRight", "MPageNumberText"]
+	Static ManualPlantersControls := ["MHarvestInterval", "MPageLeft", "MPageRight", "MSlot1Left", "MSlot1Right", "MSlot2Left", "MSlot2Right", "MSlot3Left", "MSlot3Right"
+	, "MSlot1Cycle1Planter", "MSlot1Cycle2Planter", "MSlot1Cycle3Planter", "MSlot1Cycle4Planter", "MSlot1Cycle5Planter", "MSlot1Cycle6Planter", "MSlot1Cycle7Planter", "MSlot1Cycle8Planter", "MSlot1Cycle9Planter"
+	, "MSlot1Cycle1Field", "MSlot1Cycle2Field", "MSlot1Cycle3Field", "MSlot1Cycle4Field", "MSlot1Cycle5Field", "MSlot1Cycle6Field", "MSlot1Cycle7Field", "MSlot1Cycle8Field", "MSlot1Cycle9Field"
+	, "MSlot1Cycle1Glitter", "MSlot1Cycle2Glitter", "MSlot1Cycle3Glitter", "MSlot1Cycle4Glitter", "MSlot1Cycle5Glitter", "MSlot1Cycle6Glitter", "MSlot1Cycle7Glitter", "MSlot1Cycle8Glitter", "MSlot1Cycle9Glitter"
+	, "MSlot1Cycle1AutoFull", "MSlot1Cycle2AutoFull", "MSlot1Cycle3AutoFull", "MSlot1Cycle4AutoFull", "MSlot1Cycle5AutoFull", "MSlot1Cycle6AutoFull", "MSlot1Cycle7AutoFull", "MSlot1Cycle8AutoFull", "MSlot1Cycle9AutoFull"
+	, "MSlot2Cycle1Planter", "MSlot2Cycle2Planter", "MSlot2Cycle3Planter", "MSlot2Cycle4Planter", "MSlot2Cycle5Planter", "MSlot2Cycle6Planter", "MSlot2Cycle7Planter", "MSlot2Cycle8Planter", "MSlot2Cycle9Planter"
+	, "MSlot2Cycle1Field", "MSlot2Cycle2Field", "MSlot2Cycle3Field", "MSlot2Cycle4Field", "MSlot2Cycle5Field", "MSlot2Cycle6Field", "MSlot2Cycle7Field", "MSlot2Cycle8Field", "MSlot2Cycle9Field"
+	, "MSlot2Cycle1Glitter", "MSlot2Cycle2Glitter", "MSlot2Cycle3Glitter", "MSlot2Cycle4Glitter", "MSlot2Cycle5Glitter", "MSlot2Cycle6Glitter", "MSlot2Cycle7Glitter", "MSlot2Cycle8Glitter", "MSlot2Cycle9Glitter"
+	, "MSlot2Cycle1AutoFull", "MSlot2Cycle2AutoFull", "MSlot2Cycle3AutoFull", "MSlot2Cycle4AutoFull", "MSlot2Cycle5AutoFull", "MSlot2Cycle6AutoFull", "MSlot2Cycle7AutoFull", "MSlot2Cycle8AutoFull", "MSlot2Cycle9AutoFull"
+	, "MSlot3Cycle1Planter", "MSlot3Cycle2Planter", "MSlot3Cycle3Planter", "MSlot3Cycle4Planter", "MSlot3Cycle5Planter", "MSlot3Cycle6Planter", "MSlot3Cycle7Planter", "MSlot3Cycle8Planter", "MSlot3Cycle9Planter"
+	, "MSlot3Cycle1Field", "MSlot3Cycle2Field", "MSlot3Cycle3Field", "MSlot3Cycle4Field", "MSlot3Cycle5Field", "MSlot3Cycle6Field", "MSlot3Cycle7Field", "MSlot3Cycle8Field", "MSlot3Cycle9Field"
+	, "MSlot3Cycle1Glitter", "MSlot3Cycle2Glitter", "MSlot3Cycle3Glitter", "MSlot3Cycle4Glitter", "MSlot3Cycle5Glitter", "MSlot3Cycle6Glitter", "MSlot3Cycle7Glitter", "MSlot3Cycle8Glitter", "MSlot3Cycle9Glitter"
+	, "MSlot3Cycle1AutoFull", "MSlot3Cycle2AutoFull", "MSlot3Cycle3AutoFull", "MSlot3Cycle4AutoFull", "MSlot3Cycle5AutoFull", "MSlot3Cycle6AutoFull", "MSlot3Cycle7AutoFull", "MSlot3Cycle8AutoFull", "MSlot3Cycle9AutoFull"]
 	For k, v in ManualPlantersControls
 		GuiControl, disable, %v%
 }
@@ -7860,8 +8049,11 @@ nm_TabPlantersUnLock(){
 	global
 	GuiControl, enable, PlanterMode
 	;planters+
+	GuiControl, enable, TimersButton
 	GuiControl, enable, % hNPLeft
 	GuiControl, enable, % hNPRight
+	GuiControl, enable, % hNP1Left
+	GuiControl, enable, % hNP1Right
 	nm_NectarPriority()
 	GuiControl, enable, N1MinPercentUpDown
 	GuiControl, enable, N2MinPercentUpDown
@@ -7907,20 +8099,26 @@ nm_TabPlantersUnLock(){
 	GuiControl, enable, CoconutFieldCheck
 	GuiControl, enable, PepperFieldCheck
 	;manual
+	GuiControl, enable, MHarvestInterval
+	GuiControl, enable, MSlot1Cycle1Planter
+	mp_UpdatePage()
 	mp_UpdateControls()
+}
+nm_TabStatusLock(){
+	GuiControl, disable, StatusLogReverse
+	GuiControl, disable, ResetTotalStats
+	GuiControl, disable, WebhookGUI
+}
+nm_TabStatusUnLock(){
+	GuiControl, enable, StatusLogReverse
+	GuiControl, enable, ResetTotalStats
+	GuiControl, enable, WebhookGUI
 }
 nm_TabSettingsLock(){
 	global
 	GuiControl, disable, GuiTheme
 	GuiControl, disable, GuiTransparencyUpDown
-	GuiControl, disable, FwdKey
-	GuiControl, disable, LeftKey
-	GuiControl, disable, BackKey
-	GuiControl, disable, RightKey
-	GuiControl, disable, RotLeft
-	GuiControl, disable, RotRight
-	GuiControl, disable, ZoomIn
-	GuiControl, disable, ZoomOut
+	GuiControl, disable, AlwaysOnTop
 	GuiControl, disable, KeyDelay
 	GuiControl, disable, KeyDelayEdit
 	GuiControl, disable, MoveSpeedNum
@@ -7940,23 +8138,41 @@ nm_TabSettingsLock(){
 	GuiControl, disable, NewWalk
 	GuiControl, disable, HiveSlot
 	GuiControl, disable, HiveBees
+	GuiControl, disable, HiveBeesHelp
 	GuiControl, disable, ConvertDelay
 	GuiControl, disable, PrivServer
 	GuiControl, disable, ReconnectMessage
 	GuiControl, disable, PublicFallback
+	GuiControl, disable, ResetFieldDefaultsButton
+	GuiControl, disable, ResetAllButton
+	GuiControl, disable, TestReconnectButton
+	GuiControl, disable, ReconnectMethodHelp
+	GuiControl, disable, ReconnectInterval
+	GuiControl, disable, ReconnectHour
+	GuiControl, disable, ReconnectMin
+	GuiControl, disable, ReconnectTimeHelp
+	GuiControl, disable, NatroSoBrokeHelp
+	GuiControl, disable, PublicFallbackHelp
+	GuiControl, disable, NewWalkHelp
 }
 nm_TabSettingsUnLock(){
-	GuiControlGet, ConvertBalloon
+	global
 	GuiControl, enable, GuiTheme
-	GuiControl, enable, GuiTransparency
+	GuiControl, enable, GuiTransparencyUpDown
+	GuiControl, enable, AlwaysOnTop
 	GuiControl, enable, KeyDelay
 	GuiControl, enable, KeyDelayEdit
 	GuiControl, enable, MoveSpeedNum
-	GuiControl, enable, MoveMethod
-	GuiControl, enable, SprinklerType
+	GuiControl, enable, % hRMLeft
+	GuiControl, enable, % hRMRight
+	GuiControl, enable, % hMMLeft
+	GuiControl, enable, % hMMRight
+	GuiControl, enable, % hSTLeft
+	GuiControl, enable, % hSTRight
+	GuiControl, enable, % hCBLeft
+	GuiControl, enable, % hCBRight
 	GuiControl, enable, MultiReset
-	GuiControl, enable, ConvertBalloon
-	if(ConvertBalloon="every")
+	if (ConvertBalloon="every")
 		GuiControl, enable, ConvertMins
 	GuiControl, enable, GatherDoubleReset
 	GuiControl, enable, DisableToolUse
@@ -7964,10 +8180,52 @@ nm_TabSettingsUnLock(){
 	GuiControl, enable, NewWalk
 	GuiControl, enable, HiveSlot
 	GuiControl, enable, HiveBees
+	GuiControl, enable, HiveBeesHelp
 	GuiControl, enable, ConvertDelay
 	GuiControl, enable, PrivServer
 	GuiControl, enable, ReconnectMessage
 	GuiControl, enable, PublicFallback
+	GuiControl, enable, ResetFieldDefaultsButton
+	GuiControl, enable, ResetAllButton
+	GuiControl, enable, TestReconnectButton
+	GuiControl, enable, ReconnectMethodHelp
+	GuiControl, enable, ReconnectInterval
+	GuiControl, enable, ReconnectHour
+	GuiControl, enable, ReconnectMin
+	GuiControl, enable, ReconnectTimeHelp
+	GuiControl, enable, NatroSoBrokeHelp
+	GuiControl, enable, PublicFallbackHelp
+	GuiControl, enable, NewWalkHelp
+}
+nm_TabMiscLock(){
+	GuiControl, disable, BasicEggHatcherButton
+	GuiControl, disable, BitterberryFeederButton
+	GuiControl, disable, GenerateBeeListButton
+	GuiControl, disable, TicketShopCalculatorButton
+	GuiControl, disable, SSACalculatorButton
+	GuiControl, disable, BondCalculatorButton
+	GuiControl, disable, AutoClickerGUI
+	GuiControl, disable, HotkeyGUI
+	GuiControl, disable, DebugLogGUI
+	GuiControl, disable, AutoStartManagerGUI
+	GuiControl, disable, NightAnnouncementGUI
+	GuiControl, disable, ReportBugButton
+	GuiControl, disable, MakeSuggestionButton
+}
+nm_TabMiscUnLock(){
+	GuiControl, enable, BasicEggHatcherButton
+	GuiControl, enable, BitterberryFeederButton
+	GuiControl, enable, GenerateBeeListButton
+	GuiControl, enable, TicketShopCalculatorButton
+	GuiControl, enable, SSACalculatorButton
+	GuiControl, enable, BondCalculatorButton
+	GuiControl, enable, AutoClickerGUI
+	GuiControl, enable, HotkeyGUI
+	GuiControl, enable, DebugLogGUI
+	GuiControl, enable, AutoStartManagerGUI
+	GuiControl, enable, NightAnnouncementGUI
+	GuiControl, enable, ReportBugButton
+	GuiControl, enable, MakeSuggestionButton
 }
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; FUNCTIONS
@@ -15645,7 +15903,7 @@ nm_locateVB(){
 }
 nm_hotbar(boost:=0){
 	global state, fieldOverrideReason, GatherStartTime, ActiveHotkeys, bitmaps
-		, HotkeyMax2, HotkeyMax3, HotkeyMax4, HotkeyMax5, HotkeyMax6, HotkeyMax7
+		, HotbarMax2, HotbarMax3, HotbarMax4, HotbarMax5, HotbarMax6, HotbarMax7
 		, beesmasActive
 	;whileNames:=["Always", "Attacking", "Gathering", "At Hive"]
 	;ActiveHotkeys.push([val, slot, HBSecs, LastHotkey%slot%])
@@ -15751,7 +16009,7 @@ nm_hotbar(boost:=0){
 					Gdip_DisposeImage(pBMArea)
 					HotkeyNum:=ActiveHotkeys[key][2]
 					;use snowflake if detected snowflake buff is below user selected maximum (num = "" implies 100% or indeterminate)
-					if ((num != "") && (num < HotkeyMax%HotkeyNum%)) {
+					if ((num != "") && (num < HotbarMax%HotkeyNum%)) {
 						send % "{sc00" HotkeyNum+1 "}"
 						LastHotkeyN:=nowUnix()
 						Iniwrite, %LastHotkeyN%, settings\nm_config.ini, Boost, LastHotkey%HotkeyNum%
@@ -19497,22 +19755,8 @@ start:
 ControlFocus
 SetKeyDelay, 100+KeyDelay
 send ^{Alt}
-;lock tabs
-nm_TabGatherLock()
-nm_TabCollectLock()
-nm_TabBoostLock()
-nm_TabPlantersLock()
-nm_TabSettingsLock()
-Gui, Font, s8 w700 cDefault
-for k,v in ["Discord","Roblox","Donate"]
-{
-	GuiControl, Font, Text%v%Link
-	GuiControl, -g, Text%v%Link
-	GuiControl, -g, Image%v%Link
-}
-GuiControl, -g, ImageGitHubLink
-GuiControl, -g, ImageUpdateLink
-Gui, Font, s8 cDefault Norm Tahoma
+nm_LockTabs()
+GuiControl, Disable, StartButton
 nm_setStatus("Begin", "Macro")
 Sleep, 100
 ;Auto Field Boost WARNING @ start
@@ -19738,6 +19982,7 @@ pause:
 if(state="startup")
 	return
 if(A_IsPaused) {
+	nm_LockTabs()
 	WinActivate, Roblox
 	Prev_DetectHiddenWindows := A_DetectHiddenWindows
 	Prev_TitleMatchMode := A_TitleMatchMode
@@ -19808,6 +20053,7 @@ if(A_IsPaused) {
 	DetectHiddenWindows, %Prev_DetectHiddenWindows%
 	SetTitleMatchMode, %Prev_TitleMatchMode%
 	nm_setStatus("Paused", "Press F2 to Continue")
+	nm_LockTabs(0)
 }
 Pause, Toggle, 1
 return
