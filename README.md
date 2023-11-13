@@ -25,8 +25,8 @@ The only official sources are:
 
 <!-- logo banner -->
 <picture>
-  <source width="200px" media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NatroTeam/.github/main/profile/assets/banners/natro-logo-dark.svg"> <!-- dark theme (white text) -->
-  <img src="https://raw.githubusercontent.com/NatroTeam/.github/main/profile/assets/banners/natro-logo-light.svg"> <!-- light theme (black text) -->
+  <source width="200px" media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NatroTeam/.github/main/profile/assets/banners/natro-logo-light.svg"> <!-- light theme (black text) -->
+  <img src="https://raw.githubusercontent.com/NatroTeam/.github/main/profile/assets/banners/natro-logo-dark.svg"> <!-- dark theme (light text) -->
 </picture>
 <br>
 
@@ -57,8 +57,8 @@ Discord is our main platform for troubleshooting and update news!
 
 <a href="https://discord.gg/natromacro">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="http://invidget.switchblade.xyz/natromacro"> <!-- dark theme -->
-    <img alt="discord-invite-widget" width=500 src="http://invidget.switchblade.xyz/natromacro?theme=light"> <!-- light theme -->
+    <source media="(prefers-color-scheme: light)" srcset="http://invidget.switchblade.xyz/natromacro?theme=light"> <!-- light theme -->
+    <img alt="discord-invite-widget" width=500 src="http://invidget.switchblade.xyz/natromacro"> <!-- dark theme -->
   </picture>
 </a>
 
@@ -88,8 +88,8 @@ You can do this by scrolling up and clicking the Star button at the top of the p
 
 <a href="https://github.com/NatroTeam/NatroMacro/stargazers">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="http://reporoster.com/stars/dark/NatroTeam/NatroMacro"> <!-- dark theme -->
-    <img alt="stargazer-widget" src="http://reporoster.com/stars/NatroTeam/NatroMacro"> <!-- light theme -->
+    <source media="(prefers-color-scheme: light)" srcset="http://reporoster.com/stars/NatroTeam/NatroMacro"> <!-- light theme -->
+    <img alt="stargazer-widget" src="http://reporoster.com/stars/dark/NatroTeam/NatroMacro"> <!-- dark theme -->
   </picture>
 </a>
 
