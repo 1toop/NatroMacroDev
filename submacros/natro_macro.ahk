@@ -9530,7 +9530,7 @@ nm_shrine(){
                     }
                 }
                 if (ClickNum < 60) {
-					nm_SetStatus("Collected", "Wind Shrine") ;Temp for testing
+					;nm_SetStatus("Collected", "Wind Shrine") ;Temp for testing
                     sleep, 300
                     MouseMove, WindowX+WindowWidth//2 - 70, WindowY+WindowHeight//2 + 130 ; click donate/confirm
                     sleep, 150
@@ -9542,7 +9542,7 @@ nm_shrine(){
                         Click
                     }
                     sleep 200
-                    send {raw}{..}
+                    send {raw}{..} ; change to rot right
                     sleep 800
                     gatherloot := "
                     (LTrim Join`r`n
@@ -9559,11 +9559,25 @@ nm_shrine(){
                     KeyWait, F14, D T5 L
                     KeyWait, F14, T60 L
                     nm_endWalk()
-                    ;nm_SetStatus("Collected", "Wind Shrine")
+                    nm_SetStatus("Collected", "Wind Shrine")
 					
 					if (ShrineIndex%ShrineRot% != "Infinite")  {
                     	ShrineIndex%shrineRot%-- ;subtract from shrineindex for looping only if its a number
-						GuiControl,, ShrinetextAmount%ShrineRot%, % "[" ShrineAmount%ShrineRot% "] (" ShrineIndex%ShrineRot% ")"
+						GuiControl,, ShrineIndex%ShrineRot%, % ShrineIndex%ShrineRot%
+
+						GuiControlGet, pos, Pos, ShrineAmount%ShrineRot% 
+						
+						BWitdh := Strlen(ShrineIndex%ShrineRot%) * 6
+						coord := PosW + PosX + 12, LeftCurlS := PosX - 5, RightCurlS := PosX + PosW + 1
+
+						GuiControl, Move, ShrineIndex%ShrineRot%, w%BWitdh% x%coord%
+						GuiControl, Move, LeftCurlS%ShrineRot%, x%LeftCurl%
+						GuiControl, Move, RightCurlS%ShrineRot%, x%RightCurlS%
+
+						GuiControlGet, pos, Pos, ShrineIndex%ShrineRot%
+						LeftBracketS := PosX - 5, RightBracketS := PosX + PosW + 1
+						GuiControl, move, LeftBracketS%ShrineRot%, x%LeftBracketS%
+						GuiControl, move, RightBracketS%ShrineRot%, x%RightBracketS%
 					}
                     ShrineRot := Mod(ShrineRot, 2) + 1 ; determine Shrinerot
                     nm_ShrineRotation()
@@ -9818,7 +9832,21 @@ nm_Collect(){
 					nm_BlenderRotation()
 					if (BlenderIndex%BlenderRot% != "Infinite") {
 						BlenderIndex%BlenderRot%-- ;subtract from blenderindex for looping only if its a number
-						GuiControl,, BlendertextAmount%BlenderRot%, % "[" BlenderAmount%BlenderRot% "] (" BlenderIndex%BlenderRot% ")"
+						GuiControl,, BlenderIndex%BlenderRot%, % BlenderIndex%BlenderRot%
+
+						GuiControlGet, pos, Pos, BlenderAmount%BlenderRot% 
+						
+						BWitdh := Strlen(BlenderIndex%BlenderAddIBlenderRotndex%) * 6
+						coord := PosW + PosX + 12, LeftCurlB := PosX - 5, RightCurlB := PosX + PosW + 1
+
+						GuiControl, Move, BlenderIndex%BlenderRot%, w%BWitdh% x%coord%
+						GuiControl, Move, LeftCurlB%BlenderRot%, x%LeftCurlB%
+						GuiControl, Move, RightCurlB%BlenderRot%, x%RightCurlB%
+
+						GuiControlGet, pos, Pos, BlenderIndex%BlenderRot%
+						LeftBracketB := PosX - 5, RightBracketB := PosX + PosW + 1
+						GuiControl, move, LeftBracketB%BlenderRot%, x%LeftBracketB%
+						GuiControl, move, RightBracketB%BlenderRot%, x%RightBracketB%
 					}
 					
 					sleep, 100
