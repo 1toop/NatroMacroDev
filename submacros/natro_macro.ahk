@@ -3211,7 +3211,7 @@ mp_HarvestPlanter(PlanterIndex) {
 					sleep 100
 					MouseMove, windowX+350, windowY+offsetY+100
 					Gdip_DisposeImage(pBMScreen)
-					nm_PlanterTimeUpdate(FieldName)
+					nm_PlanterTimeUpdate(MFieldName)
 					return 2
 				}
 				Gdip_DisposeImage(pBMScreen)
