@@ -19,6 +19,7 @@ You should have received a copy of the license along with Natro Macro. If not, p
 #Include %A_ScriptDir%\..\lib
 #Include Gdip_All.ahk
 #Include Gdip_ImageSearch.ahk
+#Include WinGetClientPos.ahk
 #Include GetRobloxHWND.ahk
 #Include GetYOffset.ahk
 
@@ -1976,17 +1977,6 @@ WaitForAsync(ByRef Object)
    DllCall(NumGet(NumGet(Object+0)+8*A_PtrSize), "ptr", Object, "ptr*", ObjectResult)   ; GetResults
    ObjRelease(Object)
    Object := ObjectResult
-}
-
-WinGetClientPos(ByRef X:="", ByRef Y:="", ByRef Width:="", ByRef Height:="", WinTitle:="", WinText:="", ExcludeTitle:="", ExcludeText:="")
-{
-    local hWnd, RECT
-    hWnd := WinExist(WinTitle, WinText, ExcludeTitle, ExcludeText)
-    VarSetCapacity(RECT, 16, 0)
-    DllCall("GetClientRect", "UPtr",hWnd, "Ptr",&RECT)
-    DllCall("ClientToScreen", "UPtr",hWnd, "Ptr",&RECT)
-    X := NumGet(&RECT, 0, "Int"), Y := NumGet(&RECT, 4, "Int")
-    Width := NumGet(&RECT, 8, "Int"), Height := NumGet(&RECT, 12, "Int")
 }
 
 Send_WM_COPYDATA(ByRef StringToSend, ByRef TargetScriptTitle, wParam:=0)

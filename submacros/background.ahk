@@ -19,6 +19,7 @@ You should have received a copy of the license along with Natro Macro. If not, p
 #Include %A_ScriptDir%\..\lib
 #Include Gdip_All.ahk
 #Include Gdip_ImageSearch.ahk
+#Include WinGetClientPos.ahk
 #Include GetRobloxHWND.ahk
 #Include GetYOffset.ahk
 
@@ -457,6 +458,7 @@ nm_sendHeartbeat(){
 	SetTitleMatchMode %Prev_TitleMatchMode%
 	return 0
 }
+
 nm_setGlobalInt(wParam, lParam)
 {
 	global
@@ -468,6 +470,7 @@ nm_setGlobalInt(wParam, lParam)
 	var := arr[wParam], %var% := lParam
 	return 0
 }
+
 nm_setGlobalStr(wParam, lParam)
 {
 	global
@@ -481,6 +484,7 @@ nm_setGlobalStr(wParam, lParam)
 	IniRead, %var%, %A_ScriptDir%\..\settings\nm_config.ini, %section%, %var%
 	return 0
 }
+
 Send_WM_COPYDATA(ByRef StringToSend, ByRef TargetScriptTitle, wParam:=0)
 {
     VarSetCapacity(CopyDataStruct, 3*A_PtrSize, 0)
@@ -490,21 +494,13 @@ Send_WM_COPYDATA(ByRef StringToSend, ByRef TargetScriptTitle, wParam:=0)
     SendMessage, 0x004A, wParam, &CopyDataStruct,, %TargetScriptTitle%
     return ErrorLevel
 }
+
 nowUnix(){
     Time := A_NowUTC
     EnvSub, Time, 19700101000000, Seconds
     return Time
 }
-WinGetClientPos(ByRef X:="", ByRef Y:="", ByRef Width:="", ByRef Height:="", WinTitle:="", WinText:="", ExcludeTitle:="", ExcludeText:="")
-{
-    local hWnd, RECT
-    hWnd := WinExist(WinTitle, WinText, ExcludeTitle, ExcludeText)
-    VarSetCapacity(RECT, 16, 0)
-    DllCall("GetClientRect", "UPtr",hWnd, "Ptr",&RECT)
-    DllCall("ClientToScreen", "UPtr",hWnd, "Ptr",&RECT)
-    X := NumGet(&RECT, 0, "Int"), Y := NumGet(&RECT, 4, "Int")
-    Width := NumGet(&RECT, 8, "Int"), Height := NumGet(&RECT, 12, "Int")
-}
+
 ExitFunc()
 {
 	Process, Close, % DllCall("GetCurrentProcessId")

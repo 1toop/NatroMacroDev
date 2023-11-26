@@ -27,6 +27,7 @@ You should have received a copy of the license along with Natro Macro. If not, p
 #Include Gdip_All.ahk
 #Include Gdip_ImageSearch.ahk
 #Include JSON.ahk
+#Include WinGetClientPos.ahk
 #Include GetRobloxHWND.ahk
 #Include GetYOffset.ahk
 
@@ -3765,6 +3766,7 @@ nm_testButton(){ ;~~ lines 3464 and 3465 have the same change as 14156
 	#Include Gdip_All.ahk
 	#Include Gdip_ImageSearch.ahk
 	#Include HyperSleep.ahk
+	#Include WinGetClientPos.ahk
 	#Include Walk.ahk
 	#Include GetRobloxHWND.ahk
 	#Include GetYOffset.ahk
@@ -8445,16 +8447,6 @@ nm_imgSearch(fileName,v,aim := "full", trans:="none"){
 		MsgBox Folder location cannot be found:`n%A_WorkingDir%\nm_image_assets\
 		return 3, 0, 0
 	}
-}
-WinGetClientPos(ByRef X:="", ByRef Y:="", ByRef Width:="", ByRef Height:="", WinTitle:="", WinText:="", ExcludeTitle:="", ExcludeText:="")
-{
-    local hWnd, RECT
-    hWnd := WinExist(WinTitle, WinText, ExcludeTitle, ExcludeText)
-    VarSetCapacity(RECT, 16, 0)
-    DllCall("GetClientRect", "UPtr",hWnd, "Ptr",&RECT)
-    DllCall("ClientToScreen", "UPtr",hWnd, "Ptr",&RECT)
-    X := NumGet(&RECT, 0, "Int"), Y := NumGet(&RECT, 4, "Int")
-    Width := NumGet(&RECT, 8, "Int"), Height := NumGet(&RECT, 12, "Int")
 }
 nowUnix(){
     Time := A_NowUTC
@@ -14241,6 +14233,7 @@ nm_createWalk(movement, name:="") ; this function generates the 'walk' code and 
 		#Include Gdip_All.ahk
 		#Include Gdip_ImageSearch.ahk
 		#Include HyperSleep.ahk
+		#Include WinGetClientPos.ahk
 		#Include GetRobloxHWND.ahk
 
 		#Include Walk.ahk
@@ -14305,6 +14298,7 @@ nm_createWalk(movement, name:="") ; this function generates the 'walk' code and 
 		#Include Gdip_All.ahk
 		#Include Gdip_ImageSearch.ahk
 		#Include HyperSleep.ahk
+		#Include WinGetClientPos.ahk
 		#Include GetRobloxHWND.ahk
 
 		offsetY := " GetYOffset(GetRobloxHWND()) "

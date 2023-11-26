@@ -15,8 +15,10 @@ You should have received a copy of the license along with Natro Macro. If not, p
 #NoTrayIcon
 #SingleInstance Force
 #MaxThreads 255
-#Include %A_ScriptDir%\..\lib\Gdip_All.ahk
-#Include %A_ScriptDir%\..\lib\Gdip_ImageSearch.ahk
+#Include %A_ScriptDir%\..\lib
+#Include Gdip_All.ahk
+#Include Gdip_ImageSearch.ahk
+#Include WinGetClientPos.ahk
 
 SetBatchLines -1
 SetWorkingDir %A_ScriptDir%\..
@@ -1978,17 +1980,6 @@ nowUnix()
 	Time := A_NowUTC
 	EnvSub, Time, 19700101000000, Seconds
 	return Time
-}
-
-WinGetClientPos(ByRef X:="", ByRef Y:="", ByRef Width:="", ByRef Height:="", WinTitle:="", WinText:="", ExcludeTitle:="", ExcludeText:="")
-{
-	local hWnd, RECT
-	hWnd := WinExist(WinTitle, WinText, ExcludeTitle, ExcludeText)
-	VarSetCapacity(RECT, 16, 0)
-	DllCall("GetClientRect", "UPtr",hWnd, "Ptr",&RECT)
-	DllCall("ClientToScreen", "UPtr",hWnd, "Ptr",&RECT)
-	X := NumGet(&RECT, 0, "Int"), Y := NumGet(&RECT, 4, "Int")
-	Width := NumGet(&RECT, 8, "Int"), Height := NumGet(&RECT, 12, "Int")
 }
 
 UpdateStr(var, value, section)
