@@ -20076,7 +20076,7 @@ nm_setGlobalStr(wParam, lParam)
 	Critical
 	local var
 	; enumeration
-	#Include %A_ScriptDir%\shared\EnumStr.ahk
+	#Include %A_ScriptDir%\..\lib\enum\EnumStr.ahk
 	static sections := ["Boost","Collect","Gather","Gui","Planters","Quests","Settings","Status"]
 
 	var := arr[wParam], section := sections[lParam]
@@ -20090,7 +20090,7 @@ nm_setGlobalInt(wParam, lParam)
 	Critical
 	local var
 	; enumeration
-	#Include %A_ScriptDir%\shared\EnumInt.ahk
+	#Include %A_ScriptDir%\..\lib\enum\EnumInt.ahk
 
 	var := arr[wParam], %var% := lParam
 	nm_UpdateGUIVar(var)
