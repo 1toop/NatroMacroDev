@@ -9507,8 +9507,9 @@ nm_shrine(){
 					
                     if (Gdip_ImageSearch(ShrineSS, Shrine[DonationIMG], , , , , , 2, , 4) > 0) {
 						Gdip_DisposeImage(ShrineSS)
-                        MouseMove, WindowX+WindowWidth//2 + 165, Window+WindowHeight//2 + 65 ; Add more items
-                        sleep, 100
+						sleep, 200
+                        MouseMove, WindowX+WindowWidth//2 + 165, WindowY+WindowHeight//2 + 65 ; Add more items
+                        sleep, 150
 						Test := % ShrineAmount%ShrineRot%
                         While (Test > 1) {
                             Test--
@@ -9527,6 +9528,7 @@ nm_shrine(){
                                 nm_setStatus("Failed", "Wind shrine")	
                             break
                         }
+						sleep, 100
                     }
                 }
                 if (ClickNum < 60) {
