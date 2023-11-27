@@ -608,9 +608,9 @@ config["Blender"] := {"BlenderRot":1
 	, "BlenderAmount1":0
 	, "BlenderAmount2":0
 	, "BlenderAmount3":0
-	, "BlenderIndex1":"Infinite"
-	, "BlenderIndex2":"Infinite"
-	, "BlenderIndex3":"Infinite"
+	, "BlenderIndex1":1
+	, "BlenderIndex2":1
+	, "BlenderIndex3":1
 	, "BlenderTime1":0
 	, "BlenderTime2":0
 	, "BlenderTime3":0
@@ -1739,10 +1739,12 @@ bitmaps := {}, shrine := {}, hBitmapsSBT := {}
 #Include fdc\bitmaps.ahk
 #Include offset\bitmaps.ahk
 #Include perfstats\bitmaps.ahk
+#Include gui\blendershrine_bitmaps.ahk
 
 hBitmapsSB := {}
 for x,y in hBitmapsSBT
 	hBitmapsSB[x] := Gdip_CreateHBITMAPFromBitmap(y), Gdip_DisposeImage(y)
+hBitmapsSB["None"] := 0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; SYSTEM TRAY
@@ -2308,81 +2310,67 @@ Gui, Add, Button, x4 y21 w246 h18 hwndhcollect gnm_CollectKillButton Disabled, C
 Gui, Add, Button, x250 y21 w246 h18 hwndhkill gnm_CollectKillButton, Kill
 ;collect
 Gui, Font, w700
-Gui, Add, GroupBox, x5 y42 w125 h195 vCollectGroupBox, Collect
+Gui, Add, GroupBox, x5 y42 w125 h194 vCollectGroupBox, Collect
 Gui, Font, s8 cDefault Norm, Tahoma
 Gui, Add, Checkbox, x10 y57 +BackgroundTrans vClockCheck gnm_saveCollect Checked%ClockCheck% Disabled, Clock (tickets)
-Gui, Add, Checkbox, x10 y76 w50 +BackgroundTrans vMondoBuffCheck gnm_saveCollect Checked%MondoBuffCheck% Disabled, Mondo
+Gui, Add, Checkbox, x10 yp+18 w50 +BackgroundTrans vMondoBuffCheck gnm_saveCollect Checked%MondoBuffCheck% Disabled, Mondo
 MondoActionList := ["Buff", "Kill", "Manual"], PMondoGuid ? MondoActionList.Push("Tag", "Guid")
-Gui, Add, Text, x75 y76 w40 vMondoAction +Center +BackgroundTrans,%MondoAction%
+Gui, Add, Text, x75 yp w40 vMondoAction +Center +BackgroundTrans,%MondoAction%
 Gui, Add, Button, xp-12 yp-1 w12 h16 gnm_MondoAction hwndhMALeft Disabled, <
 Gui, Add, Button, xp+51 yp w12 h16 gnm_MondoAction hwndhMARight Disabled, >
-Gui, Add, Text, x40 y90 w110 vMondoPointText +left +BackgroundTrans, \___
-Gui, Add, Edit, x63 y93 w28 h18 number Limit3 +BackgroundTrans vMondoSecs gnm_SaveConfig Disabled, %MondoSecs%
-Gui, Add, Text, x93 y95 vMondoSecsText, Secs
-Gui, Add, Checkbox, x10 y115 w35 +BackgroundTrans vAntPassCheck gnm_saveCollect Checked%AntPassCheck% Disabled, Ant
-Gui, Add, Text,x66 y115 w49 vAntPassAction +Center +BackgroundTrans,%AntPassAction%
+Gui, Add, Text, x40 yp+15 w110 vMondoPointText +left +BackgroundTrans, \___
+Gui, Add, Edit, x63 yp+3 w28 h18 number Limit3 +BackgroundTrans vMondoSecs gnm_SaveConfig Disabled, %MondoSecs%
+Gui, Add, Text, x95 yp+2 vMondoSecsText, Secs
+Gui, Add, Checkbox, x10 yp+20 w35 +BackgroundTrans vAntPassCheck gnm_saveCollect Checked%AntPassCheck% Disabled, Ant
+Gui, Add, Text,x66 yp w49 vAntPassAction +Center +BackgroundTrans,%AntPassAction%
 Gui, Add, Button, xp-12 yp-1 w12 h16 gnm_AntPassAction hwndhAPALeft Disabled, <
 Gui, Add, Button, xp+60 yp w12 h16 gnm_AntPassAction hwndhAPARight Disabled, >
-Gui, Add, Checkbox, x10 y134 +BackgroundTrans vRoboPassCheck gnm_saveCollect Checked%RoboPassCheck% Disabled, Robo Pass
-Gui, Add, Checkbox, x10 y153 +BackgroundTrans vHoneystormCheck gnm_saveCollect Checked%HoneystormCheck% Disabled, Honeystorm
+Gui, Add, Checkbox, x10 yp+19 +BackgroundTrans vRoboPassCheck gnm_saveCollect Checked%RoboPassCheck% Disabled, Robo Pass
+Gui, Add, Checkbox, x10 yp+18 +BackgroundTrans vHoneystormCheck gnm_saveCollect Checked%HoneystormCheck% Disabled, Honeystorm
 ;dispensers
 Gui, Font, w700
-Gui, Add, GroupBox, x135 y42 w165 h109 vDispensersGroupBox, Dispensers
+Gui, Add, GroupBox, x135 y42 w165 h105 vDispensersGroupBox, Dispensers
 Gui, Font, s8 cDefault Norm, Tahoma
 Gui, Add, Checkbox, x140 y57 +BackgroundTrans vHoneyDisCheck gnm_saveCollect Checked%HoneyDisCheck% Disabled, Honey
-Gui, Add, Checkbox, xp yp+19 +BackgroundTrans vTreatDisCheck gnm_saveCollect Checked%TreatDisCheck% Disabled, Treat
-Gui, Add, Checkbox, xp yp+19 +BackgroundTrans vBlueberryDisCheck gnm_saveCollect Checked%BlueberryDisCheck% Disabled, Blueberry
-Gui, Add, Checkbox, xp yp+19 +BackgroundTrans vStrawberryDisCheck gnm_saveCollect Checked%StrawberryDisCheck% Disabled, Strawberry
-Gui, Add, Checkbox, xp yp+19 +BackgroundTrans vCoconutDisCheck gnm_saveCollect Checked%CoconutDisCheck% Disabled, Coconut
+Gui, Add, Checkbox, xp yp+18 +BackgroundTrans vTreatDisCheck gnm_saveCollect Checked%TreatDisCheck% Disabled, Treat
+Gui, Add, Checkbox, xp yp+18 +BackgroundTrans vBlueberryDisCheck gnm_saveCollect Checked%BlueberryDisCheck% Disabled, Blueberry
+Gui, Add, Checkbox, xp yp+18 +BackgroundTrans vStrawberryDisCheck gnm_saveCollect Checked%StrawberryDisCheck% Disabled, Strawberry
+Gui, Add, Checkbox, xp yp+18 +BackgroundTrans vCoconutDisCheck gnm_saveCollect Checked%CoconutDisCheck% Disabled, Coconut
 Gui, Add, Checkbox, xp+85 y57 +BackgroundTrans vRoyalJellyDisCheck gnm_saveCollect Checked%RoyalJellyDisCheck% Disabled, Royal Jelly
-Gui, Add, Checkbox, xp yp+19 +BackgroundTrans vGlueDisCheck gnm_saveCollect Checked%GlueDisCheck% Disabled, Glue
+Gui, Add, Checkbox, xp yp+18 +BackgroundTrans vGlueDisCheck gnm_saveCollect Checked%GlueDisCheck% Disabled, Glue
 ;beesmas
 beesmasActive := 0
 Gui, Font, w700
-Gui, Add, GroupBox, x135 y153 w360 h84 vBeesmasGroupBox, Beesmas (Inactive)
+Gui, Add, GroupBox, x135 y149 w360 h87 vBeesmasGroupBox, Beesmas (Inactive)
 Gui, Font, s8 cDefault Norm, Tahoma
 hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["warninggui"])
-Gui, Add, Picture, +BackgroundTrans  x261 y153 w14 h14 gBeesmasActiveFail vBeesmasFailImage, HBITMAP:*%hBM%
+Gui, Add, Picture, +BackgroundTrans  x261 yp w14 h14 gBeesmasActiveFail vBeesmasFailImage, HBITMAP:*%hBM%
 DllCall("DeleteObject", "ptr", hBM)
-Gui, Add, Picture, +BackgroundTrans x247 y150 w20 h20 vBeesmasImage
-Gui, Add, Checkbox, x335 y153 +BackgroundTrans gnm_saveCollect hwndhBeesmas1 Disabled, Allow Gather Interrupt
-Gui, Add, Checkbox, x140 y170 +BackgroundTrans gnm_saveCollect hwndhBeesmas2 Disabled, Stockings
-Gui, Add, Checkbox, xp yp+17 +BackgroundTrans gnm_saveCollect hwndhBeesmas3 Disabled, Honey Wreath
-Gui, Add, Checkbox, xp yp+17 +BackgroundTrans gnm_saveCollect hwndhBeesmas4 Disabled, Feast
-Gui, Add, Checkbox, xp yp+17 +BackgroundTrans gnm_saveCollect hwndhBeesmas5 Disabled, Robo Party De-level
-Gui, Add, Checkbox, xp+125 y170 +BackgroundTrans gnm_saveCollect hwndhBeesmas6 Disabled, Gingerbread
-Gui, Add, Checkbox, xp yp+17 +BackgroundTrans gnm_saveCollect hwndhBeesmas7 Disabled, Snow Machine
-Gui, Add, Checkbox, xp yp+17 +BackgroundTrans gnm_saveCollect hwndhBeesmas8 Disabled, Candles
-Gui, Add, Checkbox, xp+125 y170 +BackgroundTrans gnm_saveCollect hwndhBeesmas9 Disabled, Samovar
-Gui, Add, Checkbox, xp yp+17 +BackgroundTrans gnm_saveCollect hwndhBeesmas10 Disabled, Lid Art
-Gui, Add, Checkbox, xp yp+17 +BackgroundTrans gnm_saveCollect hwndhBeesmas11 Disabled, Gummy Beacon
+Gui, Add, Picture, +BackgroundTrans x247 yp-3 w20 h20 vBeesmasImage
+Gui, Add, Checkbox, x335 yp+4 +BackgroundTrans gnm_saveCollect hwndhBeesmas1 Disabled, Allow Gather Interrupt
+Gui, Add, Checkbox, x140 yp+14 Section +BackgroundTrans gnm_saveCollect hwndhBeesmas2 Disabled, Stockings
+Gui, Add, Checkbox, xp yp+18 +BackgroundTrans gnm_saveCollect hwndhBeesmas3 Disabled, Honey Wreath
+Gui, Add, Checkbox, xp yp+18 +BackgroundTrans gnm_saveCollect hwndhBeesmas4 Disabled, Feast
+Gui, Add, Checkbox, xp yp+18 +BackgroundTrans gnm_saveCollect hwndhBeesmas5 Disabled, Robo Party De-level
+Gui, Add, Checkbox, xp+125 ys+6 +BackgroundTrans gnm_saveCollect hwndhBeesmas6 Disabled, Gingerbread
+Gui, Add, Checkbox, xp yp+18 +BackgroundTrans gnm_saveCollect hwndhBeesmas7 Disabled, Snow Machine
+Gui, Add, Checkbox, xp yp+18 +BackgroundTrans gnm_saveCollect hwndhBeesmas8 Disabled, Candles
+Gui, Add, Checkbox, xp+125 ys+6 +BackgroundTrans gnm_saveCollect hwndhBeesmas9 Disabled, Samovar
+Gui, Add, Checkbox, xp yp+18 +BackgroundTrans gnm_saveCollect hwndhBeesmas10 Disabled, Lid Art
+Gui, Add, Checkbox, xp yp+18 +BackgroundTrans gnm_saveCollect hwndhBeesmas11 Disabled, Gummy Beacon
 try AsyncHttpRequest("GET", "https://raw.githubusercontent.com/NatroTeam/.github/main/data/beesmas.txt", "nm_BeesmasHandler", {"accept": "application/vnd.github.v3.raw"})
 ;Blender
 Gui, Font, w700
-Gui, Add, GroupBox, x305 y42 w190 h109 vBlenderGroupBox, Blender
+Gui, Add, GroupBox, x305 y42 w190 h105 vBlenderGroupBox, Blender
 Gui, Font, s8 cDefault Norm, Tahoma
 loop 3 {
 	xCoords := 256 + (62 * A_index)
-	Gui, Add, Button, x%xCoords% y128 w40 h15 vBlenderAdd%A_index% hwndhBlenderClear%A_index% gnm_setBlenderData, % (BlenderItem%A_index% = "None") ? "Add" : "Clear"
+	Gui, Add, Button, x%xCoords% y124 w40 h15 vBlenderAdd%A_index% hwndhBlenderClear%A_index% gnm_setBlenderData Disabled, % (BlenderItem%A_index% = "None") ? "Add" : "Clear"
 	Gui, add, picture, x%xCoords% y78 h40 w40 hwndhBlenderItem%A_index%Picture vBlenderItem%A_index%Picture +BackgroundTrans +0xE
 	if (BlenderItem%A_index% != "None")
-		SetImage(hBlenderItem%A_Index%Picture, hBitmapsSB[BlenderItem%A_index%])
-	xCoords := 262 + (62 * A_index), Width := 6*StrLen(BlenderAmount%A_index%)
-	Gui, Add, Text, x%xCoords% y58 w%Width% vBlenderAmount%A_index% +Center, % BlenderAmount%A_index%
-	
-	GuiControlGet, pos, Pos, BlenderAmount%A_index%
-	
-	xcoord := PosW + PosX + 12, LeftCurlB := PosX - 5, RightCurlB := PosX + PosW + 1
-	
-	Gui, Add, Text, x%xcoord% y58 vBlenderIndex%A_index%, % (BlenderIndex%A_index% := (BlenderIndex%A_index% = "Infinite") ? "∞" : BlenderIndex%A_index%)
-	Gui, Add, Text, x%LeftCurlB% y58 vLeftCurlB%A_index%, % "("
-	Gui, Add, Text, x%RightCurlB% y58 vRightCurlB%A_index%, % ")"
-	GuiControlGet, pos, Pos, BlenderIndex%A_index%
-	
-	LeftBracketB := PosX - 5, RightBracketB := PosX + PosW + 1
-	
-	Gui, Add, Text, x%LeftBracketB% y58 vLeftBracketB%A_index%, % "["
-	Gui, Add, Text, x%RightBracketB% y58 vRightBracketB%A_index%, % "]"
+		GuiControl, , % hBlenderItem%A_Index%Picture, % hBitmapsSB[BlenderItem%A_index%] ? ("HBITMAP:*" hBitmapsSB[BlenderItem%A_index%]) : ""
+	xCoords := 247 + (62 * A_index), Width := 6*StrLen(BlenderAmount%A_index%)
+	Gui, Add, Text, x%xCoords% y58 w60 +Center vBlenderData%A_index%, % "(" BlenderAmount%A_Index% ") [" ((BlenderIndex%A_index% = "Infinite") ? "∞" : BlenderIndex%A_index%) "]"
 }
 BlenderAdd := 0 ;setup BlenderAdd for later use in the GUI
 
@@ -2397,7 +2385,8 @@ Gui, Add, Text, x307 y74 w103 h1 vblenderline1 Hidden 0x7
 Gui, Add, Text, x409 y50 w1 h100 vblenderline2 Hidden 0x7
 Gui, Add, Text, x410 y64 w83 h1 vblenderline3 Hidden 0x7
 Gui, Add, Text, x410 y121 w83 h1 vblenderline4 Hidden 0x7
-Gui, Add, edit, x427 y84 w51 vBlenderIndex Hidden Number Limit3, 0
+Gui, Add, Text, x431 y86 w41 h16 +Center +0x200 vBlenderIndexNum Hidden
+Gui, Add, UpDown, vBlenderIndex Range1-999 Hidden, 1
 Gui, Add, checkbox, x427 y69 w60 vBlenderIndexOption gnm_BlenderIndexOption Hidden, Infinite
 Gui, Add, Picture, x336 y80 w40 h40 hwndhAddBlenderItem vBlenderItem Hidden +0xE
 Gui, Font, s8 cDefault Bold, Tahoma
@@ -3696,9 +3685,9 @@ nm_BlenderIndexOption() {
 	global BlenderIndexOption, BlenderIndex
 	GuiControlGet, BlenderIndexOption
 	if (BlenderIndexOption)
-		GuiControl, hide, BlenderIndex
+		GuiControl, disable, BlenderIndex
 	else
-		GuiControl, show, BlenderIndex
+		GuiControl, enable, BlenderIndex
 }
 nm_setBlenderData(hCtrl){
     global
@@ -3708,52 +3697,31 @@ nm_setBlenderData(hCtrl){
 				BlenderaddIndex := A_Index, BlenderAdd := A_Index
 
 				loop 3 {
-					i := A_Index
-					For x, Item in ["BlenderAdd", "LeftBracketB", "RightBracketB", "BlenderAmount", "BlenderIndex", "LeftCurlB", "RightCurlB"]
-						GuiControl, Hide, %Item%%i%
-					GuiControl, Hide, BlenderItem%i%Picture
+					GuiControl, Hide, BlenderAdd%A_Index%
+					GuiControl, Hide, BlenderData%A_Index%
+					GuiControl, Hide, BlenderItem%A_Index%Picture
 				}
 				
 				GuiControl,, BlenderAmount, % BlenderAmount%A_Index%
-				GuiControl,, BlenderIndex, % ((BlenderIndex%A_Index% != "Infinite" && BlenderIndex%A_Index% != "∞") ? BlenderIndex%A_Index% : 0) 
+				GuiControl,, BlenderIndex, % ((BlenderIndex%A_Index% != "Infinite" && BlenderIndex%A_Index% != "∞") ? BlenderIndex%A_Index% : 1) 
 				ba_AddBlenderItemButton()
-				GuiControl, ChooseString, BlenderIndexOption, Infinite
+				GuiControl,, BlenderIndexOption, 0
 				GuiControl,, BlenderAddSlot, Add to Slot %BlenderaddIndex%
-				GuiControl,, BlenderIndexOption, 1
 
-				For z, ui in ["BlenderItem", "BlenderLeft", "BlenderRight", "BlenderAddSlot", "BlenderAmountText", "BlenderAmount", "BlenderAmountNum", "BlenderRepeatText", "BlenderIndexOption","blenderline1","blendertitle1","blenderline2","blenderline3","blenderline4","blenderline5"]
+				For z, ui in ["BlenderItem", "BlenderLeft", "BlenderRight", "BlenderAddSlot", "BlenderAmountText", "BlenderAmount", "BlenderAmountNum", "BlenderRepeatText", "BlenderIndexOption", "BlenderIndexNum", "BlenderIndex","blenderline1","blendertitle1","blenderline2","blenderline3","blenderline4","blenderline5"]
 					GuiControl, Show, %ui%
 			} else {
-				BlenderItem%A_Index% := "None", BlenderAmount%A_Index% := 0, BlenderIndex%A_Index% := "Infinite"
+				BlenderItem%A_Index% := "None", BlenderAmount%A_Index% := 0, BlenderIndex%A_Index% := 1
 
                 IniWrite, None, settings\nm_config.ini, Blender, BlenderItem%A_Index%
                 IniWrite, 0, settings\nm_config.ini, Blender, BlenderAmount%A_Index%
-                Iniwrite, Infinite, settings\nm_config.ini, Blender, BlenderIndex%A_Index%
+                Iniwrite, 1, settings\nm_config.ini, Blender, BlenderIndex%A_Index%
                 Iniwrite, 0, settings\nm_config.ini, Blender, BlenderTime%A_Index%
 
-				GuiControl, -Redraw, % hBlenderClear%A_Index%
 				GuiControl,, % hBlenderClear%A_Index%, % ((BlenderItem%A_Index% = "None" || BlenderItem%A_Index% = "") ? "Add" : "Clear")
-				GuiControl, +Redraw, % hBlenderClear%A_Index%
-				
-				GuiControl, Move, BlenderAmount%A_Index%, w6
-				GuiControl,, BlenderAmount%A_Index%, 0
-				GuiControlGet, pos, Pos, BlenderAmount%A_Index%
-				coord := PosW + PosX + 12, LeftCurlB := PosX - 5, RightCurlB := PosX + PosW + 1
+				GuiControl,, BlenderData%A_Index%, % "(" BlenderAmount%A_Index% ") [" ((BlenderIndex%A_Index% = "Infinite") ? "∞" : BlenderIndex%A_Index%) "]"
 
-				GuiControl, Move, LeftCurlB%A_Index%, x%LeftCurlB%
-				GuiControl, Move, RightCurlB%A_Index%, x%RightCurlB%
-				
-				GuiControl, Move, BlenderIndex%A_Index%, w10 x%coord%
-				GuiControl,, BlenderIndex%A_Index%, % "∞"
-
-				GuiControlGet, pos, Pos, BlenderIndex%A_Index%
-				LeftBracketB := PosX - 5, RightBracketB := PosX + PosW + 1
-
-				GuiControl, move, LeftBracketB%A_Index%, x%LeftBracketB%
-				GuiControl, move, RightBracketB%A_Index%, x%RightBracketB%
-
-				SetImage(hBlenderItem%A_Index%Picture, hBitmapsSB["None"])
-
+				GuiControl, , % hBlenderItem%A_Index%Picture, % ""
             }
             break
         }
@@ -3769,52 +3737,30 @@ ba_AddBlenderItemButton(hCtrl:=0){
 }
 ba_AddBlenderItem(){
     global
+	local BlenderIndex, BlenderAmount, BlenderIndexOption, BlenderIndex
 	GuiControlGet, BlenderIndex
 	GuiControlGet, BlenderAmount
 	GuiControlGet, BlenderIndexOption
-	BlenderIndex := % ((BlenderIndexOption) ? "Infinite" : BlenderIndex)
-	
-	BlenderItem%BlenderaddIndex% := AddBlenderItem, BlenderIndex%BlenderaddIndex% := BlenderIndex, BlenderAmount%BlenderaddIndex% := BlenderAmount
+	BlenderIndex := ((BlenderIndexOption) ? "Infinite" : BlenderIndex)
 
-    IniWrite, %AddBlenderItem%, settings\nm_config.ini, Blender, BlenderItem%BlenderaddIndex%
-    IniWrite, %BlenderIndex%, settings\nm_config.ini, Blender, BlenderIndex%BlenderaddIndex%
-	IniWrite, %BlenderAmount%, settings\nm_config.ini, Blender, BlenderAmount%BlenderaddIndex%
+	IniWrite, % BlenderItem%BlenderaddIndex% := AddBlenderItem, settings\nm_config.ini, Blender, BlenderItem%BlenderaddIndex%
+	IniWrite, % BlenderIndex%BlenderaddIndex% := BlenderIndex, settings\nm_config.ini, Blender, BlenderIndex%BlenderaddIndex%
+	IniWrite, % BlenderAmount%BlenderaddIndex% := BlenderAmount, settings\nm_config.ini, Blender, BlenderAmount%BlenderaddIndex%
 	
-	SetImage(hBlenderItem%BlenderaddIndex%Picture, hBitmapsSB[BlenderItem%BlenderaddIndex%])
+	GuiControl, , % hBlenderItem%BlenderaddIndex%Picture, % hBitmapsSB[BlenderItem%BlenderaddIndex%] ? ("HBITMAP:*" hBitmapsSB[BlenderItem%BlenderaddIndex%]) : ""
 	
-	BWitdh := Strlen(BlenderAmount%BlenderAddIndex%) * 6
-	
-	GuiControl, Move, BlenderAmount%BlenderAddIndex%, w%BWitdh%
-	GuiControl,, BlenderAmount%BlenderAddIndex%, % BlenderAmount%BlenderAddIndex%
-	GuiControl,, BlenderIndex%BlenderAddIndex%, % (BlenderIndex%BlenderAddIndex% := (BlenderIndex%BlenderAddIndex% = "Infinite") ? "∞" : BlenderIndex%BlenderAddIndex%)
+	GuiControl,, BlenderData%BlenderaddIndex%, % "(" BlenderAmount%BlenderaddIndex% ") [" ((BlenderIndex%BlenderaddIndex% = "Infinite") ? "∞" : BlenderIndex%BlenderaddIndex%) "]"
+	GuiControl,, % hBlenderClear%BlenderaddIndex%, % ((AddBlenderItem = "None" || AddBlenderItem = "") ? "Add" : "Clear")
 
-	GuiControlGet, pos, Pos, BlenderAmount%BlenderAddIndex% 
-	
-	BWitdh := Strlen(BlenderIndex%BlenderAddIndex%) * ((BlenderIndex%BlenderAddIndex% = "∞") ? 10 : 6)
-	coord := PosW + PosX + 12, LeftCurlB := PosX - 5, RightCurlB := PosX + PosW + 1
-
-	GuiControl, Move, BlenderIndex%BlenderAddIndex%, w%BWitdh% x%coord%
-	GuiControl, Move, LeftCurlB%BlenderAddIndex%, x%LeftCurlB%
-	GuiControl, Move, RightCurlB%BlenderAddIndex%, x%RightCurlB%
-
-	GuiControlGet, pos, Pos, BlenderIndex%BlenderAddIndex%
-	LeftBracketB := PosX - 5, RightBracketB := PosX + PosW + 1
-	GuiControl, move, LeftBracketB%BlenderAddIndex%, x%LeftBracketB%
-	GuiControl, move, RightBracketB%BlenderAddIndex%, x%RightBracketB%
-
-	For z, ui in ["BlenderItem", "BlenderLeft", "BlenderRight", "BlenderAddSlot", "BlenderAmountText", "BlenderAmount", "BlenderAmountNum", "BlenderRepeatText", "BlenderIndex", "BlenderIndexOption","blenderline1","blenderline2","blenderline3","blenderline4","blendertitle1"]
+	For z, ui in ["BlenderItem", "BlenderLeft", "BlenderRight", "BlenderAddSlot", "BlenderAmountText", "BlenderAmount", "BlenderAmountNum", "BlenderRepeatText", "BlenderIndexOption", "BlenderIndex", "BlenderIndexNum","blenderline1","blenderline2","blenderline3","blenderline4","blendertitle1"]
 		GuiControl, Hide, %ui%
 	loop 3 {
 		i := A_Index
-		For x, Item in ["BlenderAdd", "LeftBracketB", "RightBracketB", "BlenderAmount", "BlenderIndex", "LeftCurlB", "RightCurlB"]
-			GuiControl, Show, %Item%%i%
+		GuiControl, Show, BlenderAdd%i%
+		GuiControl, Show, BlenderData%i%
 		GuiControl, Show, BlenderItem%i%Picture
 	}
 	BlenderAdd := 0
-
-	GuiControl, -Redraw, % hBlenderClear%BlenderaddIndex%
-    GuiControl,, % hBlenderClear%BlenderaddIndex%, % ((AddBlenderItem = "None" || AddBlenderItem = "") ? "Add" : "Clear")
-    GuiControl, +Redraw, % hBlenderClear%BlenderaddIndex%
 }
 nm_UpdateGui(wParam, lParam) {
 	global
@@ -3822,11 +3768,6 @@ nm_UpdateGui(wParam, lParam) {
 	static BlenderItems := ["BlueExtract", "RedExtract", "Enzymes", "Oil", "Glue", "TropicalDrink", "Gumdrops", "MoonCharms", "Glitter", "StarJelly", "PurplePotion", "SoftWax", "HardWax", "SwirledWax", "CausticWax", "FieldDice", "SmoothDice", "LoadedDice", "SuperSmoothie", "Turpentine", "None"]
 	switch % wParam // 100
 	{
-		Case 1:
-		BlenderItem%i% := BlenderItems[Enum]
-		SetImage(hBlenderItem%i%Picture, hBitmapsSB[BlenderItems[Enum]])
-		GuiControl, , BlenderAdd%i%, % (BlenderItem%i%  = "None") ? "Add" : "Clear"
-
 		Case 2:
 		ShrineItem%i% := BlenderItems[Enum]
 		SetImage(hShrineItem%i%Picture, hBitmapsSB[BlenderItems[Enum]])
@@ -5222,8 +5163,9 @@ nm_TabCollectUnLock(){
 	GuiControl, enable, BlenderAdd2
 	GuiControl, enable, BlenderAdd3
 	GuiControl, enable, BlenderAmount
-	GuiControl, enable, BlenderIndex
 	GuiControl, enable, BlenderIndexOption
+	if (BlenderIndexOption = 0)
+		GuiControl, enable, BlenderIndex
 	GuiControl, enable, BlenderLeft
 	GuiControl, enable, BlenderRight
 	GuiControl, enable, ClockCheck
@@ -8331,8 +8273,8 @@ nm_CollectKillButton(hCtrl){
 		,"HoneyDisCheck","TreatDisCheck","BlueberryDisCheck","StrawberryDisCheck","CoconutDisCheck","RoyalJellyDisCheck","GlueDisCheck"]
 	, CollectControlsH := ["hMALeft","hMARight","hAPALeft","hAPARight","hBeesmas1","hBeesmas2","hBeesmas3","hBeesmas4","hBeesmas5","hBeesmas6","hBeesmas7","hBeesmas8","hBeesmas9","hBeesmas10","hBeesmas11"]
 	, KillControls := ["BugRunGroupBox","BugRunCheck","MonsterRespawnTime","TextMonsterRespawnPercent","TextMonsterRespawn","MonsterRespawnTimeHelp","BugrunInterruptCheck","TextLoot","TextKill","TextLineBugRun1","TextLineBugRun2","BugrunLadybugsLoot","BugrunRhinoBeetlesLoot","BugrunSpiderLoot","BugrunMantisLoot","BugrunScorpionsLoot","BugrunWerewolfLoot","BugrunLadybugsCheck","BugrunRhinoBeetlesCheck","BugrunSpiderCheck","BugrunMantisCheck","BugrunScorpionsCheck","BugrunWerewolfCheck","StingersGroupBox","StingerCheck","StingerDailyBonusCheck","TextFields","StingerCloverCheck","StingerSpiderCheck","StingerCactusCheck","StingerRoseCheck","StingerMountainTopCheck","StingerPepperCheck","BossesGroupBox","TunnelBearCheck","KingBeetleCheck","CocoCrabCheck","StumpSnailCheck","CommandoCheck","TunnelBearBabyCheck","KingBeetleBabyCheck","BabyLovePicture1","BabyLovePicture2","KingBeetleAmuletMode","ShellAmuletMode","KingBeetleAmuPicture","ShellAmuPicture","KingBeetleAmuletModeText","ShellAmuletModeText","ChickLevelTextLabel","ChickLevelText","ChickLevel","SnailHPText","SnailHealthEdit","SnailHealthText","ChickHPText","ChickHealthEdit","ChickHealthText","SnailTimeText","SnailTimeUpDown","ChickTimeText","ChickTimeUpDown","BossConfigHelp","TextLineBosses1","TextLineBosses2","TextLineBosses3","TextBosses1","TextBosses2","TextBosses3"]
-	, BlenderMain := ["BlenderItem1Picture", "BlenderItem2Picture", "BlenderItem3Picture", "BlenderAdd1", "BlenderAdd2", "BlenderAdd3", "BlenderAmount1", "BlenderAmount2", "BlenderAmount3", "LeftCurlB1", "LeftCurlB2", "LeftCurlB3", "RightCurlB1", "RightCurlB2", "RightCurlB3", "LeftBracB1", "LeftBracB2", "LeftBracB3", "RightBracB1", "RightBracB2", "RightBracB3", "BlenderIndex1", "BlenderIndex2", "BlenderIndex3"]
-	, BlenderSide := ["BlenderAmount", "BlenderAmountNum", "BlenderAmountText", "BlenderRepeatText", "BlenderIndex", "BlenderItem", "BlenderLeft", "BlenderRight", "BlenderAddSlot", "BlenderIndexOption","blenderline1","blenderline2","blenderline3","blenderline4","blendertitle1"]
+	, BlenderMain := ["BlenderItem1Picture", "BlenderItem2Picture", "BlenderItem3Picture", "BlenderAdd1", "BlenderAdd2", "BlenderAdd3", "BlenderData1", "BlenderData2", "BlenderData3"]
+	, BlenderSide := ["BlenderAmount", "BlenderAmountNum", "BlenderAmountText", "BlenderRepeatText", "BlenderIndex", "BlenderIndexNum", "BlenderItem", "BlenderLeft", "BlenderRight", "BlenderAddSlot", "BlenderIndexOption","blenderline1","blenderline2","blenderline3","blenderline4","blendertitle1"]
 
 	local p, i, c, k, v, arr
 
@@ -9875,21 +9817,8 @@ nm_Collect(){
 					nm_BlenderRotation()
 					if (BlenderIndex%BlenderRot% != "Infinite") {
 						BlenderIndex%BlenderRot%-- ;subtract from blenderindex for looping only if its a number
-						GuiControl,, BlenderIndex%BlenderRot%, % BlenderIndex%BlenderRot%
-
-						GuiControlGet, pos, Pos, BlenderAmount%BlenderRot% 
-						
-						BWitdh := Strlen(BlenderIndex%BlenderAddIBlenderRotndex%) * 6
-						coord := PosW + PosX + 12, LeftCurlB := PosX - 5, RightCurlB := PosX + PosW + 1
-
-						GuiControl, Move, BlenderIndex%BlenderRot%, w%BWitdh% x%coord%
-						GuiControl, Move, LeftCurlB%BlenderRot%, x%LeftCurlB%
-						GuiControl, Move, RightCurlB%BlenderRot%, x%RightCurlB%
-
-						GuiControlGet, pos, Pos, BlenderIndex%BlenderRot%
-						LeftBracketB := PosX - 5, RightBracketB := PosX + PosW + 1
-						GuiControl, move, LeftBracketB%BlenderRot%, x%LeftBracketB%
-						GuiControl, move, RightBracketB%BlenderRot%, x%RightBracketB%
+						GuiControl,, BlenderData%BlenderRot%, % "(" BlenderAmount%BlenderRot% ") [" ((BlenderIndex%BlenderRot% = "Infinite") ? "∞" : BlenderIndex%BlenderRot%) "]"
+						IniWrite, % BlenderIndex%BlenderRot%, settings\nm_config.ini, blender, BlenderIndex%BlenderRot%
 					}
 					
 					sleep, 100
@@ -21031,35 +20960,6 @@ nm_UpdateGUIVar(var)
 		GuiControl, % "+c" Format("0x{1:02x}{2:02x}{3:02x}", Round(Min(3*(100-InputChickHealth), 150)), Round(Min(3*InputChickHealth, 150)), 0) " +Redraw", ChickHealthText
 		GuiControl, , ChickHealthText, % InputChickHealth "%"
 
-		case "BlenderIndex1", "BlenderIndex2", "BlenderIndex3":
-		Num := SubStr(k, 0)
-		GuiControlGet, pos, Pos, BlenderAmount%Num%
-		xCoord := PosW + PosX + 12, StrLen := (%k% = "Infinite") ? 10 : Strlen(%k%) * 6
-		GuiControl, MoveDraw, %k%, w%StrLen% x%xCoord%
-		GuiControl, , %k%, % (%k% = "Infinite") ? "∞" : %k%
-
-		GuiControlGet, pos, Pos, %k%
-		GuiControl, MoveDraw, LeftBracketB%Num%, % "x" PosX-5
-		GuiControl, MoveDraw, RightBracketB%Num%, % "x" PosX+PosW+1
-
-		case "BlenderAmount1", "BlenderAmount2", "BlenderAmount3":
-		StrLen := 6*StrLen(%k%)
-		GuiControl, Move, %k%, w%StrLen%
-		GuiControl, , %k%, % %k%
-
-		Num := SubStr(k, 0)
-		GuiControlGet, pos, Pos, %k% ;most likely gonna be changing X
-		RightCurlB := PosX + PosW + 1, LeftCurlB := PosX - 5, Xcoord := PosW + PosX + 12
-
-		GuiControl, MoveDraw, LeftCurlB%Num%, x%LeftCurlB%
-		GuiControl, MoveDraw, RightCurlB%Num%, x%RightCurlB%
-		GuiControl, MoveDraw, BlenderIndex%Num%, x%Xcoord%
-
-		GuiControlGet, pos, Pos, BlenderIndex%Num%
-		LeftBracB := PosX - 5, RightBracB := PosX + PosW + 1 ; 5 and below is funky but 6 is fine?
-		GuiControl, MoveDraw, LeftBracketB%Num%, x%LeftBracB%
-		GuiControl, MoveDraw, RightBracketB%Num%, x%RightBracB%
-
 		Case "ShrineItem1Picture", "ShrineItem2Picture":
 		SetImage(h%k%, hBitmapsSB[%k%])
         	GuiControl, , ShrineAdd%z%, % (ShrineItem%z%Picture = "None") ? "Add" : "Clear"
@@ -21098,9 +20998,21 @@ nm_UpdateGUIVar(var)
 		switch % k
 		{
 			case "BlenderItem1", "BlenderItem2", "BlenderItem3":
-			SetImage(h%k%Picture, hBitmapsSB[%k%])
+			GuiControl, , % h%k%Picture, % hBitmapsSB[%k%] ? ("HBITMAP:*" hBitmapsSB[%k%]) : ""
 			z := SubStr(k, 0)
-			GuiControl, , BlenderAdd%z%, % (BlenderItem%z%Picture = "None") ? "Add" : "Clear"
+			GuiControl, , BlenderAdd%z%, % (BlenderItem%z% = "None") ? "Add" : "Clear"
+
+			case "BlenderIndex1", "BlenderIndex2", "BlenderIndex3":
+			Num := SubStr(k, 0)
+			local BlenderData1, BlenderData2, BlenderData3, pos
+			GuiControlGet, BlenderData%Num%
+			GuiControl,, BlenderData%Num%, % StrReplace(BlenderData%Num%, SubStr(BlenderData%Num%, InStr(BlenderData%Num%, " ") + 1), "[" %k% "]")
+
+			case "BlenderAmount1", "BlenderAmount2", "BlenderAmount3":
+			Num := SubStr(k, 0)
+			local BlenderData1, BlenderData2, BlenderData3, pos
+			GuiControlGet, BlenderData%Num%
+			GuiControl,, BlenderData%Num%, % StrReplace(BlenderData%Num%, SubStr(BlenderData%Num%, 1, InStr(BlenderData%Num%, " ") - 1), "(" %k% ")")
 		}
 
 		default:
