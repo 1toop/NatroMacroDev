@@ -1694,10 +1694,6 @@ sprinklerImages := ["saturator"]
 state:="Startup"
 objective:="UI"
 DailyReconnect:=0
-for k,v in ["PMondoGuid","PFieldBoosted","PFieldGuidExtend","PFieldGuidExtendMins","PFieldBoostExtend","PFieldBoostBypass","PPopStarExtend"]
-	%v%:=0
-PFieldDriftSteps:=15
-#include *i %A_ScriptDir%\..\settings\personal.ahk
 
 ;ensure Gui will be visible
 if (GuiX && GuiY)
@@ -1972,6 +1968,9 @@ Gui, Add, Button, x145 y260 w65 h20 -Wrap vStopButton gnm_StopButton Disabled, %
 ;add tabs
 Gui, Add, Tab, x0 y-1 w500 h240 -Wrap hwndhTab vTab gnm_TabSelect, % "Gather|Collect/Kill|Boost|Quest|Planters|Status|Settings|Misc|Credits" ((BuffDetectReset = 1) ? "|Advanced" : "")
 SendMessage, 0x1331, 0, 20, , ahk_id %hTab% ; set minimum tab width
+for k,v in ["PMondoGuid","PFieldBoosted","PFieldGuidExtend","PFieldGuidExtendMins","PFieldBoostExtend","PFieldBoostBypass","PPopStarExtend"]
+	%v%:=0
+#include *i %A_ScriptDir%\..\settings\personal.ahk
 ;check for update
 try AsyncHttpRequest("GET", "https://api.github.com/repos/NatroTeam/NatroMacro/releases/latest", "nm_AutoUpdateHandler", {"accept": "application/vnd.github+json"})
 ;open Timers
