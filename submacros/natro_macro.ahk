@@ -1798,6 +1798,7 @@ nm_AutoUpdateHandler(req)
 			GuiControl, MoveDraw, % hVersionText, % "x" 494-VersionWidth
 			GuiControl, MoveDraw, ImageGitHubLink, % "x" 494-VersionWidth-23
 			GuiControl, MoveDraw, ImageDiscordLink, % "x" 494-VersionWidth-48
+			try GuiControl, MoveDraw, SecretButton, % "x" 494-VersionWidth-104
 			
 			if (LatestVer != IgnoreUpdateVersion)
 				nm_AutoUpdateGUI()
@@ -3482,32 +3483,16 @@ nm_LockTabs(lock:=1){
 	global bitmaps
 
 	;controls outside tabs
-	Gui, Font, s8 cDefault w700 Tahoma
 	if (lock = 1)
 	{
 		GuiControl, Disable, CurrentFieldUp
 		GuiControl, Disable, CurrentFieldDown
+		GuiControl, Disable, SecretButton
 
-		GuiControl, Font, TextDiscordLink
-		GuiControl, -g, TextDiscordLink
 		pBM := Gdip_BitmapConvertGray(bitmaps["discordgui"]), hBM := Gdip_CreateHBITMAPFromBitmap(pBM)
 		GuiControl, , ImageDiscordLink, HBITMAP:*%hBM%
 		Gdip_DisposeImage(pBM), DllCall("DeleteObject", "Ptr", hBM)
 		GuiControl, -g, ImageDiscordLink
-
-		GuiControl, Font, TextRobloxLink
-		GuiControl, -g, TextRobloxLink
-		pBM := Gdip_BitmapConvertGray(bitmaps["robloxgui"]), hBM := Gdip_CreateHBITMAPFromBitmap(pBM)
-		GuiControl, , ImageRobloxLink, HBITMAP:*%hBM%
-		Gdip_DisposeImage(pBM), DllCall("DeleteObject", "Ptr", hBM)
-		GuiControl, -g, ImageRobloxLink
-		
-		GuiControl, Font, TextDonateLink
-		GuiControl, -g, TextDonateLink
-		pBM := Gdip_BitmapConvertGray(bitmaps["paypalgui"]), hBM := Gdip_CreateHBITMAPFromBitmap(pBM)
-		GuiControl, , ImageDonateLink, HBITMAP:*%hBM%
-		Gdip_DisposeImage(pBM), DllCall("DeleteObject", "Ptr", hBM)
-		GuiControl, -g, ImageDonateLink
 
 		GuiControl, -g, ImageGitHubLink
 		
@@ -3517,35 +3502,17 @@ nm_LockTabs(lock:=1){
 	{
 		GuiControl, Enable, CurrentFieldUp
 		GuiControl, Enable, CurrentFieldDown
+		GuiControl, Enable, SecretButton
 
-		Gui, Font, c0046ee
-
-		GuiControl, Font, TextDiscordLink
-		GuiControl, +gDiscordLink, TextDiscordLink
 		hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["discordgui"])
 		GuiControl, , ImageDiscordLink, HBITMAP:*%hBM%
 		DllCall("DeleteObject", "Ptr", hBM)
 		GuiControl, +gDiscordLink, ImageDiscordLink
 
-		GuiControl, Font, TextRobloxLink
-		GuiControl, +gRobloxLink, TextRobloxLink
-		hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["robloxgui"])
-		GuiControl, , ImageRobloxLink, HBITMAP:*%hBM%
-		DllCall("DeleteObject", "Ptr", hBM)
-		GuiControl, +gRobloxLink, ImageRobloxLink
-		
-		GuiControl, Font, TextDonateLink
-		GuiControl, +gDonateLink, TextDonateLink
-		hBM := Gdip_CreateHBITMAPFromBitmap(bitmaps["paypalgui"])
-		GuiControl, , ImageDonateLink, HBITMAP:*%hBM%
-		DllCall("DeleteObject", "Ptr", hBM)
-		GuiControl, +gDonateLink, ImageDonateLink
-
 		GuiControl, +gGitHubRepoLink, ImageGitHubLink
 
 		c := "UnLock"
 	}
-	Gui, Font, cDefault Norm
 
 	for i,tab in tabs
 		nm_Tab%tab%%c%()
@@ -8309,12 +8276,6 @@ nm_MakeSuggestionButton(){
 DiscordLink(){
     nm_RunDiscord("invite/xbkXjwWh8U")
 }
-DonateLink(){
-    run, https://www.paypal.com/donate/?hosted_button_id=9KN7JHBCTAU8U&no_recurring=0&currency_code=USD
-}
-RobloxLink(){
-    run, https://www.roblox.com/groups/16490149/Natro-Macro
-}
 GitHubRepoLink(){
 	run, https://github.com/NatroTeam/NatroMacro
 }
@@ -9216,7 +9177,7 @@ nm_findHiveSlot(){
 	else
 	{
 		Gdip_DisposeImage(pBMScreen)
-		
+
 		; find hive slot
 		movement := "
 		(LTrim Join`r`n
