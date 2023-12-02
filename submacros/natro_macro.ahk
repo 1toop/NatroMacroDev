@@ -3541,6 +3541,7 @@ ba_setShrineData(hCtrl){
 				GuiControl,, ShrineIndex, % ((ShrineIndex%A_Index% != "Infinite" && ShrineIndex%A_Index% != "∞") ? ShrineIndex%A_Index% : 1) 
 				ba_AddShrineItemButton()
 				GuiControl,, ShrineIndexOption, 0
+				GuiControl, Enable, ShrineIndex
 				GuiControl,, ShrineAddSlot, Add to Slot %shrineaddIndex%
 
 				For z, ui in ["ShrineItem", "ShrineLeft", "ShrineRight", "ShrineAddSlot", "ShrineAmountText", "ShrineAmount", "ShrineAmountNum", "ShrineRepeatText", "ShrineIndexOption", "ShrineIndexNum", "ShrineIndex","shrineline1","shrinetitle1","shrineline2","shrineline3","shrineline4","shrineline5"]
@@ -3621,6 +3622,7 @@ nm_setBlenderData(hCtrl){
 				GuiControl,, BlenderIndex, % ((BlenderIndex%A_Index% != "Infinite" && BlenderIndex%A_Index% != "∞") ? BlenderIndex%A_Index% : 1) 
 				ba_AddBlenderItemButton()
 				GuiControl,, BlenderIndexOption, 0
+				GuiControl, Enable, BlenderIndex
 				GuiControl,, BlenderAddSlot, Add to Slot %BlenderaddIndex%
 
 				For z, ui in ["BlenderItem", "BlenderLeft", "BlenderRight", "BlenderAddSlot", "BlenderAmountText", "BlenderAmount", "BlenderAmountNum", "BlenderRepeatText", "BlenderIndexOption", "BlenderIndexNum", "BlenderIndex","blenderline1","blendertitle1","blenderline2","blenderline3","blenderline4","blenderline5"]
