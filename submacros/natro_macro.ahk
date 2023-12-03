@@ -718,6 +718,7 @@ config["Planters"] := {"LastComfortingField":"None"
 	, "MPuffMode1":0
 	, "MPuffMode2":0
 	, "MPuffMode3":0
+	, "LastPlanterGatherSlot":3
 	, "PlanterName1":"None"
 	, "PlanterName2":"None"
 	, "PlanterName3":"None"
@@ -13259,7 +13260,8 @@ nm_GoGather(){
 					eligible[A_Index] := planterField%A_Index%
 			}
 
-			LastPlanterGatherSlot := ("") ? 3 : LastPlanterGatherSlot
+			if LastPlanterGatherSlot not in 1, 2, 3
+				LastPlanterGatherSlot := 3
 
 			; if at least one slot is available for planter gather, proceed, else revert to gather tab
 			if ((eligible.1) || (eligible.2) || (eligible.3)) {
