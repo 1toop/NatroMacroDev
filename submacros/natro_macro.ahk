@@ -18589,12 +18589,14 @@ nm_ShrineRotation() {
     global ShrineRot, ShrineItem1, ShrineItem2, ShrineCheck, ShrineIndex1, ShrineIndex2
 	loop {
 		if ((ShrineItem%ShrineRot% != "None" && ShrineItem%ShrineRot% != "") && (ShrineIndex%ShrineRot% = "Infinite" || ShrineIndex%ShrineRot% > 0)) {
+			ShrineCheck := 1
 			IniWrite, 1, settings\nm_config.ini, Shrine, ShrineCheck
 			break
 		} else {
 			ShrineRot := Mod(ShrineRot, 2) + 1
 			if (A_Index = 3) {
 				if (ShrineCheck) {
+					ShrineCheck := 0
 					IniWrite, 0, settings\nm_config.ini, Shrine, ShrineCheck
 					nm_setStatus("Confirmed", "No more items to rotate through. Turning shrine off")
 				}
