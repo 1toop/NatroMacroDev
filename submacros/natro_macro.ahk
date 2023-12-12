@@ -3191,6 +3191,7 @@ mp_PlantPlanter(PlanterIndex) {
 				break 2
 			}
 			Gdip_DisposeImage(pBMScreen)
+			sleep, 50 ; delay in case of lag
 		}
 
 		if (A_Index = 50) {
@@ -3451,6 +3452,7 @@ mp_HarvestPlanter(PlanterIndex) {
 					return 2
 				}
 				Gdip_DisposeImage(pBMScreen)
+				sleep, 50 ; delay in case of lag
 			}
 		}
 		else {
@@ -3466,6 +3468,7 @@ mp_HarvestPlanter(PlanterIndex) {
 					break
 				}
 				Gdip_DisposeImage(pBMScreen)
+				sleep, 50 ; delay in case of lag
 			}
 		}
 		
@@ -20259,6 +20262,7 @@ ba_placePlanter(fieldName, planter, planterNum, atField:=0){
 				break 2
 			}
 			Gdip_DisposeImage(pBMScreen)
+			sleep, 50 ; delay in case of lag
 		}
 
 		if (A_Index = 50) {
@@ -20397,6 +20401,7 @@ ba_harvestPlanter(planterNum){
 					break
 				}
 				Gdip_DisposeImage(pBMScreen)
+				sleep, 50 ; delay in case of lag
 			}
 		}
 
