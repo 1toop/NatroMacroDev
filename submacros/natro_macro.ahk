@@ -16359,6 +16359,8 @@ nm_locateVB(){
 			nm_setStatus("Defeated", "Vicious Bee`nTime: " duration)
 		}
 		VBState:=0 ;0=no VB, 1=searching for VB, 2=VB found
+		click, up
+
 		if WinExist("background.ahk ahk_class AutoHotkey")
 			PostMessage, 0x5554, 3, VBState
 		DetectHiddenWindows %Prev_DetectHiddenWindows%  ; Restore original setting for the caller.
@@ -16411,7 +16413,6 @@ nm_locateVB(){
 
 		Loop, 10 ; attempt each field a maximum of n (10) times
 		{
-			click, up
 			if(VBState=0) {
 				nm_setStatus("Aborting", "No Vicious Bee")
 				break 2
@@ -16497,8 +16498,10 @@ nm_locateVB(){
 						KeyWait, F14, D T5 L
 						KeyWait, F14, T60 L
 						nm_endWalk()
-						if(not nm_activeHoney())
+						if(not nm_activeHoney()) {
+							click, up
 							continue 2
+						}
 						movement := "
 						(LTrim Join`r`n
 						" nm_Walk(leftOrRightDist*9/2000, RightKey) "
@@ -16508,8 +16511,10 @@ nm_locateVB(){
 						KeyWait, F14, D T5 L
 						KeyWait, F14, T60 L
 						nm_endWalk()
-						if(not nm_activeHoney())
+						if(not nm_activeHoney()) {
+							click, up
 							continue 2
+						}
 						nm_ViciousCheck()
 					}
 					if(VBState=2){
@@ -16537,8 +16542,10 @@ nm_locateVB(){
 						KeyWait, F14, D T5 L
 						KeyWait, F14, T60 L
 						nm_endWalk()
-						if(not nm_activeHoney())
+						if(not nm_activeHoney()) {
+							click, up
 							continue 2
+						}
 						movement := "
 						(LTrim Join`r`n
 						" nm_Walk(forwardOrBackDist*9/2000, BackKey) "
@@ -16548,8 +16555,10 @@ nm_locateVB(){
 						KeyWait, F14, D T5 L
 						KeyWait, F14, T60 L
 						nm_endWalk()
-						if(not nm_activeHoney())
+						if(not nm_activeHoney()) {
+							click, up
 							continue 2
+						}
 						nm_ViciousCheck()
 					}
 					if(VBState=2){
@@ -16578,8 +16587,10 @@ nm_locateVB(){
 						nm_endWalk()
 						if (A_Index < reps)
 						{
-							if(not nm_activeHoney())
+							if(not nm_activeHoney()) {
+								click, up
 								continue 2
+							}
 							movement := "
 							(LTrim Join`r`n
 							" nm_Walk(leftOrRightDist*9/2000, LeftKey) "
@@ -16590,8 +16601,10 @@ nm_locateVB(){
 							KeyWait, F14, T60 L
 							nm_endWalk()
 						}
-						if(not nm_activeHoney())
+						if(not nm_activeHoney()) {
+							click, up
 							continue 2
+						}
 						nm_ViciousCheck()
 					}
 					if(VBState=2){
@@ -16630,8 +16643,10 @@ nm_locateVB(){
 						KeyWait, F14, D T5 L
 						KeyWait, F14, T60 L
 						nm_endWalk()
-						if(not nm_activeHoney())
+						if(not nm_activeHoney()) {
+							click, up
 							continue 3
+						}
 						movement := "
 						(LTrim Join`r`n
 						" nm_Walk(leftOrRightDist*9/2000, (v = "Spider") ? LeftKey : RightKey) "
@@ -16641,8 +16656,10 @@ nm_locateVB(){
 						KeyWait, F14, D T5 L
 						KeyWait, F14, T60 L
 						nm_endWalk()
-						if(not nm_activeHoney())
+						if(not nm_activeHoney()) {
+							click, up
 							continue 3
+						}
 						killed := nm_ViciousCheck()
 					}
 					movement := "
@@ -16662,6 +16679,7 @@ nm_locateVB(){
 				}
 				break 2
 			}
+			click, up
 			break
 		}
 	}
