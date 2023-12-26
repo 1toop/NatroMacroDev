@@ -4,7 +4,11 @@
     Send {space down}
     HyperSleep(300)
     Send {space up}
-    " nm_Walk(36, RightKey) "
+    " nm_Walk(5, RightKey) " ; 36
+    Send {space down} ; new
+    HyperSleep(300) ; new
+    Send {space up} ; new
+    " nm_Walk(31, RightKey) " ; new
     send {space down}
     HyperSleep(300)
     send {space up}

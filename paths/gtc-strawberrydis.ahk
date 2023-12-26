@@ -5,7 +5,11 @@ if (" HiveBees " > 25) {
     send {space down}
     HyperSleep(300)
     Send {space up}
-    " nm_Walk(36, RightKey) "
+    " nm_Walk(5, RightKey) " 
+    Send {space down} ; new
+    HyperSleep(300) ; new
+    Send {space up} ; new
+    " nm_Walk(29, RightKey) " 
     send {space down}
     HyperSleep(300)
     send {space up}
@@ -41,10 +45,16 @@ else {
 	send {" RotRight " 2}
 	" nm_Walk(9, BackKey) "
 	" nm_Walk(15.75, BackKey, RightKey) "
-	" nm_Walk(29.7, LeftKey) "
-	" nm_Walk(23.85, FwdKey) "
-	" nm_Walk(22.95, LeftKey) "
-	" nm_Walk(11.25, BackKey) "
+	" nm_Walk(30, LeftKey) "
+	" nm_Walk(36, FwdKey) "
+	" nm_Walk(28, LeftKey) "
+	" nm_Walk(5, RightKey) "
+	" nm_Walk(3.5, BackKey) "
+	" nm_Walk(23.5, LeftKey) "
+	" nm_Walk(3, BackKey) "
+	" nm_Walk(10, RightKey) "
+	" nm_Walk(3, LeftKey) "
+	" nm_Walk(8, BackKey) "
 }
 )"
 ;dual path 230629 noobyguy
