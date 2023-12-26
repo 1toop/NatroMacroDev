@@ -4226,8 +4226,14 @@ nm_testButton(){ ;~~ lines 3464 and 3465 have the same change as 14156
 		{
 			WinGetClientPos(windowX, windowY, windowWidth, windowHeight, """"ahk_id """" GetRobloxHWND())
 			MouseMove, windowX+350, windowY+offsetY+100
+			Sleep, 500
 			Send {"" SC_Space "" down}
-			Sleep, 100
+			Sleep, 50
+			Send {"" SC_Space "" up}
+			" nm_Walk(8, RightKey) "
+			Sleep, 500
+			Send {"" SC_Space "" down}
+			Sleep, 50
 			Send {"" SC_Space "" up}{"" RightKey "" down}
 
 			DllCall(""""GetSystemTimeAsFileTime"""",""""int64p"""",s)
@@ -9278,8 +9284,21 @@ nm_gotoCannon(){
 	success := 0
 	Loop, 10
 	{
+		Sleep, 500
+		Send {%SC_Space% down}
+		Sleep, 50
+		Send {%SC_Space% up}
+		movement := "
+		(LTrim Join`r`n
+		" nm_Walk(8, RightKey) "
+		)"
+		nm_createWalk(movement)
+		KeyWait, F14, D T5 L
+		KeyWait, F14, T5 L
+		nm_endWalk()
+		Sleep, 500
 		SendInput {%SC_Space% down}
-		Sleep, 100
+		Sleep, 50
 		SendInput {%SC_Space% up}{%RightKey% down}
 		DllCall("GetSystemTimeAsFileTime","int64p",s)
 		n := s, f := s+100000000
@@ -9359,7 +9378,7 @@ nm_findHiveSlot(){
 		movement := "
 		(LTrim Join`r`n
 		" nm_Walk(4, FwdKey) "
-		" nm_Walk(5.25, BackKey) "
+		" nm_Walk(4.25, BackKey) " ; 5.25
 		)"
 		nm_createWalk(movement)
 		KeyWait, F14, D T5 L
