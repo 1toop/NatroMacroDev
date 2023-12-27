@@ -9466,7 +9466,7 @@ nm_toAnyBooster(){
 	global VBState
 	global objective, CurrentAction, PreviousAction
 	global MondoBuffCheck, PMondoGuid, LastGuid, MondoAction, LastMondoBuff
-	global LastShrine, ShrineCheck, ShrineItem1, ShrineItem2, ShrineAmount1, ShrineAmount2, ShrineRot, Shrine, bitmaps
+	global LastShrine, ShrineCheck, ShrineItem1, ShrineItem2, ShrineAmount1, ShrineAmount2, ShrineRot, Shrine, bitmaps, SC_E
 	static blueBoosterFields:=["Pine Tree", "Bamboo", "Blue Flower"], redBoosterFields:=["Rose", "Strawberry", "Mushroom"], mountainBoosterfields:=["Cactus", "Pumpkin", "Pineapple", "Spider", "Clover", "Dandelion", "Sunflower"]
 	if(VBState=1)
 		return
@@ -9491,33 +9491,35 @@ nm_toAnyBooster(){
 				sendinput {%SC_E% up}
 				Sleep, (2000+KeyDelay)
 
+				WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " (hwnd := GetRobloxHWND()))
 				MouseMove, WindowX+Windowwidth//2, WindowY+WindowHeight//1.35 - 5
 				sleep, 150
 				Click
 				sleep, 300
-				SearchX := WindowX+Windowwidth//2 + 20, SearchY := WindowY+WindowHeight//2 - 100
 				Loop {
 					sleep, 150
-					ShrineSS := Gdip_BitmapFromScreen(SearchX "|" SearchY "|170|245")
+					pBMScreen := Gdip_BitmapFromScreen(WindowX+WindowWidth//2-250 "|" WindowY+windowHeight//2-100 "|500|300")
 					Donation := % "ShrineItem" ShrineRot
 					DonationIMG := % %Donation%
 					
-					if (Gdip_ImageSearch(ShrineSS, Shrine[DonationIMG], , , , , , 2, , 4) > 0) {
-						Gdip_DisposeImage(ShrineSS)
+					if (Gdip_ImageSearch(pBMScreen, Shrine[DonationIMG], , , , , , 2, , 4) > 0) {
 						sleep, 200
-						MouseMove, WindowX+WindowWidth//2 + 165, WindowY+WindowHeight//2 + 65 ; Add more items
+						if (Gdip_ImageSearch(pBMScreen, Shrine["Plus"], pos,,,,, 5) > 0)
+							MouseMove, SubStr(pos, 1, InStr(pos, ",")-1)+windowX+windowWidth//2-250, SubStr(pos, InStr(pos, ",")+1)+WindowY+windowHeight//2-100
 						sleep, 150
 						While (A_index < ShrineAmount%ShrineRot%) {
 							Click
 							sleep, 35
 						}
 						sleep, 300
-						MouseMove, WindowX+WindowWidth//2 - 70, WindowY+WindowHeight//2 + 145 ; click donate/confirm
+						if (Gdip_ImageSearch(pBMScreen, Shrine["Donate"], pos,,,,, 5) > 0)
+							MouseMove, SubStr(pos, 1, InStr(pos, ",")-1)+windowX+windowWidth//2-250, SubStr(pos, InStr(pos, ",")+1)+WindowY+windowHeight//2-100
+						Gdip_DisposeBitmap(pBMScreen)
 						sleep, 150
 						Click
-						sleep, 150
+						sleep, 2000
+						WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " hwnd)
 						Loop, 500 {
-							WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " hwnd)
 							pBMScreen := Gdip_BitmapFromScreen(windowX+windowWidth//2-50 "|" windowY+2*windowHeight//3 "|100|" windowHeight//3)
 							if (Gdip_ImageSearch(pBMScreen, bitmaps["dialog"], pos, , , , , 10, , 3) = 0) {
 								Gdip_DisposeImage(pBMScreen)
@@ -9574,10 +9576,11 @@ nm_toAnyBooster(){
 		
 						break 2
 					} else {
-						Gdip_DisposeImage(ShrineSS)
-						MouseMove, WindowX+WindowWidth//2 + 165, WindowY+WindowHeight//2 - 20 ; go to next item
-						sleep, 50
-						Click
+						if (Gdip_ImageSearch(pBMScreen, Shrine["LeftArrow"], pos,,,,, 5) > 0)
+							MouseMove, SubStr(pos, 1, InStr(pos, ",")-1)+windowX+windowWidth//2-250, SubStr(pos, InStr(pos, ",")+1)+WindowY+windowHeight//2-100
+						sleep 150
+						click
+						Gdip_DisposeImage(pBMScreen)
 						if (A_Index = 60) {
 							if (z = 2)
 								nm_setStatus("Failed", "Wind shrine")	
