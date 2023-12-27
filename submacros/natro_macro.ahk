@@ -9131,12 +9131,12 @@ nm_Reset(checkAll:=1, wait:=2000, convert:=1, force:=0){
 		}
 		SetKeyDelay, PrevKeyDelay
 		sendinput {%RotRight% 3}
-		send {%ZoomOut% 3}
+		send {%ZoomOut% 2}
 		sleep, 500
 
 		loop, 4 {
-			pBMScreen := Gdip_BitmapFromScreen(WindowX+WindowWidth/4-250 "|" WindowY+windowHeight/2-50 "|400|250")
-			if (Gdip_ImageSearch(pBMScreen, bitmaps["pBMHive"], , , , , , 10) > 0 || Gdip_ImageSearch(pBMScreen, bitmaps["pBMHiveHS"], , , , , , 5) > 0) {
+			pBMScreen := Gdip_BitmapFromScreen(WindowX+WindowWidth/6-200 "|" WindowY+windowHeight/2-50 "|400|250")
+			if (Gdip_ImageSearch(pBMScreen, bitmaps["pBMHive"], , , , , , 5) > 0 || Gdip_ImageSearch(pBMScreen, bitmaps["pBMHiveEH"]) > 0) {
 				Gdip_DisposeImage(pBMScreen)
 				sendinput {%RotLeft% 3}
 				HiveConfirmed:=1
