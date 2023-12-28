@@ -26,15 +26,15 @@ else
 	paths["red"] := "
 	(LTrim Join`r`n
 	;gotoramp
-	Send {space down}
-	HyperSleep(300)
+	Send {space down}{" RightKey " down}
+	Sleep, 100
 	Send {space up}
-	" nm_Walk(5, RightKey) " 
-	Send {space down} ; new
-	HyperSleep(300) ; new
-	Send {space up} ; new
-	" nm_Walk(29, RightKey) " 
-	send {space down}
+	Walk(2)
+	Send {" FwdKey " down}
+	Walk(1.8)
+	Send {" FwdKey " up}
+	Walk(30)
+	send {" RightKey " up}{space down}
 	HyperSleep(300)
 	send {space up}
 	" nm_Walk(6, RightKey) "
