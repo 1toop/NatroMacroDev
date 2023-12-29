@@ -16119,7 +16119,6 @@ nm_claimHiveSlot(){
 					}
 					Gdip_DisposeImage(pBMScreen)
 				}
-			}
 				Gdip_DisposeImage(pBMScreen)
 			}
 			else {
@@ -16143,7 +16142,7 @@ nm_claimHiveSlot(){
 					}
 				}
 			}
-
+		}
 		nm_setStatus("Failed", "Claim Hive Slot" ((A_Index > 1) ? (" (Attempt " A_Index ")") : ""))
 		if (A_Index = 5)
 			return 0
