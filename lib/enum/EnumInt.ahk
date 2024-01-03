@@ -248,9 +248,19 @@
 	, "MPuffMode1"
 	, "MPuffMode2"]
 arr2 := arr.Push("MPuffMode3" ; 250
-	, "MPlanterRelease1" ; 251
-	, "MPlanterRelease2"
-	, "MPlanterRelease3"
-	, "MPlanterSmoking1"
-	, "MPlanterSmoking2"
-	, "MPlanterSmoking3")
+	, "BlueFlowerBoosterCheck" ; 251
+	, "BambooBoosterCheck" ; 251
+	, "PineTreeBoosterCheck"
+	, "DandelionBoosterCheck"
+	, "SunflowerBoosterCheck"
+	, "CloverBoosterCheck"
+	, "SpiderBoosterCheck"
+	, "PineappleBoosterCheck"
+	, "CactusBoosterCheck"
+	, "PumpkinBoosterCheck"
+	, "MushroomBoosterCheck"
+	, "StrawberryBoosterCheck"
+	, "RoseBoosterCheck"
+	, "MPlanterHold1"
+	, "MPlanterHold2"
+	, "MPlanterHold3")
