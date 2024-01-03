@@ -1216,7 +1216,7 @@ global RileyBee:={"Abilities":[[1,"Collect","Any"]]
 	, "Picnic":[[4,"Get","Ant"]
 	,[3,"Feed","Strawberry"]
 	,[1,"Collect","Mushroom"]
-	,[2,"Collect","Red"]]
+	,[2,"Collect","Strawberry"]]
 
 	, "Pollen":[[1,"Collect","Red"]]
 
@@ -1227,7 +1227,7 @@ global RileyBee:={"Abilities":[[1,"Collect","Any"]]
 	, "Roses":[[1,"Collect","Rose"]]
 
 	, "Scavenge":[[1,"Collect","Red"]
-	,[3,"Collect","Red"]
+	,[3,"Collect","Strawberry"]
 	,[2,"Collect","Any"]]
 
 	, "Skirmish":[[2,"Kill","Ladybugs"]
@@ -1358,7 +1358,7 @@ FieldDefault["Spider"] := {"pattern":"CornerXSnake"
 	, "invertLR":1}
 
 FieldDefault["Strawberry"] := {"pattern":"CornerXSnake"
-	, "size":"S"
+	, "size":"M"
 	, "width":1
 	, "camera":"Right"
 	, "turns":2
