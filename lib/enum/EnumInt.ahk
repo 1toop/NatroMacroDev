@@ -253,4 +253,6 @@ arr2 := arr.Push("MPuffMode3" ; 250
 	, "MPlanterRelease3"
 	, "MPlanterSmoking1"
 	, "MPlanterSmoking2"
-	, "MPlanterSmoking3")
+	, "MPlanterSmoking3"
+	, "BrownQuestCheck"
+	, "LastBrownQuest")

@@ -679,21 +679,20 @@ config["Quests"] := {"QuestGatherMins":5
 	, "QuestGatherReturnBy":"Walk"
 	, "PolarQuestCheck":0
 	, "PolarQuestGatherInterruptCheck":1
-	, "PolarQuestName":"None"
 	, "PolarQuestProgress":"Unknown"
 	, "HoneyQuestCheck":0
 	, "HoneyQuestProgress":"Unknown"
 	, "BlackQuestCheck":0
-	, "BlackQuestName":"None"
 	, "BlackQuestProgress":"Unknown"
 	, "LastBlackQuest":1
+	, "BrownQuestCheck":0
+	, "BrownQuestProgress":"Unknown"
+	, "LastBrownQuest":1
 	, "BuckoQuestCheck":0
 	, "BuckoQuestGatherInterruptCheck":1
-	, "BuckoQuestName":"None"
 	, "BuckoQuestProgress":"Unknown"
 	, "RileyQuestCheck":0
 	, "RileyQuestGatherInterruptCheck":1
-	, "RileyQuestName":"None"
 	, "RileyQuestProgress":"Unknown"}
 
 config["Planters"] := {"LastComfortingField":"None"
@@ -1770,6 +1769,7 @@ bitmaps := {}, shrine := {}, hBitmapsSBT := {}
 #Include offset\bitmaps.ahk
 #Include perfstats\bitmaps.ahk
 #Include gui\blendershrine_bitmaps.ahk
+#Include quests\bitmaps.ahk
 
 hBitmapsSB := {}
 for x,y in hBitmapsSBT
@@ -2625,7 +2625,6 @@ Gui, Add, GroupBox, x5 y131 w150 h38, Honey Bee
 Gui, Add, GroupBox, x5 y170 w150 h68, Settings
 Gui, Add, GroupBox, x160 y23 w165 h108, Black Bear
 Gui, Add, GroupBox, x160 y131 w165 h108, Brown Bear
-Gui, Add, Text, x165 y145 cRED, Not Yet Implemented
 Gui, Add, GroupBox, x330 y23 w165 h108, Bucko Bee
 Gui, Add, GroupBox, x330 y131 w165 h108, Riley Bee
 Gui, Font, s8 cDefault Norm, Tahoma
@@ -2642,8 +2641,10 @@ Gui, Add, Text, x8 y201 +BackgroundTrans, Return to hive by:
 Gui, Add, Text, x110 yp w33 vQuestGatherReturnBy +Center +BackgroundTrans,%QuestGatherReturnBy%
 Gui, Add, Button, x98 yp-1 w12 h16 gnm_QuestGatherReturnBy hwndhQGRBLeft Disabled, <
 Gui, Add, Button, x142 yp w12 h16 gnm_QuestGatherReturnBy hwndhQGRBRight Disabled, >
-Gui, Add, Checkbox, x235 y23 vBlackQuestCheck gnm_BlackQuestCheck Checked%BlackQuestCheck% Disabled, Enable
+Gui, Add, Checkbox, x240 y23 vBlackQuestCheck gnm_BlackQuestCheck Checked%BlackQuestCheck% Disabled, Enable
 Gui, Add, Text, x163 y38 w158 h92 vBlackQuestProgress, % StrReplace(BlackQuestProgress, "|", "`n")
+Gui, Add, Checkbox, x240 y131 vBrownQuestCheck gnm_BrownQuestCheck Checked%BrownQuestCheck% Disabled, Enable
+Gui, Add, Text, x163 y146 w158 h92 vBrownQuestProgress, % StrReplace(BrownQuestProgress, "|", "`n")
 Gui, Add, Checkbox, x410 y23 vBuckoQuestCheck gnm_BuckoQuestCheck Checked%BuckoQuestCheck% Disabled, Enable
 Gui, Add, Checkbox, x340 y37 vBuckoQuestGatherInterruptCheck gnm_BuckoQuestCheck Checked%BuckoQuestGatherInterruptCheck% Disabled, Allow Gather Interrupt
 Gui, Add, Text, x333 y51 w158 h78 vBuckoQuestProgress, % StrReplace(BuckoQuestProgress, "|", "`n")
@@ -5597,6 +5598,11 @@ nm_BlackQuestCheck(){
 	if BlackQuestCheck
 		msgbox,0,Black Bear Quest, This option only works for the repeatable quests.  You must first complete the main questline before this option will work properly.
 }
+nm_BrownQuestCheck(){
+	global
+	GuiControlGet, BrownQuestCheck
+	IniWrite, %BrownQuestCheck%, settings\nm_config.ini, Quests, BrownQuestCheck
+}
 nm_BuckoQuestCheck(){
 	global
 	Gui +OwnDialogs
@@ -5643,6 +5649,7 @@ nm_TabQuestLock(){
 	GuiControl, disable, RileyQuestGatherInterruptCheck
 	GuiControl, disable, HoneyQuestCheck
 	GuiControl, disable, BlackQuestCheck
+	GuiControl, disable, BrownQuestCheck
 	GuiControl, disable, QuestGatherMins
 	GuiControl, disable, % hQGRBLeft
 	GuiControl, disable, % hQGRBRight
@@ -5657,6 +5664,7 @@ nm_TabQuestUnLock(){
 	GuiControl, enable, RileyQuestGatherInterruptCheck
 	GuiControl, enable, HoneyQuestCheck
 	GuiControl, enable, BlackQuestCheck
+	GuiControl, enable, BrownQuestCheck
 	GuiControl, enable, QuestGatherMins
 	GuiControl, enable, % hQGRBLeft
 	GuiControl, enable, % hQGRBRight
@@ -13218,7 +13226,7 @@ nm_GoGather(){
 	global MondoBuffCheck, MondoAction, LastMondoBuff
 	global PlanterMode, gotoPlanterField, MPlanterGatherA, MPlanterGather1, MPlanterGather2, MPlanterGather3, LastPlanterGatherSlot, MPlanterHold1, MPlanterHold2, MPlanterHold3, PlanterField1, PlanterField2, PlanterField3, PlanterHarvestTime1, PlanterHarvestTime2, PlanterHarvestTime3
 	global QuestLadybugs, QuestRhinoBeetles, QuestSpider, QuestMantis, QuestScorpions, QuestWerewolf
-	global PolarQuestGatherInterruptCheck, BuckoQuestGatherInterruptCheck, RileyQuestGatherInterruptCheck, BugrunInterruptCheck, LastBugrunLadybugs, LastBugrunRhinoBeetles, LastBugrunSpider, LastBugrunMantis, LastBugrunScorpions, LastBugrunWerewolf, BlackQuestCheck, BlackQuestComplete, QuestGatherField, BuckoQuestCheck, BuckoQuestComplete, RileyQuestCheck, RileyQuestComplete, PolarQuestCheck, PolarQuestComplete, RotateQuest, QuestGatherMins, QuestGatherReturnBy, BuckoRhinoBeetles, BuckoMantis, RileyLadybugs, RileyScorpions, RileyAll, GameFrozenCounter, HiveSlot, BugrunLadybugsCheck, BugrunRhinoBeetlesCheck, BugrunSpiderCheck, BugrunMantisCheck, BugrunScorpionsCheck, BugrunWerewolfCheck, MonsterRespawnTime
+	global PolarQuestGatherInterruptCheck, BuckoQuestGatherInterruptCheck, RileyQuestGatherInterruptCheck, BugrunInterruptCheck, LastBugrunLadybugs, LastBugrunRhinoBeetles, LastBugrunSpider, LastBugrunMantis, LastBugrunScorpions, LastBugrunWerewolf, BlackQuestCheck, BlackQuestComplete, BrownQuestCheck, BrownQuestComplete, QuestGatherField, BuckoQuestCheck, BuckoQuestComplete, RileyQuestCheck, RileyQuestComplete, PolarQuestCheck, PolarQuestComplete, RotateQuest, QuestGatherMins, QuestGatherReturnBy, BuckoRhinoBeetles, BuckoMantis, RileyLadybugs, RileyScorpions, RileyAll, GameFrozenCounter, HiveSlot, BugrunLadybugsCheck, BugrunRhinoBeetlesCheck, BugrunSpiderCheck, BugrunMantisCheck, BugrunScorpionsCheck, BugrunWerewolfCheck, MonsterRespawnTime
 	global beesmasActive, BeesmasGatherInterruptCheck, StockingsCheck, LastStockings, FeastCheck, LastFeast, RBPDelevelCheck, LastRBPDelevel, GingerbreadCheck, LastGingerbread, SnowMachineCheck, LastSnowMachine, CandlesCheck, LastCandles, SamovarCheck, LastSamovar, LidArtCheck, LastLidArt, GummyBeaconCheck, LastGummyBeacon
 	global GatherStartTime, TotalGatherTime, SessionGatherTime, ConvertStartTime, TotalConvertTime, SessionConvertTime
 	global bitmaps
@@ -13312,7 +13320,7 @@ nm_GoGather(){
 			}
 		}
 		;questing override
-		if((BlackQuestCheck || BuckoQuestCheck || RileyQuestCheck || PolarQuestCheck) && (QuestGatherField && QuestGatherField!="None")){
+		if((BlackQuestCheck || BrownQuestCheck || BuckoQuestCheck || RileyQuestCheck || PolarQuestCheck) && (QuestGatherField && QuestGatherField!="None")){
 			fieldOverrideReason:="Quest"
 			thisfield:=QuestGatherField
 			if(QuestGatherField=FieldName1) {
@@ -13714,6 +13722,18 @@ nm_GoGather(){
 			}
 			;interrupt if
 			if (thisfield!=QuestGatherField || BlackQuestComplete){ ;change fields or this field is complete
+				interruptReason := "Next Quest Step"
+				break
+			}
+		}
+		;Brown Bear quest
+		if(RotateQuest="Brown" && BrownQuestCheck && fieldOverrideReason="Quest"){
+			nm_BrownQuestProg()
+			if(FieldPatternShift) {
+				nm_setShiftLock(1)
+			}
+			;interrupt if
+			if (thisfield!=QuestGatherField || BrownQuestComplete){ ;change fields or this field is complete
 				interruptReason := "Next Quest Step"
 				break
 			}
@@ -17321,9 +17341,9 @@ nm_PolarQuest(){
 	}
 }
 nm_QuestRotate(){
-	global QuestGatherField, RotateQuest, BlackQuestCheck, BlackQuestComplete, LastBlackQuest, BuckoQuestCheck, BuckoQuestComplete, RileyQuestCheck, RileyQuestComplete, HoneyQuestCheck, PolarQuestCheck, GatherFieldBoostedStart, LastGlitter, MondoBuffCheck, PMondoGuid, LastGuid, MondoAction, LastMondoBuff, VBState, bitmaps
+	global QuestGatherField, RotateQuest, BlackQuestCheck, BlackQuestComplete, LastBlackQuest, BrownQuestCheck, BuckoQuestCheck, BuckoQuestComplete, RileyQuestCheck, RileyQuestComplete, HoneyQuestCheck, PolarQuestCheck, GatherFieldBoostedStart, LastGlitter, MondoBuffCheck, PMondoGuid, LastGuid, MondoAction, LastMondoBuff, VBState, bitmaps
 
-	if ((BlackQuestCheck=0) && (BuckoQuestCheck=0) && (RileyQuestCheck=0) && (HoneyQuestCheck=0) && (PolarQuestCheck=0))
+	if ((BlackQuestCheck=0) && (BrownQuestCheck=0) && (BuckoQuestCheck=0) && (RileyQuestCheck=0) && (HoneyQuestCheck=0) && (PolarQuestCheck=0))
 		return
 	if(VBState=1)
 		return
@@ -17351,6 +17371,11 @@ nm_QuestRotate(){
 				nm_RileyQuest()
 			}
 		}
+	}
+
+	if (QuestGatherField = "None") {
+		;all previous quests did not set a QuestGatherField, so check brown bear quest
+		nm_BrownQuest()
 	}
 
 	;honey bee quest
@@ -18396,6 +18421,304 @@ nm_BlackQuest(){
 		IniWrite, %LastBlackQuest%, settings\nm_config.ini, Quests, LastBlackQuest
 	}
 }
+nm_BrownQuestProg(){
+	global BrownQuestCheck, BrownQuest, BrownStart, HiveBees, FieldName1
+	global QuestGatherField:="None"
+	global QuestGatherFieldSlot:=0
+	global BrownQuestComplete:=1
+	global BrownQuestProgress
+	global QuestBarSize
+	global QuestBarGapSize
+	global QuestBarInset
+	global state, bitmaps
+	if(!BrownQuestCheck)
+		return
+	nm_setShiftLock(0)
+	nm_OpenMenu("questlog")
+
+	hwnd := GetRobloxHWND()
+	offsetY := GetYOffset(hwnd)
+	;search for brown quest
+	Loop, 70
+	{
+		Qfound:=nm_imgSearch("brown_bear.png",50,"quest")
+		if (Qfound[1]=0) {
+			if (A_Index > 1)
+				Gdip_DisposeImage(pBMLog)
+			break
+		}
+
+		Qfound:=nm_imgSearch("brown_bear2.png",50,"quest")
+		if (Qfound[1]=0) {
+			if (A_Index > 1)
+				Gdip_DisposeImage(pBMLog)
+			break
+		}
+
+		WinActivate, Roblox
+		switch A_Index
+		{
+			case 1:
+			WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " hwnd)
+			MouseMove, windowX+30, windowY+offsetY+200, 5
+			Loop, 50 ; scroll all the way up
+			{
+				MouseMove, windowX+30, windowY+offsetY+200, 5
+				sendinput {WheelUp}
+				Sleep, 50
+			}
+			pBMLog := Gdip_BitmapFromScreen(windowX+30 "|" windowY+offsetY+180 "|30|400")
+
+			default:
+			WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " hwnd)
+			MouseMove, windowX+30, windowY+offsetY+200, 5
+			sendinput {WheelDown}
+			Sleep, 500 ; wait for scroll to finish
+			pBMScreen := Gdip_BitmapFromScreen(windowX+30 "|" windowY+offsetY+180 "|30|400")
+			if (Gdip_ImageSearch(pBMScreen, pBMLog, , , , , , 50) = 1) { ; end of quest log
+				Gdip_DisposeImage(pBMLog), Gdip_DisposeImage(pBMScreen)
+				break
+			}
+			Gdip_DisposeImage(pBMLog), pBMLog := Gdip_CloneBitmap(pBMScreen), Gdip_DisposeImage(pBMScreen)
+		}
+	}
+	Sleep, 500
+
+	if(Qfound[1]=0){
+		;locate exact bottom of quest title bar coordinates
+		;titlebar = 30 pixels high
+		;quest objective bar spacing = 10 pixels
+		;quest objective bar height = 40 pixels
+		WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " hwnd)
+		MouseMove, windowX+350, windowY+offsetY+100
+		xi := windowX
+		yi := windowY+Qfound[3]
+		ww := windowX+306
+		wh := windowY+windowHeight
+		fileName:="questbargap.png"
+		IfExist, %A_WorkingDir%\nm_image_assets\
+		{
+			ImageSearch, FoundX, FoundY, xi, yi, ww, wh, *5 %A_WorkingDir%\nm_image_assets\%fileName%
+			if (ErrorLevel = 2) {
+				nm_setStatus("Error", "Image file " filename " was not found in:`n" A_WorkingDir "\nm_image_assets\" fileName)
+				Sleep, 5000
+				Process, Close, % DllCall("GetCurrentProcessId")
+			}
+		} else {
+			MsgBox Folder location cannot be found:`n%A_WorkingDir%\nm_image_assets\
+		}
+		BrownStart:=[ErrorLevel, FoundX-windowX, FoundY-windowY]
+		;determine quest bar sizes and spacing
+		if(QuestBarGapSize=0 || QuestBarSize=0 || QuestBarInset=0) {
+			Loop, 3 {
+				xi := windowX
+				yi := windowY+BrownStart[3]+15
+				ww := windowX+306
+				wh := windowY+BrownStart[3]+100
+				ImageSearch, FoundX, FoundY, xi, yi, ww, wh, *5 nm_image_assets\questbargap.png
+				if(ErrorLevel=0) {
+					QuestBarSize:=FoundY-windowY-BrownStart[3]
+					QuestBarGapSize:=3
+					QuestBarInset:=3
+					NextY:=FoundY+1
+					NextX:=FoundX+1
+					loop 20 {
+						ImageSearch, FoundX, FoundY, FoundX, NextY, ww, wh, *5 nm_image_assets\questbargap.png
+						if(ErrorLevel=0) {
+							NextY:=FoundY+1
+							QuestBarGapSize:=QuestBarGapSize+1
+						} else {
+							break
+						}
+					}
+					wh := windowY+BrownStart[3]+200
+					loop 20 {
+						ImageSearch, FoundX, FoundY, NextX, yi, ww, wh, *5 nm_image_assets\questbarinset.png
+						if(ErrorLevel=0) {
+							NextX:=FoundX+1
+							QuestBarInset:=QuestBarInset+1
+						} else {
+							break
+						}
+					}
+					break
+					;msgbox QuestBarSize=%QuestBarSize%`nQuestBarGapSize=%QuestBarGapSize%`nQuestBarInset=%QuestBarInset%
+				} else {
+					MouseMove, windowX+30, windowY+offsetY+225
+					Sleep, 50
+					send, {WheelDown 1}
+					Sleep, 50
+					BrownStart[3]-=150
+					Sleep, 500
+				}
+			}
+		}
+		;determine Quest objecives
+		static objectiveList := {"dandelion": "Dand", "sunflower": "Sunf", "mushroom": "Mush", "blueflower": "Bluf", "clover": "Clove"
+			, "strawberry": "Straw", "spider": "Spide", "bamboo": "Bamb", "pineapple": "Pinap", "stump": "Stump"
+			, "cactus": "Cact", "pumpkin": "Pump", "pinetree": "Pine"
+			, "rose": "Rose", "mountaintop": "Mount", "pepper": "Pepp", "coconut": "Coco"
+			, "redpollen": "Red", "bluepollen": "Blue", "whitepollen": "White"}
+		objectives := []
+
+		WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " hwnd)
+		while ((objectives.Length() < 4) && (A_Index <= 6)) { ; maximum 4 objectives, possible +2 scroll
+			objectivePos := objectives.Length() * QuestBarSize, objectiveSize := 0
+			pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY+BrownStart[3]+QuestBarGapSize+objectivePos "|304|" QuestBarSize-QuestBarGapSize)
+
+			if (Gdip_ImageSearch(pBMScreen, bitmaps["questbarinset"], , , , 6, , 5) = 1) {
+				for i,size in [16,15,14,18,17] { ; in approximate order of probability
+					if (Gdip_ImageSearch(pBMScreen, bitmaps["s" size "collect"], , 6, , , , 30) = 1) {
+						objectiveSize := size
+						break
+					}
+				}
+
+				if (objectiveSize = 0)
+					objectives.Push("unknown")
+				else {
+					for k in objectiveList {
+						for i,v in objectives ; if objective already exists, cannot be duplicated
+							if (k = v)
+								continue 2
+						if (bitmaps.HasKey("s" objectiveSize k) && (Gdip_ImageSearch(pBMScreen, bitmaps["s" objectiveSize k], , 6, , , , 30) = 1))
+							objectives.Push(k)
+					}
+				}
+			} else {
+				;//todo: replace this with proper questlog endpoint detection (similar to inventory) to determine if quest is cut off or not, instead of next quest title (which may not exist)
+				if ((Gdip_ImageSearch(pBMScreen, bitmaps["questbartitle"], , , , 6, , 5) = 1) || (Gdip_ImageSearch(pBMScreen, bitmaps["questbartitlebeesmas"], , , , 6, , 5) = 1)) {
+					Gdip_DisposeImage(pBMScreen)
+					break ; end of quest reached confirmed, since there is a quest below
+				}
+
+				;//todo: detect if scrollbar is already at end before scrolling, or how much has scrolled instead of fixed 150. every quest needs this, should be in rewrite
+				
+				; otherwise, scroll up 
+				MouseMove, windowX+30, windowY+offsetY+225
+				Sleep, 50
+				send, {WheelDown 1}
+				Sleep, 50
+				BrownStart[3]-=150
+				Sleep, 500
+			}
+
+			Gdip_DisposeImage(pBMScreen)
+		}
+		;Update Brown quest progress in GUI
+		;also set next steps
+		QuestGatherField:="None"
+		QuestGatherFieldSlot:=0
+		newLine:="|"
+		brownProgress:=""
+		BrownQuest:=(objectives.Length() = 1) ? "Solo" : ""
+		for i,objective in objectives {
+			action:="Collect"
+			; decide field (where)
+			;//todo: make this into a function for use in other quest functions
+			switch objective {
+				case "redpollen":
+				if(HiveBees>=35){
+					where:="Pepper"
+				} else if(HiveBees>=15){
+					where:="Rose"
+				} else if (HiveBees>=5) {
+					where:="Strawberry"
+				} else {
+					where:="Mushroom"
+				}
+
+				case "bluepollen":
+				if(HiveBees>=15){
+					where:="Pine Tree"
+				} else if (HiveBees>=5) {
+					where:="Bamboo"
+				} else {
+					where:="Blue Flower"
+				}
+
+				case "whitepollen":
+				if (HiveBees>=10) {
+					where:="Pineapple"
+				} else if (HiveBees>=5) {
+					where:="Spider"
+				} else {
+					where:="Sunflower"
+				}
+
+				case "blueflower":
+				where:="Blue Flower"
+
+				case "pinetree":
+				where:="Pine Tree"
+
+				case "mountaintop":
+				where:="Mountain Top"
+
+				default:
+				where:=Format("{:T}", objective) ; title case, capitalise first letter
+			}
+
+			PixelGetColor, questbarColor, windowX+QuestBarInset+10, windowY+QuestBarSize*(i-1)+BrownStart[3]+QuestBarGapSize+5, RGB fast
+			if((questbarColor=Format("{:d}",0xF46C55)) || (questbarColor=Format("{:d}",0x6EFF60))) {
+				BrownQuestComplete:=0
+				completeness:="Incomplete"
+				if(QuestGatherField="None") {
+					QuestGatherField:=where
+					QuestGatherFieldSlot:=i
+				}
+			}
+			;border color, white (titlebar), black (text)
+			else if((questbarColor!=Format("{:d}",0x96C3DE)) && (questbarColor!=Format("{:d}",0xE5F0F7)) && (questbarColor!=Format("{:d}",0x1B2A35))) {
+				completeness:="Complete"
+			} else {
+				completeness:="Unknown"
+			}
+			BrownQuest .= "-" . objectiveList[objective]
+			brownProgress .= newline . action . " " . where . ": " . completeness
+		}
+		brownProgress := (BrownQuest := LTrim(BrownQuest, "-")) . brownProgress
+
+		IniWrite, %brownProgress%, settings\nm_config.ini, Quests, BrownQuestProgress
+		GuiControl,,BrownQuestProgress, % StrReplace(brownProgress, "|", "`n")
+		if(QuestGatherField="None") {
+			BrownQuestComplete:=1
+		}
+	}
+}
+nm_BrownQuest(){
+	global BrownQuestCheck, BrownQuestComplete, LastBrownQuest, RotateQuest, QuestGatherField, CurrentAction, PreviousAction, TotalQuestsComplete, SessionQuestsComplete
+	if(!BrownQuestCheck)
+		return
+	RotateQuest:="Brown"
+	nm_BrownQuestProg()
+	if(BrownQuestComplete && (nowUnix()-LastBrownQuest)>3600) {
+		if(CurrentAction!="Quest") {
+			PreviousAction:=CurrentAction
+			CurrentAction:="Quest"
+		}
+		nm_gotoQuestgiver("Brown")
+		nm_BrownQuestProg()
+		if(!BrownQuestComplete){
+			nm_setStatus("Starting", "Brown Bear Quest: " . BrownQuest)
+			TotalQuestsComplete:=TotalQuestsComplete+1
+			SessionQuestsComplete:=SessionQuestsComplete+1
+			Prev_DetectHiddenWindows := A_DetectHiddenWindows
+			Prev_TitleMatchMode := A_TitleMatchMode
+			DetectHiddenWindows On
+			SetTitleMatchMode 2
+			if WinExist("StatMonitor.ahk ahk_class AutoHotkey") {
+				PostMessage, 0x5555, 5, 1
+			}
+			DetectHiddenWindows %Prev_DetectHiddenWindows%
+			SetTitleMatchMode %Prev_TitleMatchMode%
+			IniWrite, %TotalQuestsComplete%, settings\nm_config.ini, Status, TotalQuestsComplete
+			IniWrite, %SessionQuestsComplete%, settings\nm_config.ini, Status, SessionQuestsComplete
+		}
+		LastBrownQuest:=nowUnix()
+		IniWrite, %LastBrownQuest%, settings\nm_config.ini, Quests, LastBrownQuest
+	}
+}
 nm_bugDeathCheck(){
 	global objective, TotalBugKills, SessionBugKills, LastBugrunLadybugs, LastBugrunRhinoBeetles, LastBugrunSpider, LastBugrunMantis, LastBugrunScorpions, LastBugrunWerewolf, BugDeathCheckLockout, BugrunLadybugsCheck, BugrunRhinoBeetlesCheck, BugrunMantisCheck, BugrunWerewolfCheck
 	if(BugDeathCheckLockout && (nowUnix() - BugDeathCheckLockout)>20)
@@ -18940,6 +19263,7 @@ nm_gotoQuestgiver(giver){
 		#Include gtq-polar.ahk
 		#Include gtq-honey.ahk
 		#Include gtq-black.ahk
+		#Include gtq-brown.ahk
 		#Include gtq-riley.ahk
 		#Include gtq-bucko.ahk
 		SetMoveMethod := MoveMethod, SetHiveSlot := HiveSlot, SetHiveBees := HiveBees
