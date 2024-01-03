@@ -15712,12 +15712,12 @@ DisconnectCheck(testCheck := 0)
 				CloseRoblox()
 				;Run Server Deeplink
 				nm_setStatus("Attempting", ServerLabels[server])
-				try Run % "roblox://placeID=1537690962" (server ? ("&linkCode=" linkCodes[server]) : "")
+				try Run % """roblox://placeID=1537690962" (server ? ("&linkCode=" linkCodes[server]) : "") """"
 				
 				case 3,4:
 				;Run Server Deeplink (without closing)
 				nm_setStatus("Attempting", ServerLabels[server])
-				try Run % "roblox://placeID=1537690962" (server ? ("&linkCode=" linkCodes[server]) : "")
+				try Run % """roblox://placeID=1537690962" (server ? ("&linkCode=" linkCodes[server]) : "") """"
 				
 				default:
 				if server {
@@ -15738,7 +15738,7 @@ DisconnectCheck(testCheck := 0)
 					;Close Roblox
 					(i = 1) ? CloseRoblox()
 					;Run Server Link (spam deeplink method)
-					try Run % "roblox://placeID=1537690962"
+					try Run % """roblox://placeID=1537690962"""
 				}
 			}
 			;STAGE 1 - wait for Roblox window
