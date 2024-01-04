@@ -5349,18 +5349,6 @@ nm_TabBoostLock(){
 	GuiControl, disable, BoostChaserCheck
 	GuiControl, disable, AutoFieldBoostButton
 	GuiControl, disable, BoostedFieldSelectButton
-	GuiControl, disable, BlueFlowerBoosterCheck
-	GuiControl, disable, BambooBoosterCheck
-	GuiControl, disable, PineTreeBoosterCheck
-	GuiControl, disable, DandelionBoosterCheck
-	GuiControl, disable, CloverBoosterCheck
-	GuiControl, disable, SpiderBoosterCheck
-	GuiControl, disable, PineappleBoosterCheck
-	GuiControl, disable, CactusBoosterCheck
-	GuiControl, disable, PumpkinBoosterCheck
-	GuiControl, disable, MushroomBoosterCheck
-	GuiControl, disable, StrawberryBoosterCheck
-	GuiControl, disable, RoseBoosterCheck
 	GuiControl, disable, HotbarWhile2
 	GuiControl, disable, HotbarWhile3
 	GuiControl, disable, HotbarWhile4
@@ -5397,18 +5385,6 @@ nm_TabBoostUnLock(){
 	GuiControl, enable, FieldBoosterMinsUpDown
 	GuiControl, enable, BoostChaserCheck
 	GuiControl, enable, BoostedFieldSelectButton
-	GuiControl, enable, BlueFlowerBoosterCheck
-	GuiControl, enable, BambooBoosterCheck
-	GuiControl, enable, PineTreeBoosterCheck
-	GuiControl, enable, DandelionBoosterCheck
-	GuiControl, enable, CloverBoosterCheck
-	GuiControl, enable, SpiderBoosterCheck
-	GuiControl, enable, PineappleBoosterCheck
-	GuiControl, enable, CactusBoosterCheck
-	GuiControl, enable, PumpkinBoosterCheck
-	GuiControl, enable, MushroomBoosterCheck
-	GuiControl, enable, StrawberryBoosterCheck
-	GuiControl, enable, RoseBoosterCheck
 	GuiControl, enable, AutoFieldBoostButton
 	GuiControl, enable, HotbarWhile2
 	GuiControl, enable, HotbarWhile3
@@ -5878,7 +5854,6 @@ nm_BoostedFieldSelectButton(){
 	global
 	Gui, BoostedFieldSelect:Destroy
 	Gui, BoostedFieldSelect:+AlwaysOnTop +Border
-	Gui, BoostedFieldSelect:Show, w335 h180, Select boosted gather fields
 	Gui, BoostedFieldSelect:Add, text, x9 y10, This option allows you to select which fields to gather in, if boosted. `nIf the free field booster boosts a field that is not selected here, `nthe macro will ignore it and continue with other tasks.
 
 	Gui  BoostedFieldSelect:font, s8 cDefault Bold, Tahoma
@@ -5905,36 +5880,13 @@ nm_BoostedFieldSelectButton(){
 	Gui, BoostedFieldSelect:Add, Checkbox, % "xp-2 yp+18 vMushroomBoosterCheck gnm_BoostedFieldSelectCheck Checked" MushroomBoosterCheck, Mushroom
 	Gui, BoostedFieldSelect:Add, Checkbox, % "xp yp+14 vStrawberryBoosterCheck gnm_BoostedFieldSelectCheck Checked" StrawberryBoosterCheck, Strawberry
 	Gui, BoostedFieldSelect:Add, Checkbox, % "xp yp+14 vRoseBoosterCheck gnm_BoostedFieldSelectCheck Checked" RoseBoosterCheck, Rose
+	Gui, BoostedFieldSelect:Show, w335 h180, Select boosted gather fields
 }
 
 nm_BoostedFieldSelectCheck(){
 	global
-	GuiControlGet, BlueFlowerBoosterCheck
-	GuiControlGet, BambooBoosterCheck
-	GuiControlGet, PineTreeBoosterCheck
-	GuiControlGet, DandelionBoosterCheck
-	GuiControlGet, SunflowerBoosterCheck
-	GuiControlGet, CloverBoosterCheck
-	GuiControlGet, SpiderBoosterCheck
-	GuiControlGet, PineappleBoosterCheck
-	GuiControlGet, CactusBoosterCheck
-	GuiControlGet, PumpkinBoosterCheck
-	GuiControlGet, MushroomBoosterCheck
-	GuiControlGet, StrawberryBoosterCheck
-	GuiControlGet, RoseBoosterCheck
-	IniWrite, %BlueFlowerBoosterCheck%, settings\nm_config.ini, Boost, BlueFlowerBoosterCheck
-	IniWrite, %BambooBoosterCheck%, settings\nm_config.ini, Boost, BambooBoosterCheck
-	IniWrite, %PineTreeBoosterCheck%, settings\nm_config.ini, Boost, PineTreeBoosterCheck
-	IniWrite, %DandelionBoosterCheck%, settings\nm_config.ini, Boost, DandelionBoosterCheck
-	IniWrite, %SunflowerBoosterCheck%, settings\nm_config.ini, Boost, SunflowerBoosterCheck
-	IniWrite, %CloverBoosterCheck%, settings\nm_config.ini, Boost, CloverBoosterCheck
-	IniWrite, %SpiderBoosterCheck%, settings\nm_config.ini, Boost, SpiderBoosterCheck
-	IniWrite, %PineappleBoosterCheck%, settings\nm_config.ini, Boost, PineappleBoosterCheck
-	IniWrite, %CactusBoosterCheck%, settings\nm_config.ini, Boost, CactusBoosterCheck
-	IniWrite, %PumpkinBoosterCheck%, settings\nm_config.ini, Boost, PumpkinBoosterCheck
-	IniWrite, %MushroomBoosterCheck%, settings\nm_config.ini, Boost, MushroomBoosterCheck
-	IniWrite, %StrawberryBoosterCheck%, settings\nm_config.ini, Boost, StrawberryBoosterCheck
-	IniWrite, %RoseBoosterCheck%, settings\nm_config.ini, Boost, RoseBoosterCheck
+	GuiControlGet, %A_GuiControl%, BoostedFieldSelect:
+	IniWrite, % %A_GuiControl%, settings\nm_config.ini, Boost, %A_GuiControl%
 }
 
 ;;;;;;;;; START AFB
