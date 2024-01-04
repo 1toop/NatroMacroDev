@@ -673,7 +673,20 @@ config["Boost"] := {"FieldBoostStacks":0
 	, "FieldLastBoostedBy":"None"
 	, "FieldNextBoostedBy":"None"
 	, "AFBdiceUsed":0
-	, "AFBglitterUsed":0}
+	, "AFBglitterUsed":0
+	, "BlueFlowerBoosterCheck":1
+	, "BambooBoosterCheck":1
+	, "PineTreeBoosterCheck":1
+	, "DandelionBoosterCheck":1
+	, "SunflowerBoosterCheck":1
+	, "CloverBoosterCheck":1
+	, "SpiderBoosterCheck":1
+	, "PineappleBoosterCheck":1
+	, "CactusBoosterCheck":1
+	, "PumpkinBoosterCheck":1
+	, "MushroomBoosterCheck":1
+	, "StrawberryBoosterCheck":1
+	, "RoseBoosterCheck":1}
 
 config["Quests"] := {"QuestGatherMins":5
 	, "QuestGatherReturnBy":"Walk"
@@ -2611,7 +2624,8 @@ Loop, 6
 	SetLoadingProgress(31+A_Index)
 }
 nm_HotbarWhile()
-Gui, Add, Button, x120 y61 w90 h30 vAutoFieldBoostButton gnm_autoFieldBoostButton Disabled, % (AutoFieldBoostActive ? "Auto Field Boost`n[ON]" : "Auto Field Boost`n[OFF]")
+Gui, Add, Button, x120 y61 w90 h30 vBoostedFieldSelectButton gnm_BoostedFieldSelectButton Disabled, Select Boosted Gather Fields
+Gui, Add, Button, x225 y61 w90 h30 vAutoFieldBoostButton gnm_autoFieldBoostButton Disabled, % (AutoFieldBoostActive ? "Auto Field Boost`n[ON]" : "Auto Field Boost`n[OFF]")
 Gui, Font, w700
 Gui, Font, s8 cDefault Norm, Tahoma
 
@@ -5335,6 +5349,7 @@ nm_TabBoostLock(){
 	GuiControl, disable, FieldBoosterMinsUpDown
 	GuiControl, disable, BoostChaserCheck
 	GuiControl, disable, AutoFieldBoostButton
+	GuiControl, disable, BoostedFieldSelectButton
 	GuiControl, disable, HotbarWhile2
 	GuiControl, disable, HotbarWhile3
 	GuiControl, disable, HotbarWhile4
@@ -5370,6 +5385,7 @@ nm_TabBoostUnLock(){
 	nm_FieldBooster()
 	GuiControl, enable, FieldBoosterMinsUpDown
 	GuiControl, enable, BoostChaserCheck
+	GuiControl, enable, BoostedFieldSelectButton
 	GuiControl, enable, AutoFieldBoostButton
 	GuiControl, enable, HotbarWhile2
 	GuiControl, enable, HotbarWhile3
@@ -5841,6 +5857,46 @@ nm_ShowErrorBalloonTip(hEdit, Title, Text){
 	NumPut(3, EBT, A_PtrSize * 3, "UInt")
 	DllCall("SendMessage", "UPtr", hEdit, "UInt", 0x1503, "Ptr", 0, "Ptr", &EBT, "Ptr")
 }
+
+nm_BoostedFieldSelectButton(){
+	global
+	Gui, BoostedFieldSelect:Destroy
+	Gui, BoostedFieldSelect:+AlwaysOnTop +Border
+	Gui, BoostedFieldSelect:Add, text, x9 y10, This option allows you to select which fields to gather in, if boosted. `nIf the free field booster boosts a field that is not selected here, `nthe macro will ignore it and continue with other tasks.
+
+	Gui  BoostedFieldSelect:font, s8 cDefault Bold, Tahoma
+	Gui, BoostedFieldSelect:Add, text, x10 y54, Blue
+	Gui  BoostedFieldSelect:font, s8 cDefault Norm, Tahoma
+	Gui, BoostedFieldSelect:Add, Checkbox, % "xp-2 yp+18 vBlueFlowerBoosterCheck gnm_BoostedFieldSelectCheck Checked" BlueFlowerBoosterCheck, Blue Flower
+	Gui, BoostedFieldSelect:Add, Checkbox, % "xp yp+14 vBambooBoosterCheck gnm_BoostedFieldSelectCheck Checked" BambooBoosterCheck, Bamboo
+	Gui, BoostedFieldSelect:Add, Checkbox, % "xp yp+14 vPineTreeBoosterCheck gnm_BoostedFieldSelectCheck Checked" PineTreeBoosterCheck, Pine Tree	
+	
+	Gui  BoostedFieldSelect:font, s8 cDefault Bold, Tahoma
+	Gui, BoostedFieldSelect:Add, text, x134 y54, Mountain top
+	Gui  BoostedFieldSelect:font, s8 cDefault Norm, Tahoma
+	Gui, BoostedFieldSelect:Add, Checkbox, % "xp-2 yp+18 vDandelionBoosterCheck gnm_BoostedFieldSelectCheck Checked" DandelionBoosterCheck, Dandelion
+	Gui, BoostedFieldSelect:Add, Checkbox, % "xp yp+14 vSunflowerBoosterCheck gnm_BoostedFieldSelectCheck Checked" SunflowerBoosterCheck, Sunflower
+	Gui, BoostedFieldSelect:Add, Checkbox, % "xp yp+14 vCloverBoosterCheck gnm_BoostedFieldSelectCheck Checked" CloverBoosterCheck, Clover
+	Gui, BoostedFieldSelect:Add, Checkbox, % "xp yp+14 vSpiderBoosterCheck gnm_BoostedFieldSelectCheck Checked" SpiderBoosterCheck, Spider
+	Gui, BoostedFieldSelect:Add, Checkbox, % "xp yp+14 vPineappleBoosterCheck gnm_BoostedFieldSelectCheck Checked" PineappleBoosterCheck, Pineapple
+	Gui, BoostedFieldSelect:Add, Checkbox, % "xp yp+14 vCactusBoosterCheck gnm_BoostedFieldSelectCheck Checked" CactusBoosterCheck, Cactus
+	Gui, BoostedFieldSelect:Add, Checkbox, % "xp yp+14 vPumpkinBoosterCheck gnm_BoostedFieldSelectCheck Checked" PumpkinBoosterCheck, Pumpkin
+	
+	Gui  BoostedFieldSelect:font, s8 cDefault Bold, Tahoma
+	Gui, BoostedFieldSelect:Add, text, x256 y54, Red
+	Gui  BoostedFieldSelect:font, s8 cDefault Norm, Tahoma
+	Gui, BoostedFieldSelect:Add, Checkbox, % "xp-2 yp+18 vMushroomBoosterCheck gnm_BoostedFieldSelectCheck Checked" MushroomBoosterCheck, Mushroom
+	Gui, BoostedFieldSelect:Add, Checkbox, % "xp yp+14 vStrawberryBoosterCheck gnm_BoostedFieldSelectCheck Checked" StrawberryBoosterCheck, Strawberry
+	Gui, BoostedFieldSelect:Add, Checkbox, % "xp yp+14 vRoseBoosterCheck gnm_BoostedFieldSelectCheck Checked" RoseBoosterCheck, Rose
+	Gui, BoostedFieldSelect:Show, w335 h180, Select boosted gather fields
+}
+
+nm_BoostedFieldSelectCheck(){
+	global
+	GuiControlGet, %A_GuiControl%, BoostedFieldSelect:
+	IniWrite, % %A_GuiControl%, settings\nm_config.ini, Boost, %A_GuiControl%
+}
+
 ;;;;;;;;; START AFB
 nm_autoFieldBoostButton(){
 	nm_autoFieldBoostGui()
@@ -13220,6 +13276,7 @@ nm_GoGather(){
 	global WhirligigKey, PFieldBoosted, GlitterKey, GatherFieldBoosted, GatherFieldBoostedStart, LastGlitter, PMondoGuidComplete, LastGuid, PMondoGuid, PFieldGuidExtend, PFieldGuidExtendMins, PFieldBoostExtend, PPopStarExtend, HasPopStar, PopStarActive, FieldGuidDetected, CurrentAction, PreviousAction
 	global LastWhirligig
 	global BoostChaserCheck, LastBlueBoost, LastRedBoost, LastMountainBoost, FieldBooster3, FieldBooster2, FieldBooster1, FieldDefault, LastMicroConverter, HiveConfirmed, LastWreath, WreathCheck
+	global BlueFlowerBoosterCheck, BambooBoosterCheck, PineTreeBoosterCheck, DandelionBoosterCheck, SunflowerBoosterCheck, CloverBoosterCheck, SpiderBoosterCheck, PineappleBoosterCheck, CactusBoosterCheck, PumpkinBoosterCheck, MushroomBoosterCheck, StrawberryBoosterCheck, RoseBoosterCheck
 	global FieldName1, FieldPattern1, FieldPatternSize1, FieldPatternReps1, FieldPatternShift1, FieldPatternInvertFB1, FieldPatternInvertLR1, FieldUntilMins1, FieldUntilPack1, FieldReturnType1, FieldSprinklerLoc1, FieldSprinklerDist1, FieldRotateDirection1, FieldRotateTimes1, FieldDriftCheck1
 	global FieldName2, FieldPattern2, FieldPatternSize2, FieldPatternReps2, FieldPatternShift2, FieldPatternInvertFB2, FieldPatternInvertLR2, FieldUntilMins2, FieldUntilPack2, FieldReturnType2, FieldSprinklerLoc2, FieldSprinklerDist2, FieldRotateDirection2, FieldRotateTimes2, FieldDriftCheck2
 	global FieldName3, FieldPattern3, FieldPatternSize3, FieldPatternReps3, FieldPatternShift3, FieldPatternInvertFB3, FieldPatternInvertLR3, FieldUntilMins3, FieldUntilPack3, FieldReturnType3, FieldSprinklerLoc3, FieldSprinklerDist3, FieldRotateDirection3, FieldRotateTimes3, FieldDriftCheck3
@@ -13253,15 +13310,19 @@ nm_GoGather(){
 	loop 1 {
 		;boosted field override
 		if(BoostChaserCheck){
+
 			BoostChaserField:="None"
-			blueBoosterFields:=["Pine Tree", "Bamboo", "Blue Flower"]
-			redBoosterFields:=["Rose", "Strawberry", "Mushroom"]
-			mountainBoosterfields:=["Cactus", "Pumpkin", "Pineapple", "Spider", "Clover", "Dandelion", "Sunflower"]
-			otherFields:=["Stump", "Coconut", "Mountain Top", "Pepper"]
+			blueBoosterFields		:={PineTreeBoosterCheck: "Pine Tree", BambooBoosterCheck: "Bamboo", BlueFlowerBoosterCheck: "Blue Flower"}
+			redBoosterFields		:={RoseBoosterCheck: "Rose", StrawberryBoosterCheck: "Strawberry", MushroomBoosterCheck: "Mushroom"}
+			mountainBoosterfields	:={CactusBoosterCheck: "Cactus", PumpkinBoosterCheck: "Pumpkin", PineappleBoosterCheck: "Pineapple", SpiderBoosterCheck: "Spider", CloverBoosterCheck: "Clover", DandelionBoosterCheck: "Dandelion", SunflowerBoosterCheck: "Sunflower"}
+			otherFields				:=["Stump", "Coconut", "Mountain Top", "Pepper"]
+
 			loop 1 {
 				;blue
 				for key, value in blueBoosterFields {
-					if(nm_fieldBoostCheck(value, 1)) {
+					;MsgBox % "key: " %key% ", value: " value
+					if((nm_fieldBoostCheck(value, 1)) && (%key% = 1)) {
+						;MsgBox % "inside if((nm_fieldBoostCheck(value, 1)) && (%key% = 0)) statement"
 						BoostChaserField:=value
 						break
 					}
@@ -13270,7 +13331,7 @@ nm_GoGather(){
 					break
 				;mountain
 				for key, value in mountainBoosterFields {
-					if(nm_fieldBoostCheck(value, 1)) {
+					if((nm_fieldBoostCheck(value, 1)) && (%key% = 1)) {
 						BoostChaserField:=value
 						break
 					}
@@ -13279,7 +13340,7 @@ nm_GoGather(){
 					break
 				;red
 				for key, value in redBoosterFields {
-					if(nm_fieldBoostCheck(value, 1)) {
+					if((nm_fieldBoostCheck(value, 1)) && (%key% = 1)) {
 						BoostChaserField:=value
 						break
 					}
