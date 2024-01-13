@@ -374,6 +374,7 @@ config["Settings"] := {"GuiTheme":"MacLion3"
 	, "ClickCount":1000
 	, "ClickDelay":10
 	, "ClickMode":0
+	, "ClickDuration":50
 	, "KeyDelay":20
 	, "StartHotkey":"F1"
 	, "PauseHotkey":"F2"
@@ -8421,7 +8422,7 @@ nm_autoclickerbutton()
 	Gui, clicker:Destroy
 	Gui, clicker:+AlwaysOnTop +Border
 	Gui, clicker:Font, s8 cDefault w700, Tahoma
-	Gui, clicker:Add, Groupbox, x5 y2 w161 h60, Settings
+	Gui, clicker:Add, Groupbox, x5 y2 w161 h80, Settings
 	Gui, clicker:Font, Norm
 	Gui, clicker:Add, Checkbox, x76 y2 +BackgroundTrans vClickMode gnm_saveAutoClicker Checked%ClickMode%, Infinite
 	Gui, clicker:Add, Text, x13 y21, Repeat
@@ -8431,7 +8432,10 @@ nm_autoclickerbutton()
 	Gui, clicker:Add, Text, x10 y41, Click Interval (ms):
 	Gui, clicker:Add, Edit, x100 y39 w61 h18 +BackgroundTrans Number gnm_saveAutoClicker Limit5, %ClickDelay%
 	Gui, clicker:Add, UpDown, vClickDelay gnm_saveAutoClicker Range0-99999, %ClickDelay%
-	Gui, clicker:Add, Button, x45 y68 w80 h20 gnm_StartAutoClicker, Start (%AutoClickerHotkey%)
+	Gui, clicker:Add, Text, x10 y61, Click Duration (ms):
+	Gui, clicker:Add, Edit, x104 y59 w57 h18 +BackgroundTrans Number gnm_saveAutoClicker Limit4, %ClickDuration%
+	Gui, clicker:Add, UpDown, vClickDuration gnm_saveAutoClicker Range0-9999, %ClickDuration%
+	Gui, clicker:Add, Button, x45 y88 w80 h20 gnm_StartAutoClicker, Start (%AutoClickerHotkey%)
 	Gui, clicker:Show, w170, AutoClicker
 }
 nm_saveAutoClicker(){
@@ -8439,9 +8443,11 @@ nm_saveAutoClicker(){
 	GuiControlGet, ClickDelay, clicker:
 	GuiControlGet, ClickCount, clicker:
 	GuiControlGet, ClickMode, clicker:
+	GuiControlGet, ClickDuration, clicker:
 	IniWrite, %ClickDelay%, settings\nm_config.ini, Settings, ClickDelay
 	IniWrite, %ClickCount%, settings\nm_config.ini, Settings, ClickCount
 	IniWrite, %ClickMode%, settings\nm_config.ini, Settings, ClickMode
+	IniWrite, %ClickDuration%, settings\nm_config.ini, Settings, ClickDuration
 	GuiControl, % (ClickMode ? "Disable" : "Enable"), ClickCount
 	GuiControl, % (ClickMode ? "Disable" : "Enable"), ClickCountEdit
 }
@@ -21455,13 +21461,16 @@ Pause, Toggle, 1
 return
 ;AUTOCLICKER
 autoclicker(){
-	global ClickMode, ClickCount, ClickDelay
+	global ClickMode, ClickCount, ClickDelay, ClickDuration
 	static toggle:=0
 	toggle := !toggle
 	while ((ClickMode || (A_Index <= ClickCount)) && toggle) {
-		click
+		sendinput {click down}
+		sleep %ClickDuration%
+		sendinput {click up}
 		sleep %ClickDelay%
 	}
+	toggle := 0
 }
 return
 ;TIMERS
