@@ -1518,7 +1518,7 @@ FieldDefault["Coconut"] := {"pattern":"CornerXSnake"
 	, "drift":0
 	, "shiftlock":0
 	, "invertFB":0
-	, "invertLR":0}
+	, "invertLR":1}
 
 FieldDefault["Pepper"] := {"pattern":"CornerXSnake"
 	, "size":"M"
