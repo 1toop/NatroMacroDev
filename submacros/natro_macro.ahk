@@ -10061,6 +10061,7 @@ nm_Collect(){
 				nm_Move(2000*MoveSpeedFactor, BackKey)
 				nm_Move(500*MoveSpeedFactor, RightKey)
 				nm_Move(100*MoveSpeedFactor, FwdKey)
+				click, down
 				loop 300 {
 					if (Mod(A_Index, 10) = 1) {
 						resetTime:=nowUnix()
@@ -10088,8 +10089,8 @@ nm_Collect(){
 						break
 					}
 					sleep, 1000
-					click
 				}
+				click, up
 			}
 			else {
 				pBMScreen := Gdip_BitmapFromScreen(windowX+windowWidth//2-200 "|" windowY+offsetY "|400|125")
@@ -10795,8 +10796,6 @@ nm_Bugrun(){
 						}
 						if(youDied)
 							break
-						if(!DisableToolUse)
-							click
 					}
 					sendinput % "{" RotDown " 4}" ((r = 1) ? "{" RotRight " 2}" : "")
 					sleep, 500
@@ -10928,8 +10927,6 @@ nm_Bugrun(){
 							}
 							if(youDied)
 								break
-							if(!DisableToolUse)
-								Click
 						}
 						sendinput % "{" RotDown " 4}" ((r = 1) ? "{" RotRight " 2}" : "")
 						sleep, 500
@@ -11051,8 +11048,6 @@ nm_Bugrun(){
 						}
 						if(youDied)
 							break
-						if(!DisableToolUse)
-							click
 					}
 					sendinput % "{" RotDown " 4}" ((r = 1) ? "{" RotRight " 2}" : "")
 					sleep, 500
@@ -11163,10 +11158,6 @@ nm_Bugrun(){
 						}
 						if(youDied)
 							break
-						if(!DisableToolUse)
-						{
-							Click
-						}
 					}
 					sendinput {%RotDown% 4}
 					click up
@@ -11300,8 +11291,6 @@ nm_Bugrun(){
 						}
 						if(youDied)
 							break
-						if(!DisableToolUse)
-							Click
 					}
 					sendinput % "{" RotDown " 4}" ((r = 1) ? "{" RotRight " 2}" : "")
 					sleep, 500
@@ -11405,8 +11394,6 @@ nm_Bugrun(){
 							}
 							if(youDied)
 								break
-							if(!DisableToolUse)
-								Click
 						}
 						sendinput % "{" RotDown " 4}" ((r = 1) ? "{" RotRight " 2}" : "")
 						sleep, 500
@@ -11569,8 +11556,6 @@ nm_Bugrun(){
 						}
 						if(youDied)
 							break
-						if(!DisableToolUse)
-							Click
 						sleep, 250
 					}
 					sendinput % "{" RotDown " 4}" ((r = 1) ? "{" RotRight " 2}" : "")
@@ -11730,8 +11715,6 @@ nm_Bugrun(){
 								success:=1
 							if(youDied)
 								break
-							if(!DisableToolUse)
-								Click
 						}
 						sendinput {%RotDown% 4}
 						sleep, 500
@@ -11856,8 +11839,6 @@ nm_Bugrun(){
 							}
 							if(youDied)
 								break
-							if(!DisableToolUse)
-								Click
 						}
 						sendinput % "{" RotDown " 4}" ((r = 1) ? "{" RotRight " 2}" : "")
 						sleep, 500
@@ -12050,8 +12031,6 @@ nm_Bugrun(){
 								success:=1
 							if(youDied)
 								break
-							if(!DisableToolUse)
-								Click
 						}
 						sendinput {%RotDown% 4}
 						sleep, 500
@@ -12994,8 +12973,11 @@ nm_Bugrun(){
 
 						Loop, 600
 						{
-							if(!DisableToolUse)
-								Click
+							if(!DisableToolUse) {
+								sendinput {click down}
+								sleep, 50
+								sendinput {click up}
+							}
 							if(nm_imgSearch("crab.png",70,"lowright")[1] = 0){
 								Crdead:=1
 								send {%RotUp% 2}
