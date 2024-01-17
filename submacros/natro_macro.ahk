@@ -4309,12 +4309,10 @@ nm_testButton(){ ;~~ lines 3464 and 3465 have the same change as 14156
 		global offsetY
 		
 		bitmaps := {}
-		bitmaps[""""day""""] := Gdip_CreateBitmap(1, 4), G := Gdip_GraphicsFromImage(bitmaps[""""day""""]), Gdip_GraphicsClear(G, 0xffda9400), Gdip_DeleteGraphics(G)
-		bitmaps[""""night""""] := Gdip_CreateBitmap(1, 4), G := Gdip_GraphicsFromImage(bitmaps[""""night""""]), Gdip_GraphicsClear(G, 0xffd18e00), Gdip_DeleteGraphics(G)
-		bitmaps[""""honeystorm""""] := Gdip_CreateBitmap(1, 4), G := Gdip_GraphicsFromImage(bitmaps[""""honeystorm""""]), Gdip_GraphicsClear(G, 0xffdc9e29), Gdip_DeleteGraphics(G)
-		bitmaps[""""untextured-day""""] := Gdip_CreateBitmap(1, 4), G := Gdip_GraphicsFromImage(bitmaps[""""untextured-day""""]), Gdip_GraphicsClear(G, 0xff7d5700), Gdip_DeleteGraphics(G)
-		bitmaps[""""untextured-night""""] := Gdip_CreateBitmap(1, 4), G := Gdip_GraphicsFromImage(bitmaps[""""untextured-night""""]), Gdip_GraphicsClear(G, 0xff684900), Gdip_DeleteGraphics(G)
-		bitmaps[""""untextured-honeystorm""""] := Gdip_CreateBitmap(1, 4), G := Gdip_GraphicsFromImage(bitmaps[""""untextured-honeystorm""""]), Gdip_GraphicsClear(G, 0xff8e6d29), Gdip_DeleteGraphics(G)
+		bitmaps[""""day""""] := Gdip_CreateBitmap(1, 16), G := Gdip_GraphicsFromImage(bitmaps[""""day""""]), Gdip_GraphicsClear(G, 0xffb97e03), Gdip_DeleteGraphics(G)
+		bitmaps[""""night""""] := Gdip_CreateBitmap(1, 16), G := Gdip_GraphicsFromImage(bitmaps[""""night""""]), Gdip_GraphicsClear(G, 0xffa97300), Gdip_DeleteGraphics(G)
+		bitmaps[""""noshadow""""] := Gdip_CreateBitmap(1, 16), G := Gdip_GraphicsFromImage(bitmaps[""""noshadow""""]), Gdip_GraphicsClear(G, 0xffe39d1f), Gdip_DeleteGraphics(G)
+		bitmaps[""""wing""""] := Gdip_CreateBitmap(1, 16), G := Gdip_GraphicsFromImage(bitmaps[""""wing""""]), Gdip_GraphicsClear(G, 0xffa28645), Gdip_DeleteGraphics(G)
 
 		pBMR := Gdip_BitmapFromBase64(""""iVBORw0KGgoAAAANSUhEUgAAACgAAAAGCAAAAACUM4P3AAAAAnRSTlMAAHaTzTgAAAAXdEVYdFNvZnR3YXJlAFBob3RvRGVtb24gOS4wzRzYMQAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0n77u/JyBpZD0nVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkJz8+Cjx4OnhtcG1ldGEgeG1sbnM6eD0nYWRvYmU6bnM6bWV0YS8nIHg6eG1wdGs9J0ltYWdlOjpFeGlmVG9vbCAxMi40NCc+CjxyZGY6UkRGIHhtbG5zOnJkZj0naHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyc+CgogPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9JycKICB4bWxuczpleGlmPSdodHRwOi8vbnMuYWRvYmUuY29tL2V4aWYvMS4wLyc+CiAgPGV4aWY6UGl4ZWxYRGltZW5zaW9uPjQwPC9leGlmOlBpeGVsWERpbWVuc2lvbj4KICA8ZXhpZjpQaXhlbFlEaW1lbnNpb24+NjwvZXhpZjpQaXhlbFlEaW1lbnNpb24+CiA8L3JkZjpEZXNjcmlwdGlvbj4KCiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0nJwogIHhtbG5zOnRpZmY9J2h0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvJz4KICA8dGlmZjpJbWFnZUxlbmd0aD42PC90aWZmOkltYWdlTGVuZ3RoPgogIDx0aWZmOkltYWdlV2lkdGg+NDA8L3RpZmY6SW1hZ2VXaWR0aD4KICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogIDx0aWZmOlJlc29sdXRpb25Vbml0PjI8L3RpZmY6UmVzb2x1dGlvblVuaXQ+CiAgPHRpZmY6WFJlc29sdXRpb24+OTYvMTwvdGlmZjpYUmVzb2x1dGlvbj4KICA8dGlmZjpZUmVzb2x1dGlvbj45Ni8xPC90aWZmOllSZXNvbHV0aW9uPgogPC9yZGY6RGVzY3JpcHRpb24+CjwvcmRmOlJERj4KPC94OnhtcG1ldGE+Cjw/eHBhY2tldCBlbmQ9J3InPz77yGiWAAAAI0lEQVR42mNUYyAOMDJggOUMDAyRmAqXMxAHmBiobjWxngEAj7gC+wwAe1AAAAAASUVORK5CYII="""")
 		success := 0
@@ -4337,17 +4335,17 @@ nm_testButton(){ ;~~ lines 3464 and 3465 have the same change as 14156
 			}
 			Sleep, 1000
 
-			hiveWidth := 5*windowHeight//9
-			region := windowX+windowWidth//2-hiveWidth//2 """"|"""" windowY """"|"""" hiveWidth """"|"""" windowHeight//2
-			sconf := hiveWidth**2//200
+			region := windowX """"|"""" windowY+3*windowHeight//4 """"|"""" windowWidth """"|"""" windowHeight//4
+			sconf := windowWidth**2//3200
 			loop, 4 {
 				sleep 250
 				pBMScreen := Gdip_BitmapFromScreen(region), s := 0
-				for i, k in [""""day"""", """"night"""", """"honeystorm"""", """"untextured-day"""", """"untextured-night"""", """"untextured-honeystorm""""] {
-					s := Max(s, Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 8, , , 0))
-					if (s > (sconf * (InStr(k, """"untextured"""") ? 2 : 1))) {
+				for i, k in [""""day"""", """"night"""", """"noshadow"""", """"wing""""] {
+					s := Max(s, Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 8, , , sconf))
+					if (s >= sconf) {
 						Gdip_DisposeImage(pBMScreen)
 						success := 1
+						Send {"" RotRight "" 4}
 						SendEvent {"" ZoomOut "" 5}
 						break 3
 					}
@@ -9210,17 +9208,17 @@ nm_Reset(checkAll:=1, wait:=2000, convert:=1, force:=0){
 		SetKeyDelay, PrevKeyDelay
 
 		; hive check
-		hiveWidth := 5*windowHeight//9
-		region := windowX+windowWidth//2-hiveWidth//2 "|" windowY "|" hiveWidth "|" windowHeight//2
-		sconf := hiveWidth**2//200
+		region := windowX "|" windowY+3*windowHeight//4 "|" windowWidth "|" windowHeight//4
+		sconf := windowWidth**2//3200
 		loop, 4 {
 			sleep (250+KeyDelay)
 			pBMScreen := Gdip_BitmapFromScreen(region), s := 0
-			for i, k in ["day", "night", "honeystorm", "untextured-day", "untextured-night", "untextured-honeystorm"] {
-				s := Max(s, Gdip_ImageSearch(pBMScreen, bitmaps["hive"][k], , , , , , 8, , , 0))
-				if (s > (sconf * (InStr(k, "untextured") ? 2 : 1))) {
+			for i, k in ["day", "night", "noshadow", "wing"] {
+				s := Max(s, Gdip_ImageSearch(pBMScreen, bitmaps["hive"][k], , , , , , 8, , , sconf))
+				if (s >= sconf) {
 					Gdip_DisposeImage(pBMScreen)
 					HiveConfirmed := 1
+					sendinput {%RotRight% 4}
 					Send {%ZoomOut% 5}
 					break 2
 				}
