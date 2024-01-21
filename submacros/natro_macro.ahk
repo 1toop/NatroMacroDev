@@ -2038,12 +2038,10 @@ Gui, Font, s8 cDefault Norm, Tahoma
 Gui, Add, Button, x5 y260 w65 h20 -Wrap vStartButton gnm_StartButton Disabled, % " Start (" StartHotkey ")"
 Gui, Add, Button, x75 y260 w65 h20 -Wrap vPauseButton gnm_PauseButton Disabled, % " Pause (" PauseHotkey ")"
 Gui, Add, Button, x145 y260 w65 h20 -Wrap vStopButton gnm_StopButton Disabled, % " Stop (" StopHotkey ")"
+#include *i %A_ScriptDir%\..\settings\personal.ahk
 ;add tabs
 Gui, Add, Tab, x0 y-1 w500 h240 -Wrap hwndhTab vTab gnm_TabSelect, % "Gather|Collect/Kill|Boost|Quest|Planters|Status|Settings|Misc|Credits" ((BuffDetectReset = 1) ? "|Advanced" : "")
 SendMessage, 0x1331, 0, 20, , ahk_id %hTab% ; set minimum tab width
-for k,v in ["PMondoGuid","PFieldBoosted","PFieldGuidExtend","PFieldGuidExtendMins","PFieldBoostExtend","PFieldBoostBypass","PPopStarExtend"]
-	%v%:=0
-#include *i %A_ScriptDir%\..\settings\personal.ahk
 ;check for update
 try AsyncHttpRequest("GET", "https://api.github.com/repos/NatroTeam/NatroMacro/releases/latest", "nm_AutoUpdateHandler", {"accept": "application/vnd.github+json"})
 ;open Timers
@@ -3634,8 +3632,8 @@ nm_Start(){
 		nm_Collect()
 		;quests
 		nm_QuestRotate()
-		;booster
-		nm_ToAnyBooster()
+		;boost
+		nm_Boost()
 		;gather
 		nm_GoGather()
 		continue
@@ -9696,6 +9694,22 @@ nm_findHiveSlot(){
 
 	return HiveConfirmed
 }
+nm_Boost(){
+	global VBState, MondoBuffCheck, PMondoGuid, LastGuid, MondoAction, LastMondoBuff, QuestGatherField
+	if(VBState=1)
+		return
+	FormatTime, utc_min, %A_NowUTC%, m
+	if((MondoBuffCheck && utc_min>=0 && utc_min<14 && (nowUnix()-LastMondoBuff)>960 && (MondoAction="Buff" || MondoAction="Kill")) || (MondoBuffCheck && utc_min>=0 && utc_min<12 && (nowUnix()-LastGuid)<60 && PMondoGuid && MondoAction="Guid") || (MondoBuffCheck  && (utc_min>=0 && utc_min<=8) && (nowUnix()-LastMondoBuff)>960 && PMondoGuid && MondoAction="Tag"))
+		return
+
+	nm_StickerPrinter()
+	nm_StickerStack()
+
+	if ((QuestGatherField!="None" && QuestGatherField) || (IsFunc(name := "nm_PBoost") && (%name%() = 1)))
+		return
+	nm_shrine()
+	nm_toAnyBooster()
+}
 nm_toBooster(location){
 	global FwdKey, LeftKey, BackKey, RightKey, RotLeft, RotRight, KeyDelay, MoveSpeedNum, MoveMethod, SC_E
 	global LastBlueBoost, LastRedBoost, LastMountainBoost, RecentFBoost, objective
@@ -9742,109 +9756,8 @@ nm_toBooster(location){
 		IniWrite, % Last%location%Boost, settings\nm_config.ini, Collect, Last%location%Boost
 	}
 }
-nm_toAnyBooster(){
-	global FwdKey
-	global LeftKey
-	global BackKey
-	global RightKey
-	global RotLeft
-	global RotRight
-	global KeyDelay
-	global MoveMethod
-	global LastBlueBoost, QuestBlueBoost
-	global LastRedBoost
-	global LastMountainBoost, QuestRedBoost, QuestGatherField
-	global FieldBooster1
-	global FieldBooster2
-	global FieldBooster3
-	global FieldBoosterMins
-	global VBState
-	global objective, CurrentAction, PreviousAction
-	global MondoBuffCheck, PMondoGuid, LastGuid, MondoAction, LastMondoBuff
-	global LastShrine, ShrineCheck, ShrineItem1, ShrineItem2, ShrineAmount1, ShrineAmount2, ShrineRot, Shrine, bitmaps, SC_E
-	global StickerStackCheck, LastStickerStack, StickerStackItem, StickerStackMode, StickerStackTimer
-	global StickerPrinterCheck, LastStickerPrinter, StickerPrinterEgg
-	static blueBoosterFields:=["Pine Tree", "Bamboo", "Blue Flower"], redBoosterFields:=["Rose", "Strawberry", "Mushroom"], mountainBoosterfields:=["Cactus", "Pumpkin", "Pineapple", "Spider", "Clover", "Dandelion", "Sunflower"]
-	if(VBState=1)
-		return
-	FormatTime, utc_min, %A_NowUTC%, m
-	if((MondoBuffCheck && utc_min>=0 && utc_min<14 && (nowUnix()-LastMondoBuff)>960 && (MondoAction="Buff" || MondoAction="Kill")) || (MondoBuffCheck && utc_min>=0 && utc_min<12 && (nowUnix()-LastGuid)<60 && PMondoGuid && MondoAction="Guid") || (MondoBuffCheck  && (utc_min>=0 && utc_min<=8) && (nowUnix()-LastMondoBuff)>960 && PMondoGuid && MondoAction="Tag"))
-		return
-	if (QuestGatherField!="None" && QuestGatherField)
-		return
-	; Sticker Printer
-	If (StickerPrinterCheck && (nowUnix()-LastStickerPrinter)>3600) { ;1 hour
-		loop, 2 {
-			nm_Reset()
-			nm_setStatus("Traveling", "Sticker Printer" ((A_Index > 1) ? " (Attempt 2)" : ""))
-
-			nm_gotoCollect("stickerprinter")
-			searchRet := nm_imgSearch("e_button.png",30,"high")
-			If (searchRet[1] = 0) {
-				sendinput {%SC_E% down}
-				Sleep, 100
-				sendinput {%SC_E% up}
-				Sleep, 500 ;//todo: wait for GUI with timeout instead of fixed time
-				WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " GetRobloxHWND())
-				pBMScreen := Gdip_BitmapFromScreen(windowX+windowWidth//2+150 "|" windowY+4*windowHeight//10+160 "|100|60")
-				if (Gdip_ImageSearch(pBMScreen, bitmaps["stickerprinterCD"], , , , , , 10) = 1) {
-					Gdip_DisposeImage(pBMScreen)
-					nm_setStatus("Detected", "Sticker Printer on Cooldown")
-					Sleep, 500
-					sendinput {%SC_E% down}
-					Sleep, 100
-					sendinput {%SC_E% up}
-					break
-				}
-				Gdip_DisposeImage(pBMScreen)
-				pos := {"Basic": -95, "Silver": -40, "Gold": 15, "Diamond": 70, "Mythic": 125}
-				MouseMove, windowX+windowWidth//2+pos[StickerPrinterEgg], windowY+4*windowHeight//10-20
-				Sleep, 200
-				Click
-				Sleep, 200
-				pBMScreen := Gdip_BitmapFromScreen(windowX+windowWidth//2+150 "|" windowY+4*windowHeight//10+160 "|100|60")
-				if (Gdip_ImageSearch(pBMScreen, bitmaps["stickerprinterConfirm"], , , , , , 10) != 1) {
-					Gdip_DisposeImage(pBMScreen)
-					nm_setStatus("Error", "No Eggs left in inventory!`nSticker Printer has been disabled.")
-					StickerPrinterCheck := 0
-					Sleep, 500
-					sendinput {%SC_E% down}
-					Sleep, 100
-					sendinput {%SC_E% up}
-					break
-				}
-				Gdip_DisposeImage(pBMScreen)
-				MouseMove, windowX+windowWidth//2+225, windowY+4*windowHeight//10+195
-				Sleep, 200
-				Click
-				i := 0
-				loop 16 {
-					sleep, 250
-					pBMScreen := Gdip_BitmapFromScreen(windowX+windowWidth//2-250 "|" windowY+windowHeight//2-52 "|500|150")
-					if (Gdip_ImageSearch(pBMScreen, bitmaps["yes"], pos, , , , , 2, , 2) = 1) {
-						MouseMove, windowX+windowWidth//2-250+SubStr(pos, 1, InStr(pos, ",")-1)-50, windowY+windowHeight//2-52+SubStr(pos, InStr(pos, ",")+1)
-						sleep 150
-						Click
-						sleep 100
-						i++
-					} else if (i > 0) {
-						Gdip_DisposeImage(pBMScreen)
-						break
-					}
-					Gdip_DisposeImage(pBMScreen)
-					if (A_Index = 16)
-						break
-				}
-				Sleep, 8000 ; wait for printer to print
-				nm_setStatus("Collected", "Sticker Printer (" StickerPrinterEgg " Egg)")
-				break
-			}
-		}
-		if (StickerPrinterCheck = 1) {
-			LastStickerPrinter:=nowUnix()
-			IniWrite, %LastStickerPrinter%, settings\nm_config.ini, Boost, LastStickerPrinter
-		}
-	}
+nm_shrine(){
+	global FwdKey, BackKey, LeftKey, RightKey, RotLeft, RotRight, KeyDelay, objective, CurrentAction, PreviousAction, MoveSpeedNum, GatherFieldBoostedStart, LastGlitter, MondoBuffCheck, PMondoGuid, LastGuid, MondoAction, LastMondoBuff, VBState, LastShrine, ShrineCheck, ShrineItem1, ShrineItem2, ShrineAmount1, ShrineAmount2, ShrineIndex1, ShrineIndex2, ShrineRot, Shrine, bitmaps, SC_E, SC_Space, SC_1
 	nm_ShrineRotation() ; make sure ShrineRot hasnt changed
 	if (ShrineCheck && (nowUnix()-LastShrine)>3600) { ;1 hour
 		loop, 2 {
@@ -9962,36 +9875,86 @@ nm_toAnyBooster(){
 		IniWrite, %LastShrine%, settings\nm_config.ini, Shrine, LastShrine
 		IniWrite, %ShrineRot%, settings\nm_config.ini, Shrine, ShrineRot
 	}
-	loop 3 {
-		if(FieldBooster%A_Index%="none" && QuestBlueBoost=0 && QuestRedBoost=0)
-			break
-		LastBooster:=max(LastBlueBoost, LastRedBoost, LastMountainBoost)
-		;Blue Field Booster
-		if((FieldBooster%A_Index%="blue" && (nowUnix()-LastBlueBoost)>3600 && (nowUnix()-LastBooster)>(FieldBoosterMins*60)) || (QuestBlueBoost && (nowUnix()-LastBlueBoost)>3600)){
-			if(CurrentAction!="Booster"){
-				PreviousAction:=CurrentAction
-				CurrentAction:="Booster"
+}
+nm_StickerPrinter(){
+	global StickerPrinterCheck, LastStickerPrinter, StickerPrinterEgg, SC_E, bitmaps
+	
+	If (StickerPrinterCheck && (nowUnix()-LastStickerPrinter)>3600) { ;1 hour
+		loop, 2 {
+			nm_Reset()
+			nm_setStatus("Traveling", "Sticker Printer" ((A_Index > 1) ? " (Attempt 2)" : ""))
+
+			nm_gotoCollect("stickerprinter")
+			searchRet := nm_imgSearch("e_button.png",30,"high")
+			If (searchRet[1] = 0) {
+				sendinput {%SC_E% down}
+				Sleep, 100
+				sendinput {%SC_E% up}
+				Sleep, 500 ;//todo: wait for GUI with timeout instead of fixed time
+				WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " GetRobloxHWND())
+				pBMScreen := Gdip_BitmapFromScreen(windowX+windowWidth//2+150 "|" windowY+4*windowHeight//10+160 "|100|60")
+				if (Gdip_ImageSearch(pBMScreen, bitmaps["stickerprinterCD"], , , , , , 10) = 1) {
+					Gdip_DisposeImage(pBMScreen)
+					nm_setStatus("Detected", "Sticker Printer on Cooldown")
+					Sleep, 500
+					sendinput {%SC_E% down}
+					Sleep, 100
+					sendinput {%SC_E% up}
+					break
+				}
+				Gdip_DisposeImage(pBMScreen)
+				pos := {"Basic": -95, "Silver": -40, "Gold": 15, "Diamond": 70, "Mythic": 125}
+				MouseMove, windowX+windowWidth//2+pos[StickerPrinterEgg], windowY+4*windowHeight//10-20
+				Sleep, 200
+				Click
+				Sleep, 200
+				pBMScreen := Gdip_BitmapFromScreen(windowX+windowWidth//2+150 "|" windowY+4*windowHeight//10+160 "|100|60")
+				if (Gdip_ImageSearch(pBMScreen, bitmaps["stickerprinterConfirm"], , , , , , 10) != 1) {
+					Gdip_DisposeImage(pBMScreen)
+					nm_setStatus("Error", "No Eggs left in inventory!`nSticker Printer has been disabled.")
+					StickerPrinterCheck := 0
+					Sleep, 500
+					sendinput {%SC_E% down}
+					Sleep, 100
+					sendinput {%SC_E% up}
+					break
+				}
+				Gdip_DisposeImage(pBMScreen)
+				MouseMove, windowX+windowWidth//2+225, windowY+4*windowHeight//10+195
+				Sleep, 200
+				Click
+				i := 0
+				loop 16 {
+					sleep, 250
+					pBMScreen := Gdip_BitmapFromScreen(windowX+windowWidth//2-250 "|" windowY+windowHeight//2-52 "|500|150")
+					if (Gdip_ImageSearch(pBMScreen, bitmaps["yes"], pos, , , , , 2, , 2) = 1) {
+						MouseMove, windowX+windowWidth//2-250+SubStr(pos, 1, InStr(pos, ",")-1)-50, windowY+windowHeight//2-52+SubStr(pos, InStr(pos, ",")+1)
+						sleep 150
+						Click
+						sleep 100
+						i++
+					} else if (i > 0) {
+						Gdip_DisposeImage(pBMScreen)
+						break
+					}
+					Gdip_DisposeImage(pBMScreen)
+					if (A_Index = 16)
+						break
+				}
+				Sleep, 8000 ; wait for printer to print
+				nm_setStatus("Collected", "Sticker Printer (" StickerPrinterEgg " Egg)")
+				break
 			}
-			nm_toBooster("blue")
 		}
-		;Red Field Booster
-		else if((FieldBooster%A_Index%="red" && (nowUnix()-LastRedBoost)>3600 && (nowUnix()-LastBooster)>(FieldBoosterMins*60)) || (QuestRedBoost && (nowUnix()-LastRedBoost)>3600)){
-			if(CurrentAction!="Booster"){
-				PreviousAction:=CurrentAction
-				CurrentAction:="Booster"
-			}
-			nm_toBooster("red")
-		}
-		;Mountain Top Field Booster
-		else if(FieldBooster%A_Index%="mountain"  && (nowUnix()-LastMountainBoost)>3600 && (nowUnix()-LastBooster)>(FieldBoosterMins*60)){ ;1 hour
-			if(CurrentAction!="Booster"){
-				PreviousAction:=CurrentAction
-				CurrentAction:="Booster"
-			}
-			nm_toBooster("mountain")
+		if (StickerPrinterCheck = 1) {
+			LastStickerPrinter:=nowUnix()
+			IniWrite, %LastStickerPrinter%, settings\nm_config.ini, Boost, LastStickerPrinter
 		}
 	}
-	;Sticker Stack
+}
+nm_StickerStack(){
+	global StickerStackCheck, LastStickerStack, StickerStackItem, StickerStackMode, StickerStackTimer, SC_E, bitmaps
+
 	if (StickerStackCheck && (nowUnix()-LastStickerStack)>StickerStackTimer) {
 		loop, 2 {
 			nm_Reset()
@@ -10094,6 +10057,42 @@ nm_toAnyBooster(){
 				GuiControl, , StickerStackTimer, %StickerStackTimer%
 				IniWrite, %StickerStackTimer%, settings\nm_config.ini, Boost, StickerStackTimer
 			}
+		}
+	}
+}
+nm_toAnyBooster(){
+	global LastBlueBoost, QuestBlueBoost, LastRedBoost, QuestRedBoost, LastMountainBoost
+		, FieldBooster1, FieldBooster2, FieldBooster3, FieldBoosterMins
+		, CurrentAction, PreviousAction
+	static blueBoosterFields:=["Pine Tree", "Bamboo", "Blue Flower"], redBoosterFields:=["Rose", "Strawberry", "Mushroom"], mountainBoosterfields:=["Cactus", "Pumpkin", "Pineapple", "Spider", "Clover", "Dandelion", "Sunflower"]
+
+	loop 3 {
+		if(FieldBooster%A_Index%="none" && QuestBlueBoost=0 && QuestRedBoost=0)
+			break
+		LastBooster:=max(LastBlueBoost, LastRedBoost, LastMountainBoost)
+		;Blue Field Booster
+		if((FieldBooster%A_Index%="blue" && (nowUnix()-LastBlueBoost)>3600 && (nowUnix()-LastBooster)>(FieldBoosterMins*60)) || (QuestBlueBoost && (nowUnix()-LastBlueBoost)>3600)){
+			if(CurrentAction!="Booster"){
+				PreviousAction:=CurrentAction
+				CurrentAction:="Booster"
+			}
+			nm_toBooster("blue")
+		}
+		;Red Field Booster
+		else if((FieldBooster%A_Index%="red" && (nowUnix()-LastRedBoost)>3600 && (nowUnix()-LastBooster)>(FieldBoosterMins*60)) || (QuestRedBoost && (nowUnix()-LastRedBoost)>3600)){
+			if(CurrentAction!="Booster"){
+				PreviousAction:=CurrentAction
+				CurrentAction:="Booster"
+			}
+			nm_toBooster("red")
+		}
+		;Mountain Top Field Booster
+		else if(FieldBooster%A_Index%="mountain"  && (nowUnix()-LastMountainBoost)>3600 && (nowUnix()-LastBooster)>(FieldBoosterMins*60)){ ;1 hour
+			if(CurrentAction!="Booster"){
+				PreviousAction:=CurrentAction
+				CurrentAction:="Booster"
+			}
+			nm_toBooster("mountain")
 		}
 	}
 }
@@ -19444,7 +19443,7 @@ nm_ReadIni(path)
 	local ini, str, c, p, k
 
 	ini := FileOpen(path, "r"), str := ini.Read(), ini.Close()
-	Loop, Parse, str, `r`n, %A_Space%%A_Tab%
+	Loop, Parse, str, `n, `r%A_Space%%A_Tab%
 	{
 		switch (c := SubStr(A_LoopField, 1, 1))
 		{
