@@ -230,6 +230,7 @@ settings["BlenderItem2"] := {"enum": 63, "type": "str", "section": "Blender", "r
 settings["BlenderItem3"] := {"enum": 64, "type": "str", "section": "Blender", "regex": "i)^(blueextract|redextract|glue|oil|enzymes|gumdrops|tropicaldrink|mooncharms|glitter|starjelly|purplepotion|antpass|cloudvial|softwax|hardwax|swirledwax|causticwax|fielddice|smoothdice|loadeddice|Turpentine|None)$"}
 settings["StickerStackItem"] := {"enum": 65, "type": "str", "section": "Boost", "regex": "i)^(tickets|sticker|sticker\+tickets)$"}
 settings["StickerPrinterEgg"] := {"enum": 66, "type": "str", "section": "Boost", "regex": "i)^(Basic|Silver|Gold|Diamond|Mythic)$"}
+settings["MondoLootDirection"] := {"enum": 67, "type": "str", "section": "Collect", "regex": "i)^(Left|Right|Random)$"}
 
 ;settings["discordMode"] := {"enum": 1, "type": "int", "section": "Status", "regex": "i)^(0|1|2)$"} dangerous
 ;settings["discordCheck"] := {"enum": 2, "type": "int", "section": "Status", "regex": "i)^(0|1)$"} dangerous
@@ -472,7 +473,7 @@ settings["LastBlenderRot"] := {"enum": 238, "type": "int", "section": "Blender",
 settings["BlenderTime1"] := {"enum": 239, "type": "int", "section": "Blender", "regex": "i)^\d{1,10}$"}
 settings["BlenderTime2"] := {"enum": 240, "type": "int", "section": "Blender", "regex": "i)^\d{1,10}$"}
 settings["BlenderTime3"] := {"enum": 241, "type": "int", "section": "Blender", "regex": "i)^\d{1,10}$"}
-settings["MondoSecs"] := {"enum": 242, "type": "int", "section": "Collect", "regex": "i)^\d{1,10}$"}
+settings["MondoSecs"] := {"enum": 242, "type": "int", "section": "Collect", "regex": "i)^\d{1,3}$"}
 settings["MPlanterGatherA"] := {"enum": 243, "type": "int", "section": "Planters", "regex": "i)^(0|1)$"}
 settings["MPlanterGather1"] := {"enum": 244, "type": "int", "section": "Planters", "regex": "i)^(0|1)$"}
 settings["MPlanterGather2"] := {"enum": 245, "type": "int", "section": "Planters", "regex": "i)^(0|1)$"}

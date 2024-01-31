@@ -489,6 +489,7 @@ config["Collect"] := {"ClockCheck":1
 	, "LastClock":1
 	, "MondoBuffCheck":0
 	, "MondoAction":"Buff"
+	, "MondoLootDirection":"Random"
 	, "LastMondoBuff":1
 	, "AntPassCheck":0
 	, "AntPassBuyCheck":0
@@ -588,7 +589,7 @@ config["Collect"] := {"ClockCheck":1
 	, "StingerDailyBonusCheck":0
 	, "NightLastDetected":1
 	, "VBLastKilled":1
-	, "MondoSecs":30}
+	, "MondoSecs":120}
 
 config["Shrine"] := {"ShrineCheck":0
 	, "LastShrine":1
@@ -2384,18 +2385,22 @@ Gui, Add, GroupBox, x5 y42 w125 h194 vCollectGroupBox, Collect
 Gui, Font, s8 cDefault Norm, Tahoma
 Gui, Add, Checkbox, x10 y57 +BackgroundTrans vClockCheck gnm_saveCollect Checked%ClockCheck% Disabled, Clock (tickets)
 Gui, Add, Checkbox, x10 yp+18 w50 +BackgroundTrans vMondoBuffCheck gnm_saveCollect Checked%MondoBuffCheck% Disabled, Mondo
-MondoActionList := ["Buff", "Kill", "Manual"], PMondoGuid ? MondoActionList.Push("Tag", "Guid")
+MondoActionList := ["Buff", "Kill"], PMondoGuid ? MondoActionList.Push("Tag", "Guid")
 Gui, Add, Text, x75 yp w40 vMondoAction +Center +BackgroundTrans,%MondoAction%
 Gui, Add, Button, xp-12 yp-1 w12 h16 gnm_MondoAction hwndhMALeft Disabled, <
 Gui, Add, Button, xp+51 yp w12 h16 gnm_MondoAction hwndhMARight Disabled, >
-Gui, Add, Text, x36 yp+15 w110 vMondoPointText +left +BackgroundTrans, \___
-Gui, Add, Edit, x63 yp+3 w28 h18 number Limit3 +BackgroundTrans vMondoSecs gnm_saveCollect Disabled, %MondoSecs%
-Gui, Add, Text, x95 yp+2 vMondoSecsText, Secs
-Gui, Add, Checkbox, x10 yp+20 w35 +BackgroundTrans vAntPassCheck gnm_saveCollect Checked%AntPassCheck% Disabled, Ant
+Gui, Add, Text, % "x14 yp+15 vMondoPointText +left +BackgroundTrans Section Hidden" (MondoAction != "Buff" && MondoAction != "Kill"), \__
+Gui, Add, Edit, % "xs+20 ys+3 w30 h18 number Limit3 +BackgroundTrans vMondoSecs gnm_saveCollect Disabled Hidden" (MondoAction != "Buff"), %MondoSecs%
+Gui, Add, Text, % "x+4 yp+2 vMondoSecsText Hidden" (MondoAction != "Buff"), Secs
+Gui, Add, Text, % "xs+18 ys+4 vMondoLootText Hidden" (MondoAction != "Kill"), Loot:
+Gui, Add, Text, % "x+13 yp w45 vMondoLootDirection +Center +BackgroundTrans Hidden" (MondoAction != "Kill"), %MondoLootDirection%
+Gui, Add, Button, % "xp-12 yp-1 w12 h16 gnm_MondoLootDirection vMLDLeft Disabled Hidden" (MondoAction != "Kill"), <
+Gui, Add, Button, % "xp+56 yp w12 h16 gnm_MondoLootDirection vMLDRight Disabled Hidden" (MondoAction != "Kill"), >
+Gui, Add, Checkbox, x10 y112 w35 +BackgroundTrans vAntPassCheck gnm_saveCollect Checked%AntPassCheck% Disabled, Ant
 Gui, Add, Text,x60 yp w55 vAntPassAction +Center +BackgroundTrans,%AntPassAction%
 Gui, Add, Button, xp-12 yp-1 w12 h16 gnm_AntPassAction hwndhAPALeft Disabled, <
 Gui, Add, Button, xp+66 yp w12 h16 gnm_AntPassAction hwndhAPARight Disabled, >
-Gui, Add, Text, x24 yp+15 vAntPassPointText +BackgroundTrans, \___
+Gui, Add, Text, x14 yp+15 vAntPassPointText +BackgroundTrans, \__
 Gui, Add, Checkbox, x+4 yp+5 vAntPassBuyCheck gnm_AntPassBuyCheck Checked%AntPassBuyCheck% Disabled, Use Tickets
 Gui, Add, Checkbox, x10 yp+17 +BackgroundTrans vRoboPassCheck gnm_saveCollect Checked%RoboPassCheck% Disabled, Robo Pass
 Gui, Add, Checkbox, x10 yp+18 +BackgroundTrans vHoneystormCheck gnm_saveCollect Checked%HoneystormCheck% Disabled, Honeystorm
@@ -5202,6 +5207,8 @@ nm_TabCollectLock(){
 	GuiControl, disable, ClockCheck
 	GuiControl, disable, MondoBuffCheck
 	GuiControl, disable, MondoSecs
+	GuiControl, disable, MLDLeft
+	GuiControl, disable, MLDRight
 	GuiControl, disable, % hMALeft
 	GuiControl, disable, % hMARight
 	GuiControl, disable, RoboPassCheck
@@ -5284,8 +5291,9 @@ nm_TabCollectUnLock(){
 	GuiControl, enable, BlenderRight
 	GuiControl, enable, ClockCheck
 	GuiControl, enable, MondoBuffCheck
-	if (MondoAction="Manual")
-		GuiControl, enable, MondoSecs
+	GuiControl, enable, MondoSecs
+	GuiControl, enable, MLDLeft
+	GuiControl, enable, MLDRight
 	GuiControl, enable, % hMALeft
 	GuiControl, enable, % hMARight
 	GuiControl, enable, RoboPassCheck
@@ -7312,7 +7320,7 @@ nm_ConvertBalloon(hCtrl){
 	GuiControl, % (ConvertBalloon = "Every") ? "Enable" : "Disable", ConvertMins
 	IniWrite, %ConvertBalloon%, settings\nm_config.ini, Settings, ConvertBalloon
 }
-nm_MondoAction(hCtrl){
+nm_MondoAction(hCtrl:=""){
 	global MondoAction, MondoActionList, hMALeft, hMARight
 
 	l := MondoActionList.Length()
@@ -7324,15 +7332,32 @@ nm_MondoAction(hCtrl){
 		i := 2
 		case % MondoActionList[3]:
 		i := 3
-		case % MondoActionList[4]:
-		i := 4
 		default:
-		i := 5
+		i := 4
 	}
 
-	GuiControl, , MondoAction, % (MondoAction := MondoActionList[(hCtrl = hMARight) ? (Mod(i, l) + 1) : (Mod(l + i - 2, l) + 1)])
-	GuiControl, % (MondoAction = "Manual") ? "Enable" : "Disable", MondoSecs
+	GuiControl, , MondoAction, % (MondoAction := MondoActionList[(hCtrl = hMARight) ? (Mod(i, l) + 1) : (hCtrl = hMALeft) ? (Mod(l + i - 2, l) + 1) : i])
+
+	GuiControl, % (MondoAction = "Buff") || (MondoAction = "Kill") ? "Show" : "Hide", MondoPointText
+	c := (MondoAction = "Buff") ? "Show" : "Hide"
+	GuiControl, %c%, MondoSecs
+	GuiControl, %c%, MondoSecsText
+	c := (MondoAction = "Kill") ? "Show" : "Hide"
+	GuiControl, %c%, MondoLootText
+	GuiControl, %c%, MondoLootDirection
+	GuiControl, %c%, MLDLeft
+	GuiControl, %c%, MLDRight
+
 	IniWrite, %MondoAction%, settings\nm_config.ini, Collect, MondoAction
+}
+nm_MondoLootDirection(){
+	global MondoLootDirection
+	static val := ["Left", "Right", "Random"], l := val.Length()
+
+	i := (MondoLootDirection = "Left") ? 1 : (MondoLootDirection = "Right") ? 2 : 3
+
+	GuiControl, , MondoLootDirection, % (MondoLootDirection := val[(A_GuiControl = "MLDRight") ? (Mod(i, l) + 1) : (Mod(l + i - 2, l) + 1)])
+	IniWrite, %MondoLootDirection%, settings\nm_config.ini, Collect, MondoLootDirection
 }
 nm_AntPassAction(hCtrl){
 	global AntPassAction, hAPALeft, hAPARight
@@ -8611,12 +8636,14 @@ nm_ContributorsPageButton(hwnd){
 nm_CollectKillButton(hCtrl){
 	global
 	static CollectControls := ["CollectGroupBox","DispensersGroupBox","BeesmasGroupBox","BlenderGroupBox","BeesmasFailImage","BeesmasImage"
-		,"ClockCheck","MondoBuffCheck","MondoAction","MondoPointText","MondoSecs","MondoSecsText","AntPassCheck","AntPassPointText","AntPassBuyCheck","AntPassAction","RoboPassCheck","HoneystormCheck"
+		,"ClockCheck","MondoBuffCheck","MondoAction","AntPassCheck","AntPassPointText","AntPassBuyCheck","AntPassAction","RoboPassCheck","HoneystormCheck"
 		,"HoneyDisCheck","TreatDisCheck","BlueberryDisCheck","StrawberryDisCheck","CoconutDisCheck","RoyalJellyDisCheck","GlueDisCheck"]
 	, CollectControlsH := ["hMALeft","hMARight","hAPALeft","hAPARight","hBeesmas1","hBeesmas2","hBeesmas3","hBeesmas4","hBeesmas5","hBeesmas6","hBeesmas7","hBeesmas8","hBeesmas9","hBeesmas10","hBeesmas11"]
 	, KillControls := ["BugRunGroupBox","BugRunCheck","MonsterRespawnTime","TextMonsterRespawnPercent","TextMonsterRespawn","MonsterRespawnTimeHelp","BugrunInterruptCheck","TextLoot","TextKill","TextLineBugRun1","TextLineBugRun2","BugrunLadybugsLoot","BugrunRhinoBeetlesLoot","BugrunSpiderLoot","BugrunMantisLoot","BugrunScorpionsLoot","BugrunWerewolfLoot","BugrunLadybugsCheck","BugrunRhinoBeetlesCheck","BugrunSpiderCheck","BugrunMantisCheck","BugrunScorpionsCheck","BugrunWerewolfCheck","StingersGroupBox","StingerCheck","StingerDailyBonusCheck","TextFields","StingerCloverCheck","StingerSpiderCheck","StingerCactusCheck","StingerRoseCheck","StingerMountainTopCheck","StingerPepperCheck","BossesGroupBox","TunnelBearCheck","KingBeetleCheck","CocoCrabCheck","StumpSnailCheck","CommandoCheck","TunnelBearBabyCheck","KingBeetleBabyCheck","BabyLovePicture1","BabyLovePicture2","KingBeetleAmuletMode","ShellAmuletMode","KingBeetleAmuPicture","ShellAmuPicture","KingBeetleAmuletModeText","ShellAmuletModeText","ChickLevelTextLabel","ChickLevelText","ChickLevel","SnailHPText","SnailHealthEdit","SnailHealthText","ChickHPText","ChickHealthEdit","ChickHealthText","SnailTimeText","SnailTimeUpDown","ChickTimeText","ChickTimeUpDown","BossConfigHelp","TextLineBosses1","TextLineBosses2","TextLineBosses3","TextBosses1","TextBosses2","TextBosses3"]
 	, BlenderMain := ["BlenderItem1Picture", "BlenderItem2Picture", "BlenderItem3Picture", "BlenderAdd1", "BlenderAdd2", "BlenderAdd3", "BlenderData1", "BlenderData2", "BlenderData3"]
 	, BlenderSide := ["BlenderAmount", "BlenderAmountNum", "BlenderAmountText", "BlenderRepeatText", "BlenderIndex", "BlenderIndexNum", "BlenderItem", "BlenderLeft", "BlenderRight", "BlenderAddSlot", "BlenderIndexOption","blenderline1","blenderline2","blenderline3","blenderline4","blendertitle1"]
+	, MondoKillControls := ["MondoLootText", "MondoLootDirection", "MLDLeft", "MLDRight"]
+	, MondoBuffControls := ["MondoSecs", "MondoSecsText"]
 
 	local p, i, c, k, v, arr
 
@@ -8633,6 +8660,12 @@ nm_CollectKillButton(hCtrl){
 				GuiControl, %c%, %v%
 			for k,v in CollectControlsH
 				GuiControl, %c%, % %v%
+			if ((MondoAction = "Buff") || (MondoAction = "Kill"))
+			{
+				GuiControl, %c%, MondoPointText
+				for k,v in Mondo%MondoAction%Controls
+					GuiControl, %c%, %v%
+			}
 			arr := (BlenderAdd > 0) ? "BlenderSide" : "BlenderMain"
 			for k,v in %arr%
 				GuiControl, %c%, %v%
@@ -13560,7 +13593,7 @@ nm_Mondo(){
 		global AFBuseGlitter
 		global AFBuseBooster
 		global CurrentField, CurrentAction, PreviousAction
-		global MondoSecs
+		global MondoSecs, MondoLootDirection
 		PreviousAction:=CurrentAction
 		CurrentAction:="Mondo"
 		MoveSpeedFactor:=round(18/MoveSpeedNum, 2)
@@ -13620,22 +13653,13 @@ nm_Mondo(){
 					nm_setStatus("Attacking")
 			        if(MondoAction="Buff"){
 			            repeat:=0
-			            loop 120 { ;2 mins
+			            loop %MondoSecs% {
 			                nm_autoFieldBoost(CurrentField)
 			                if(youDied || AFBrollingDice || AFBuseGlitter || AFBuseBooster)
 			                    break
 			                sleep, 1000
 			            }
 					}
-					else if (MondoAction="Manual") {
-						repeat:=0
-			            loop %MondoSecs% { ; inputted user time
-			                nm_autoFieldBoost(CurrentField)
-			                if(youDied || AFBrollingDice || AFBuseGlitter || AFBuseBooster)
-			                    break
-			                sleep, 1000
-			            }
-			        }
 			        else if(MondoAction="Tag"){
 			            repeat:=0
 			            ;zaappiix5
@@ -13701,7 +13725,11 @@ nm_Mondo(){
 						if (success = 1) {
 							repeat := 0
 							;loot mondo after death
-							Random, dir, 0, 1
+							if (MondoLootDirection = "Random")
+								Random, dir, 0, 1
+							else
+								dir := (MondoLootDirection = "Right")
+
 							if (dir = 0)
 								tc := "left", afc := "right"
 							else
@@ -22178,6 +22206,10 @@ nm_UpdateGUIVar(var)
 		case "InputChickHealth":
 		GuiControl, % "+c" Format("0x{1:02x}{2:02x}{3:02x}", Round(Min(3*(100-InputChickHealth), 150)), Round(Min(3*InputChickHealth, 150)), 0) " +Redraw", ChickHealthText
 		GuiControl, , ChickHealthText, % InputChickHealth "%"
+
+		case "MondoAction":
+		GuiControl, , %k%, % %k%
+		nm_MondoAction()
 
 		case "":
 		k := var
