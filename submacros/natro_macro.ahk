@@ -19879,7 +19879,7 @@ nm_gotoPlanter(location, waitEnd := 1){
     KeyWait, F14, D T5 L
 	if WaitEnd
 	{
-		KeyWait, F14, T60 L
+		KeyWait, F14, T90 L
 		nm_endWalk()
 	}
 }
