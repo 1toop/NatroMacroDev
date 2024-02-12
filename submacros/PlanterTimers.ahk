@@ -392,7 +392,7 @@ ba_setPlanterData(hCtrl){
 				IniWrite, 0, settings\nm_config.ini, Planters, PlanterGlitter%A_Index%
 				IniWrite, 0, settings\nm_config.ini, Planters, PlanterGlitterC%A_Index%
 				IniWrite, 0, settings\nm_config.ini, Planters, MPlanterHold%A_Index%
-				IniWrite, 0, settings\nm_config.ini, Planters, MPlanterRelease%A_Index%
+				IniWrite, 0, settings\nm_config.ini, Planters, PlanterHarvestNow%A_Index%
 				IniWrite, 0, settings\nm_config.ini, Planters, MPlanterSmoking%A_Index%
 			}
 			break
@@ -490,7 +490,7 @@ ba_AddPlanter(){
 	IniWrite, 0, settings\nm_config.ini, Planters, PlanterGlitter%addindex%
 	IniWrite, 0, settings\nm_config.ini, Planters, PlanterGlitterC%addindex%
 	IniWrite, 0, settings\nm_config.ini, Planters, MPlanterHold%addindex%
-	IniWrite, 0, settings\nm_config.ini, Planters, MPlanterRelease%addindex%
+	IniWrite, 0, settings\nm_config.ini, Planters, PlanterHarvestNow%addindex%
 	IniWrite, 0, settings\nm_config.ini, Planters, MPlanterSmoking%addindex%
 }
 

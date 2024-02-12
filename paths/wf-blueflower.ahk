@@ -3,7 +3,7 @@
 send {" RotRight " 2}
 " nm_Walk(13.5, FwdKey) "
 " nm_Walk(4.5, BackKey) "
-" nm_Walk(40.5, RightKey) "
+" nm_Walk(46, RightKey) " ; 40.5
 " nm_Walk(40.5, FwdKey) "
 " nm_Walk(33.5, RightKey) "
 " nm_Walk(27, FwdKey) "

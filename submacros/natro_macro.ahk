@@ -734,9 +734,6 @@ config["Planters"] := {"LastComfortingField":"None"
 	, "MPlanterHold1":0
 	, "MPlanterHold2":0
 	, "MPlanterHold3":0
-	, "MPlanterRelease1":0
-	, "MPlanterRelease2":0
-	, "MPlanterRelease3":0
 	, "MPlanterSmoking1":0
 	, "MPlanterSmoking2":0
 	, "MPlanterSmoking3":0
@@ -744,6 +741,13 @@ config["Planters"] := {"LastComfortingField":"None"
 	, "MPuffMode1":0
 	, "MPuffMode2":0
 	, "MPuffMode3":0
+	, "MConvertFullBagHarvest":0
+	, "PlanterHarvestNow1":0
+	, "PlanterHarvestNow2":0
+	, "PlanterHarvestNow3":0
+	, "PlanterSS1":0
+	, "PlanterSS2":0
+	, "PlanterSS3":0
 	, "LastPlanterGatherSlot":3
 	, "PlanterName1":"None"
 	, "PlanterName2":"None"
@@ -2847,48 +2851,49 @@ Loop, 3 {
         Gui, Add, Text, % "xs ys+22 w350 h1 0x7 vMSlot" i "SeparatorLine" (PlanterMode == 1 ? "" : " Hidden")
 }
 
-Gui, Add, Text, % "x378 y62 +BackgroundTrans Section vMCurrentCycle" (PlanterMode == 1 ? "" : " Hidden"), Current Planter Cycle
+Gui, Add, Text, % "x366 y65 +BackgroundTrans Section +center vMCurrentCycle" (PlanterMode == 1 ? "" : " Hidden"), Current`nPlanter`nCycle
 Loop, 3 {
-	Gui, Add, Text, % ((A_Index = 1) ? "x361 y78" : "xs ys+16") "w200 +BackgroundTrans Section vMSlot" A_Index "CycleText" (PlanterMode == 1 ? "" : " Hidden"), % "Slot " A_Index ": Cycle " PlanterManualCycle%A_Index%
-	Gui, Add, Button, % "x461 ys-2 w15 h16 +Center vMSlot" A_Index "Left gmp_Slot" A_Index "ChangeLeft Disabled" (PlanterMode == 1 ? "" : " Hidden"), —
-	Gui, Add, Button, % "x+2 ys-2 w15 h16 +Center vMSlot" A_Index "Right gmp_Slot" A_Index "ChangeRight Disabled" (PlanterMode == 1 ? "" : " Hidden"), +
+	Gui, Add, Text, % ((A_Index = 1) ? "x415 y63" : "x415 ys+16") "w200 +BackgroundTrans Section vmSlot" A_Index "CycleText" (PlanterMode == 1 ? "" : " Hidden"), % "Slot " A_Index ": " 
+	Gui, Add, Text, % ((A_Index = 1) ? "x469 y63" : "x469 ys") "w200 +BackgroundTrans Section vMSlot" A_Index "CycleNo" (PlanterMode == 1 ? "" : " Hidden"), % PlanterManualCycle%A_Index%
+	Gui, Add, Button, % "x455 ys w11 h14 +Center vMSlot" A_Index "Left gmp_Slot" A_Index "ChangeLeft Disabled" (PlanterMode == 1 ? "" : " Hidden"), <
+	Gui, Add, Button, % "x477 ys w11 h14 +Center vMSlot" A_Index "Right gmp_Slot" A_Index "ChangeRight Disabled" (PlanterMode == 1 ? "" : " Hidden"), >
 }
 
 Gui, Add, Text, % "x355 y23 h215 w1 0x7 vMSectionSeparatorLine" (PlanterMode == 1 ? "" : " Hidden")
 Gui, Add, Text, % "x355 y58 h1 w150 0x7 vMSliderSeparatorLine" (PlanterMode == 1 ? "" : " Hidden")
 
 ; disable automatic harvest
-Gui, Add, Text, % "x355 y128 h1 w150 0x7 Section vMPuffModeSeparatorLine" (PlanterMode == 1 ? "" : " Hidden")
+Gui, Add, Text, % "x355 y112 h1 w150 0x7 Section vMPuffModeSeparatorLine" (PlanterMode == 1 ? "" : " Hidden")
 Gui, Add, Checkbox, % "xs+5 ys+4 w150 h16 +BackgroundTrans vMPuffModeA gmp_MPuffMode Section Disabled Checked" MPuffModeA ((PlanterMode = 1) ? "" : " Hidden"), Disable Auto-Harvest
 Gui, Add, Text, % "xs+16 ys+16 vMPuffModeText " (PlanterMode == 1 ? "" : " Hidden"), Slots:
 Gui, Add, Checkbox, % "xs+46 yp-1 w24 h16 +BackgroundTrans vMPuffMode1 gmp_SaveConfig Disabled Checked" MPuffMode1 ((PlanterMode = 1) ? "" : " Hidden"), 1
 Gui, Add, Checkbox, % "xs+70 yp w24 h16 +BackgroundTrans vMPuffMode2 gmp_SaveConfig Disabled Checked" MPuffMode2 ((PlanterMode = 1) ? "" : " Hidden"), 2
 Gui, Add, Checkbox, % "xs+95 yp w24 h16 +BackgroundTrans vMPuffMode3 gmp_SaveConfig Disabled Checked" MPuffMode3 ((PlanterMode = 1) ? "" : " Hidden"), 3
-Gui, Add, Button, % "x481 yp+1 w12 h14 gnm_MPuffModeHelp vMPuffModeHelp Disabled" ((PlanterMode = 1) ? "" : " Hidden"), ?
+Gui, Add, Button, % "x484 yp+1 w11 h14 gnm_MPuffModeHelp vMPuffModeHelp Disabled" ((PlanterMode = 1) ? "" : " Hidden"), ?
 
 ; gather in planter field and slots
-Gui, Add, Text, % "x355 y165 h1 w156 0x7 Section vMGatherSeparatorLine" (PlanterMode == 1 ? "" : " Hidden")
+Gui, Add, Text, % "x355 y149 h1 w156 0x7 Section vMGatherSeparatorLine" (PlanterMode == 1 ? "" : " Hidden")
 Gui, Add, Checkbox, % "xs+5 ys+4 w150 h16 +BackgroundTrans vMPlanterGatherA gmp_MPlanterGatherSwitch_ Section Disabled Checked" MPlanterGatherA ((PlanterMode = 1) ? "" : " Hidden"), Gather in Planter Fields
 Gui, Add, Text, % "xs+16 ys+16 vMPlanterGatherText " (PlanterMode == 1 ? "" : " Hidden"), Slots:
 Gui, Add, Checkbox, % "xs+46 yp-1 w24 h16 +BackgroundTrans vMPlanterGather1 gmp_SaveConfig Disabled Checked" MPlanterGather1 ((PlanterMode = 1) ? "" : " Hidden"), 1
 Gui, Add, Checkbox, % "xs+70 yp w24 h16 +BackgroundTrans vMPlanterGather2 gmp_SaveConfig Disabled Checked" MPlanterGather2 ((PlanterMode = 1) ? "" : " Hidden"), 2
 Gui, Add, Checkbox, % "xs+95 yp w24 h16 +BackgroundTrans vMPlanterGather3 gmp_SaveConfig Disabled Checked" MPlanterGather3 ((PlanterMode = 1) ? "" : " Hidden"), 3
-Gui, Add, Button, % "x481 yp+1 w12 h14 gnm_MPlanterGatherHelp vMPlanterGatherHelp Disabled" ((PlanterMode = 1) ? "" : " Hidden"), ?
+Gui, Add, Button, % "x484 yp+1 w11 h14 gnm_MPlanterGatherHelp vMPlanterGatherHelp Disabled" ((PlanterMode = 1) ? "" : " Hidden"), ?
 
 ; harvest every interval
-Gui, Add, Text, % "x355 y202 h1 w150 0x7 Section vMPageSeparatorLine" (PlanterMode == 1 ? "" : " Hidden")
-Gui, Add, Text, % "xs+9 ys+3 vMHarvestText Section" (PlanterMode == 1 ? "" : " Hidden"), Harvest every
-Gui, Add, Text, % "x374 ys+15 w48 vMHarvestInterval +Center +BackgroundTrans " ((PlanterMode = 1) ? "" : " Hidden"),%MHarvestInterval%
-Gui, Add, Button, % "x361 ys+15 w15 h16 gnm_MHarvestInterval hwndhMHILeft Disabled" ((PlanterMode = 1) ? "" : " Hidden"), <
-Gui, Add, Button, % "x420 ys+15 w15 h16 gnm_MHarvestInterval hwndhMHIRight Disabled" ((PlanterMode = 1) ? "" : " Hidden"), >
-;Gui, Add, DropdownList, % "x374 ys+12 w60 vMHarvestInterval gmp_SaveConfig Disabled" (PlanterMode == 1 ? "" : " Hidden"), % StrReplace("30 min|Hour|2 hours|3 hours|4 hours|5 hours|6 hours|", MHarvestInterval, MHarvestInterval "|")
+Gui, Add, Text, % "x355 y186 h1 w150 0x7 Section vMPageSeparatorLine" (PlanterMode == 1 ? "" : " Hidden")
+Gui, Add, Checkbox, % "x360 ys+4 w138 h13 vMConvertFullBagHarvest gmp_SaveConfig Disabled Checked" MConvertFullBagHarvest ((PlanterMode = 1) ? "" : " Hidden"), Convert Full Bag Harvest
+Gui, Add, Text, % "xs+6 ys+19 vMHarvestText Section" (PlanterMode == 1 ? "" : " Hidden"), Harvest every
+Gui, Add, Text, % "xs+65 ys w48 vMHarvestInterval +Center +BackgroundTrans " ((PlanterMode = 1) ? "" : " Hidden"),%MHarvestInterval% 
+Gui, Add, Button, % "x471 ys w11 h14 gnm_MHarvestInterval hwndhMHILeft Disabled" ((PlanterMode = 1) ? "" : " Hidden"), < 
+Gui, Add, Button, % "x484 ys w11 h14 gnm_MHarvestInterval hwndhMHIRight Disabled" ((PlanterMode = 1) ? "" : " Hidden"), >
 
 SetLoadingProgress(99)
 
 ; page movement
-Gui, Add, Text, % "x460 ys vMPageNumberText" (PlanterMode == 1 ? "" : " Hidden"), % "Page " (MPageIndex := 1) ;
-Gui, Add, Button, % "x461 ys+15 w15 h16 hwndMPageLeftHWND vMPageLeft gmp_UpdatePage Disabled" (PlanterMode == 1 ? "" : " Hidden"), <
-Gui, Add, Button, % "x+2 ys+15 w15 h16 hwndMPageRightHWND vMPageRight gmp_UpdatePage Disabled" (PlanterMode == 1 ? "" : " Hidden"), >
+Gui, Add, Text, % "x395 ys+16 vMPageNumberText" (PlanterMode == 1 ? "" : " Hidden"), % "Page " (MPageIndex := 1) 
+Gui, Add, Button, % "xp+36 ys+16 w11 h14 hwndMPageLeftHWND vMPageLeft gmp_UpdatePage Disabled" (PlanterMode == 1 ? "" : " Hidden"), <
+Gui, Add, Button, % "xp+13 ys+16 w11 h14 hwndMPageRightHWND vMPageRight gmp_UpdatePage Disabled" (PlanterMode == 1 ? "" : " Hidden"), >
 
 mp_UpdatePage(hwnd:=0)
 {
@@ -2983,6 +2988,8 @@ mp_SaveConfig() {
 	GuiControlGet, MPlanterGather2
 	GuiControlGet, MPlanterGather3
 
+	GuiControlGet, MConvertFullBagHarvest
+
 	Loop, 3 {
 		i := A_Index
 		Loop, 9 {
@@ -3016,6 +3023,7 @@ mp_SaveConfig() {
 	IniWrite, %MPlanterGather1%, settings\nm_config.ini, Planters, MPlanterGather1
 	IniWrite, %MPlanterGather2%, settings\nm_config.ini, Planters, MPlanterGather2
 	IniWrite, %MPlanterGather3%, settings\nm_config.ini, Planters, MPlanterGather3
+	IniWrite, %MConvertFullBagHarvest%, settings\nm_config.ini, Planters, MConvertFullBagHarvest
 	
 	mp_UpdateControls()
 
@@ -3039,7 +3047,7 @@ mp_UpdateCycles() {
 
 		GuiControl, % (PlanterManualCycle%i% != 1 ? "Enable" : "Disable"), MSlot%i%Left
 		GuiControl, % (PlanterManualCycle%i% < MSlot%i%MaxCycle ? "Enable" : "Disable"), MSlot%i%Right
-		GuiControl,, MSlot%i%CycleText, % "Slot " i ": Cycle " PlanterManualCycle%i%
+		GuiControl,, MSlot%i%CycleNo, % PlanterManualCycle%i%
 	}
 }
 
@@ -3095,20 +3103,24 @@ mp_Planter() {
 	If (VBState == 1 || ((MondoBuffCheck && utc_min>=0 && utc_min<14 && (nowUnix()-LastMondoBuff)>960 && (MondoAction="Buff" || MondoAction="Kill")) || (MondoBuffCheck && utc_min>=0 && utc_min<12 && (nowUnix()-LastGuid)<60 && PMondoGuid && MondoAction="Guid") || (MondoBuffCheck && (utc_min>=0 && utc_min<=8) && (nowUnix()-LastMondoBuff)>960 && PMondoGuid && MondoAction="Tag")) || ((nowUnix()-GatherFieldBoostedStart)<900 || (nowUnix()-LastGlitter)<900 || nm_boostBypassCheck()))
 		Return
 
+	; if enabled, take any/all planter screenshots before further planter actions 
+	If (PlanterSS1 || PlanterSS2 || PlanterSS3)
+		nm_planterSS()
+
 	Loop, 2 {
 		Loop, 3 {
 			If (!MSlot%A_Index%Cycle1Field)
 				Continue
 			IniRead, PlanterField%A_Index%, settings\nm_config.ini, planters, PlanterField%A_Index%
-			IniRead, MPlanterRelease%A_Index%, settings\nm_config.ini, planters, MPlanterRelease%A_Index%
+			IniRead, PlanterHarvestNow%A_Index%, settings\nm_config.ini, planters, PlanterHarvestNow%A_Index%
 			IniRead, MPlanterSmoking%A_Index%, settings\nm_config.ini, planters, MPlanterSmoking%A_Index%
 			; reset Release variable to 0 if planter slot empty
 			If (PlanterField%A_Index% = "None") {
-				MPlanterRelease%A_Index% := 0
-				IniWrite, % MPlanterRelease%A_Index%, settings\nm_config.ini, Planters, MPlanterRelease%A_Index%
+				PlanterHarvestNow%A_Index% := 0
+				IniWrite, % PlanterHarvestNow%A_Index%, settings\nm_config.ini, Planters, PlanterHarvestNow%A_Index%
 			}
-			; reset Hold and Smoking variables to 0 if planter slot empty, disable auto harvest no longer selected, or user has set to Release with remote control
-			If ((!MPuffModeA) || (!MPuffMode%A_Index%) || (PlanterField%A_Index% = "None")  || (MPlanterRelease%A_Index%)) {
+			; reset Hold and Smoking variables to 0 if planter slot empty, disable auto harvest no longer selected, or user has set to Harvest Now with remote control
+			If ((!MPuffModeA) || (!MPuffMode%A_Index%) || (PlanterField%A_Index% = "None")  || (PlanterHarvestNow%A_Index%)) {
 				MPlanterHold%A_Index% := 0
 				IniWrite, % MPlanterHold%A_Index%, settings\nm_config.ini, Planters, MPlanterHold%A_Index%
 				MPlanterSmoking%A_Index% := 0
@@ -3135,7 +3147,39 @@ mp_Planter() {
 		}
 	}
 }
+nm_planterSS(){
+	Global
 
+	Loop, 3 {	
+		If (PlanterSS%A_Index%) {
+			nm_setShiftLock(0)
+			nm_Reset(nm_Reset(1, ((PlanterField%A_Index% = "Rose") || (PlanterField%A_Index% = "Pine Tree") || (PlanterField%A_Index% = "Pumpkin") || (PlanterField%A_Index% = "Cactus") || (PlanterField%A_Index% = "Spider")) ? min(20000, (60-HiveBees)*1000) : 0))
+			nm_setStatus("Traveling", PlanterName%A_Index% " (" PlanterField%A_Index% ")")
+			nm_gotoPlanter(PlanterField%A_Index%, 1)
+
+			sendinput {%ZoomIn% 2}
+
+			; fields where the view is initially obstructed
+			If ((PlanterField%A_Index% = "Rose") || (PlanterField%A_Index% = "Mountain Top")) {
+				sleep, 200
+				sendinput {%RotRight% 3}
+			}
+			If ((PlanterField%A_Index% = "Bamboo") || (PlanterField%A_Index% = "Rose") || (PlanterField%A_Index% = "Cactus") || (PlanterField%A_Index% = "Mountain Top")) {
+				loop, 3 {
+					sleep, 200
+					sendinput {%ZoomOut% 2}
+				}
+			}
+
+			Sleep, 2000
+			nm_setStatus("Screenshot", (PlanterName%A_Index% . " (" . PlanterField%A_Index% . ")"))
+			Sleep, 2000
+
+			PlanterSS%A_Index%:=0
+			IniWrite, % 0, settings\nm_config.ini, Planters, PlanterSS%A_Index%
+		}
+	}
+}
 mp_PlantPlanter(PlanterIndex) {
 	Global
 	Local CycleIndex, MFieldName, MPlanterName, planterPos, pBMScreen, imgPos, field, k, v, hwnd, windowX, windowY, windowWidth, windowHeight, offsetY
@@ -3423,7 +3467,7 @@ mp_HarvestPlanter(PlanterIndex) {
 
 	nm_setStatus("Traveling", MPlanterName . " (" . MFieldName . ")")
 	nm_gotoPlanter(MFieldName)
-	if ((!MPuffModeA) || (!MPuffMode%PlanterIndex%) || (MPlanterRelease%PlanterIndex%))
+	if ((!MPuffModeA) || (!MPuffMode%PlanterIndex%) || (PlanterHarvestNow%PlanterIndex%))
 		nm_setStatus("Collecting", (MPlanterName . " (" . MFieldName . ")"))
 	else
 		nm_setStatus("Checking", (MPlanterName . " (" . MFieldName . ")"))
@@ -3443,8 +3487,8 @@ mp_HarvestPlanter(PlanterIndex) {
 			nm_setStatus("Found", MPlanterName . ". Clearing Data.")
 
 			;reset disable auto harvest values if phantom planter
-			MPlanterRelease%PlanterIndex% := 0
-			IniWrite, % MPlanterRelease%PlanterIndex%, settings\nm_config.ini, Planters, MPlanterRelease%PlanterIndex%
+			PlanterHarvestNow%PlanterIndex% := 0
+			IniWrite, % PlanterHarvestNow%PlanterIndex%, settings\nm_config.ini, Planters, PlanterHarvestNow%PlanterIndex%
 			MPlanterSmoking%PlanterIndex% := 0
 			IniWrite, % MPlanterSmoking%PlanterIndex%, settings\nm_config.ini, Planters, MPlanterSmoking%PlanterIndex%
 
@@ -3474,7 +3518,7 @@ mp_HarvestPlanter(PlanterIndex) {
 
 		return 1
 	}
-	else if ((MPuffModeA = 1) && (MPuffMode%PlanterIndex% = 1) && (MPlanterRelease%PlanterIndex% != 1)) {
+	else if ((MPuffModeA = 1) && (MPuffMode%PlanterIndex% = 1) && (PlanterHarvestNow%PlanterIndex% != 1)) {
 		; screenshot and set to hold instead of harvest, if auto harvest is disabled for the slot, and the user hasn't selected to release it by remote control
 		Sleep, 200 ; wait for game to update frame
 		nm_setStatus("Holding", (MPlanterName . " (" . MFieldName . ")"))
@@ -3508,7 +3552,7 @@ mp_HarvestPlanter(PlanterIndex) {
 
 		Sleep, 50 ; wait for game to update frame
 		WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " hwnd)
-		if (PlanterHarvestFull%PlanterIndex% == "Full") {
+		if ((PlanterHarvestFull%PlanterIndex% == "Full") && !PlanterHarvestNow%PlanterIndex%) {
 			loop 3 {
 				pBMScreen := Gdip_BitmapFromScreen(windowX+windowWidth//2-250 "|" windowY+windowHeight//2-52 "|500|150")
 				if (Gdip_ImageSearch(pBMScreen, bitmaps["no"], pos, , , , , 2, , 3) = 1) {
@@ -3535,6 +3579,8 @@ mp_HarvestPlanter(PlanterIndex) {
 					sleep 100
 					Gdip_DisposeImage(pBMScreen)
 					MouseMove, windowX+350, windowY+offsetY+100
+					If PlanterHarvestNow%PlanterIndex%
+						IniWrite, % 0, settings\nm_config.ini, Planters, PlanterHarvestNow%PlanterIndex%
 					break
 				}
 				Gdip_DisposeImage(pBMScreen)
@@ -3542,8 +3588,8 @@ mp_HarvestPlanter(PlanterIndex) {
 			}
 		}
 		
-		MPlanterRelease%PlanterIndex% := 0
-		IniWrite, % MPlanterRelease%PlanterIndex%, settings\nm_config.ini, Planters, MPlanterRelease%PlanterIndex%
+		PlanterHarvestNow%PlanterIndex% := 0
+		IniWrite, % PlanterHarvestNow%PlanterIndex%, settings\nm_config.ini, Planters, PlanterHarvestNow%PlanterIndex%
 		MPlanterSmoking%PlanterIndex% := 0
 		IniWrite, % MPlanterSmoking%PlanterIndex%, settings\nm_config.ini, Planters, MPlanterSmoking%PlanterIndex%
 
@@ -3588,6 +3634,19 @@ mp_HarvestPlanter(PlanterIndex) {
 		sleep, 1000
 		nm_Move(1500*round(18/MoveSpeedNum, 2), BackKey, RightKey)
 		nm_loot(9, 5, "left")
+		if ((MConvertFullBagHarvest = 1) && (BackpackPercent >= 95))
+			{
+				; loot path end location for some fields prevents successful return to hive
+				If (MFieldName = "Cactus") || (MFieldName = "Sunflower") {
+					sleep, 200
+					nm_Move(1500*round(18/MoveSpeedNum, 6), RightKey)
+					sleep, 200
+				}
+				;nm_setStatus("Holding", "Inside if MConvertFullBagHarvest=1 && BackpackPercent>=95 " (MPlanterName . " (" . MFieldName . ")")) ; //testing
+				nm_walkFrom(MFieldName)
+				DisconnectCheck()
+				nm_findHiveSlot()
+			}
 		return 1
 	}
 }
@@ -8431,7 +8490,7 @@ nm_MPlanterGatherHelp(){ ; gather in planter field information for manual plante
 	msgbox, 0x40000, Gather in planter field, DESCRIPTION:`n`nGather in planter field will enable you to gather only in the fields where planters are placed, instead of the fields selected in your gather tab. You can choose which planter slots you wish to gather in. If you choose more than one planter slot to gather in, the macro will rotate between each selected slot. If there are no slots available for planter gather (none selected, none with planters, or all 'holding' if 'disable auto harvest' mode is also selected), the macro will revert to gathering in the fields specified in the gather tab.
 }
 nm_MPuffModeHelp(){ ; disable auto harvest information for manual planters
-	msgbox, 0x40000, Disable auto harvest, DESCRIPTION:`n`nThis option is designed for users trying to grow smoking planters for puffshrooms. Enabling it for a planter slot will cause the macro NOT to harvest the planter. Instead, it will 'hold' the planter until you harvest and clear it either manually or through remote control. This allows you to check whether it is smoking before harvesting.`n`nTo use this feature:`n- Choose which slots to disable auto harvest for, depending on how many planters you wish to use for puffshrooms versus loot or nectar. `n- If you have set up a Discord webhook and would like a ping and screenshot of the planter when full grown, select Planter Progress in Natro Status tab > Change Discord Settings.`n- When ready, either: harvest manually in game, clear the planter in the Planter Timers pop-up (F5), and move to next cycle by pressing + in the planter tab, or do nothing if the planter is smoking and you wish to keep holding it.`n- If you turn off 'Disable Auto Harvest' or switch to Planters Plus mode, the macro will harvest any planters marked holding or smoking.`n`nAdvanced options:`nIf you have set up remote control, after receiving a ping you can also optionally set your planter to smoking to help you keep track, or release from hold and plant next using these commands:`n?planter smoking [1][2][3]`n?planter release [1][2][3]`nSee these planter commands and your planter status using ?planter`n`nSee our Discord server for more details on how to set up and use webhook or remote control!
+	msgbox, 0x40000, Disable auto harvest, DESCRIPTION:`n`nThis option is designed for users trying to grow smoking planters for puffshrooms. Enabling it for a planter slot will cause the macro NOT to harvest the planter. Instead, it will 'hold' the planter until you harvest and clear it either manually or through remote control. This allows you to check whether it is smoking before harvesting.`n`nTo use this feature:`n- Choose which slots to disable auto harvest for, depending on how many planters you wish to use for puffshrooms versus loot or nectar. `n- If you have set up a Discord webhook and would like a ping and screenshot of the planter when full grown, select Planter Progress in Natro Status tab > Change Discord Settings.`n- When ready, either: harvest manually in game, clear the planter in the Planter Timers pop-up (F5), and move to next cycle by pressing + in the planter tab, or do nothing if the planter is smoking and you wish to keep holding it.`n- If you turn off 'Disable Auto Harvest' or switch to Planters Plus mode, the macro will harvest any planters marked holding or smoking.`n`nAdvanced options:`nIf you have set up remote control, after receiving a ping you can also optionally set your planter to smoking to help you keep track, or release from hold and plant next using these commands:`n?planter smoking [1][2][3]`n?planter harvestnow [1][2][3]`nSee these planter commands and your planter status using ?planter`n`nSee our Discord server for more details on how to set up and use webhook or remote control!
 }
 nm_ReconnectTimeHelp(){
 	global ReconnectHour, ReconnectMin, ReconnectInterval
@@ -8840,7 +8899,7 @@ nm_TabPlantersLock(){
 	GuiControl, disable, % hMHILeft
 	GuiControl, disable, % hMHIRight
 	Static ManualPlantersControls := ["MPageLeft", "MPageRight", "MSlot1Left", "MSlot1Right", "MSlot2Left", "MSlot2Right", "MSlot3Left", "MSlot3Right"
-	, "MPuffModeA", "MPuffMode1", "MPuffMode2", "MPuffMode3", "MPuffModeHelp", "MPlanterGatherA", "MPlanterGather1", "MPlanterGather2", "MPlanterGather3", "MPlanterGatherHelp"
+	, "MPuffModeA", "MPuffMode1", "MPuffMode2", "MPuffMode3", "MPuffModeHelp", "MPlanterGatherA", "MPlanterGather1", "MPlanterGather2", "MPlanterGather3", "MPlanterGatherHelp", "MConvertFullBagHarvest"
 	, "MSlot1Cycle1Planter", "MSlot1Cycle2Planter", "MSlot1Cycle3Planter", "MSlot1Cycle4Planter", "MSlot1Cycle5Planter", "MSlot1Cycle6Planter", "MSlot1Cycle7Planter", "MSlot1Cycle8Planter", "MSlot1Cycle9Planter"
 	, "MSlot1Cycle1Field", "MSlot1Cycle2Field", "MSlot1Cycle3Field", "MSlot1Cycle4Field", "MSlot1Cycle5Field", "MSlot1Cycle6Field", "MSlot1Cycle7Field", "MSlot1Cycle8Field", "MSlot1Cycle9Field"
 	, "MSlot1Cycle1Glitter", "MSlot1Cycle2Glitter", "MSlot1Cycle3Glitter", "MSlot1Cycle4Glitter", "MSlot1Cycle5Glitter", "MSlot1Cycle6Glitter", "MSlot1Cycle7Glitter", "MSlot1Cycle8Glitter", "MSlot1Cycle9Glitter"
@@ -8916,6 +8975,7 @@ nm_TabPlantersUnLock(){
 	GuiControl, enable, MPuffModeHelp
 	GuiControl, enable, MPlanterGatherA
 	GuiControl, enable, MPlanterGatherHelp
+	GuiControl, enable, MConvertFullBagHarvest
 	mp_UpdatePage()
 	mp_UpdateControls()
 }
@@ -19823,7 +19883,7 @@ nm_gotoPlanter(location, waitEnd := 1){
     KeyWait, F14, D T5 L
 	if WaitEnd
 	{
-		KeyWait, F14, T60 L
+		KeyWait, F14, T90 L
 		nm_endWalk()
 	}
 }
@@ -19979,7 +20039,7 @@ ba_planterSwitch(){
 	global
 	static PlantersPlusControls := ["N1Priority","N2Priority","N3Priority","N4Priority","N5Priority","N1MinPercent","N2MinPercent","N3MinPercent","N4MinPercent","N5MinPercent","N1MinPercentUpDown","N2MinPercentUpDown","N3MinPercentUpDown","N4MinPercentUpDown","N5MinPercentUpDown","DandelionFieldCheck","SunflowerFieldCheck","MushroomFieldCheck","BlueFlowerFieldCheck","CloverFieldCheck","SpiderFieldCheck","StrawberryFieldCheck","BambooFieldCheck","PineappleFieldCheck","StumpFieldCheck","PumpkinFieldCheck","PineTreeFieldCheck","RoseFieldCheck","MountainTopFieldCheck","CactusFieldCheck","CoconutFieldCheck","PepperFieldCheck","Text1","Text2","Text3","Text4","Text5","TextLine1","TextLine2","TextLine3","TextLine4","TextLine5","TextLine6","TextLine7","TextZone1","TextZone2","TextZone3","TextZone4","TextZone5","TextZone6","NPreset","TextPresets","TextNp","TextMin","PlasticPlanterCheck","CandyPlanterCheck","BlueClayPlanterCheck","RedClayPlanterCheck","TackyPlanterCheck","PesticidePlanterCheck","HeatTreatedPlanterCheck","HydroponicPlanterCheck","PetalPlanterCheck","PlanterOfPlentyCheck","PaperPlanterCheck","TicketPlanterCheck","TextHarvest","HarvestFullGrown","gotoPlanterField","gatherFieldSipping","TextHours","TextMax","MaxAllowedPlanters","MaxAllowedPlantersText","TextAllowedPlanters","TextAllowedFields","TimersButton","AutomaticHarvestInterval","ConvertFullBagHarvest","GatherPlanterLoot","TextBox1"]
 	, PlantersPlusControlsH := ["hNPLeft","hNPRight","hNP1Left","hNP1Right","hNP2Left","hNP2Right","hNP3Left","hNP3Right","hNP4Left","hNP4Right","hNP5Left","hNP5Right"]
-	, ManualPlantersControls := ["MHeader1Text","MHeader2Text","MHeader3Text","MSlot1PlanterText","MSlot1FieldText","MSlot1SettingsText","MSlot1SeparatorLine","MSlot2PlanterText","MSlot2FieldText","MSlot2SettingsText","MSlot2SeparatorLine","MSlot3PlanterText","MSlot3FieldText","MSlot3SettingsText","MSectionSeparatorLine","MSliderSeparatorLine","MSlot1CycleText","MSlot1LocationText","MSlot1Left","MSlot1ChangeText","MSlot1Right","MSlot2CycleText","MSlot2LocationText","MSlot2Left","MSlot2ChangeText","MSlot2Right","MSlot3CycleText","MSlot3LocationText","MSlot3Left","MSlot3ChangeText","MSlot3Right","MCurrentCycle","MHarvestText","MHarvestInterval","MPageSeparatorLine","MPageLeft","MPageNumberText","MPageRight", "MPuffModeSeparatorLine", "MPuffModeHelp", "MPuffModeText", "MPuffModeA", "MPuffMode1", "MPuffMode2", "MPuffMode3", "MGatherSeparatorLine", "MPlanterGatherHelp", "MPlanterGatherText", "MPlanterGatherA", "MPlanterGather1", "MPlanterGather2", "MPlanterGather3"]
+	, ManualPlantersControls := ["MHeader1Text","MHeader2Text","MHeader3Text","MSlot1PlanterText","MSlot1FieldText","MSlot1SettingsText","MSlot1SeparatorLine","MSlot2PlanterText","MSlot2FieldText","MSlot2SettingsText","MSlot2SeparatorLine","MSlot3PlanterText","MSlot3FieldText","MSlot3SettingsText","MSectionSeparatorLine","MSliderSeparatorLine","MSlot1CycleText","MSlot1CycleNo","MSlot1LocationText","MSlot1Left","MSlot1ChangeText","MSlot1Right","MSlot2CycleText","MSlot2CycleNo","MSlot2LocationText","MSlot2Left","MSlot2ChangeText","MSlot2Right","MSlot3CycleText","MSlot3CycleNo","MSlot3LocationText","MSlot3Left","MSlot3ChangeText","MSlot3Right","MCurrentCycle","MHarvestText","MHarvestInterval","MPageSeparatorLine","MPageLeft","MPageNumberText","MPageRight", "MPuffModeSeparatorLine", "MPuffModeHelp", "MPuffModeText", "MPuffModeA", "MPuffMode1", "MPuffMode2", "MPuffMode3", "MGatherSeparatorLine", "MPlanterGatherHelp", "MPlanterGatherText", "MPlanterGatherA", "MPlanterGather1", "MPlanterGather2", "MPlanterGather3", "MConvertFullBagHarvest"]
 	, ManualPlantersControlsH := ["hMHILeft","hMHIRight"]
 	, ManualPlantersOptions := ["Planter","Field","Glitter","AutoFull"]
 	local i, c, k, v, Prev_DetectHiddenWindows, Prev_TitleMatchMode
@@ -20350,7 +20410,7 @@ ba_planter(){
 	global SunflowerFieldCheck
 	global VBState
 	global MondoBuffCheck, PMondoGuid, LastGuid, MondoAction, LastMondoBuff
-	global MPlanterRelease1, MPlanterRelease2, MPlanterRelease3
+	global PlanterSS1, PlanterSS1, PlanterSS1
 	global MPlanterHold1, MPlanterHold2, MPlanterHold3
 	global MPlanterSmoking1, MPlanterSmoking2, MPlanterSmoking3
 	loop, 3 {
@@ -20361,8 +20421,6 @@ ba_planter(){
 	IniRead, PlanterEstPercent%A_Index%, settings\nm_config.ini, Planters, PlanterEstPercent%A_Index%
 	;reset manual planter disable auto harvest variables to 0
 	if (PlanterMode = 2) {
-	MPlanterRelease%A_Index% := 0
-	IniWrite, % MPlanterRelease%A_Index%, settings\nm_config.ini, Planters, MPlanterRelease%A_Index%
 	MPlanterHold%A_Index% := 0
 	IniWrite, % MPlanterHold%A_Index%, settings\nm_config.ini, Planters, MPlanterHold%A_Index%
 	MPlanterSmoking%A_Index% := 0
@@ -20383,6 +20441,11 @@ ba_planter(){
 		return
 	if ((nowUnix()-GatherFieldBoostedStart)<900 || (nowUnix()-LastGlitter)<900 || nm_boostBypassCheck())
 		return
+
+	; if enabled, take any/all planter screenshots before further planter actions 
+	If (PlanterSS1 || PlanterSS2 || PlanterSS3)
+		nm_planterSS()
+
 	nectars:=["n1", "n2", "n3", "n4", "n5"]
 	;get current field nectar
 	currentFieldNectar:="None"
@@ -21357,7 +21420,7 @@ ba_placePlanter(fieldName, planter, planterNum, atField:=0){
 	return 1
 }
 ba_harvestPlanter(planterNum){
-	global PlanterName1, PlanterName2, PlanterName3, PlanterField1, PlanterField2, PlanterField3, PlanterHarvestTime1, PlanterHarvestTime2, PlanterHarvestTime3, PlanterNectar1, PlanterNectar2, PlanterNectar3, PlanterEstPercent1, PlanterEstPercent2, PlanterEstPercent3, BackKey, RightKey, objective, TotalPlantersCollected, SessionPlantersCollected, HarvestFullGrown, ConvertFullBagHarvest, GatherPlanterLoot, BackpackPercent, bitmaps, SC_E, HiveBees
+	global PlanterName1, PlanterName2, PlanterName3, PlanterField1, PlanterField2, PlanterField3, PlanterHarvestTime1, PlanterHarvestTime2, PlanterHarvestTime3, PlanterNectar1, PlanterNectar2, PlanterNectar3, PlanterEstPercent1, PlanterEstPercent2, PlanterEstPercent3, BackKey, RightKey, objective, TotalPlantersCollected, SessionPlantersCollected, HarvestFullGrown, ConvertFullBagHarvest, GatherPlanterLoot, BackpackPercent, bitmaps, SC_E, HiveBees, MoveSpeedNum, PlanterHarvestNow1, PlanterHarvestNow2, PlanterHarvestNow3
 
 	if(CurrentAction!="Planters"){
 		PreviousAction:=CurrentAction
@@ -21429,7 +21492,7 @@ ba_harvestPlanter(planterNum){
 
 		Sleep, 50 ; wait for game to update frame
 		WinGetClientPos(windowX, windowY, windowWidth, windowHeight, "ahk_id " hwnd)
-		if (HarvestFullGrown = 1) {
+		if ((HarvestFullGrown = 1) && !PlanterHarvestNow%planterNum%) {
 			loop 3 {
 				pBMScreen := Gdip_BitmapFromScreen(windowX+windowWidth//2-250 "|" windowY+windowHeight//2-52 "|500|150")
 				if (Gdip_ImageSearch(pBMScreen, bitmaps["no"], pos, , , , , 2, , 3) = 1) {
@@ -21455,6 +21518,8 @@ ba_harvestPlanter(planterNum){
 					sleep 100
 					MouseMove, windowX+350, windowY+offsetY+100
 					Gdip_DisposeImage(pBMScreen)
+					If PlanterHarvestNow%planterNum%
+						IniWrite, % 0, settings\nm_config.ini, Planters, PlanterHarvestNow%planterNum%
 					break
 				}
 				Gdip_DisposeImage(pBMScreen)
@@ -21502,6 +21567,14 @@ ba_harvestPlanter(planterNum){
 		}
 		if ((ConvertFullBagHarvest = 1) && (BackpackPercent >= 95))
 		{
+			; loot path end location for some fields prevents successful return to hive
+			If (GatherPlanterLoot = 1) {
+				If (fieldname = "Cactus") || (fieldname = "Sunflower") {
+					sleep, 200
+					nm_Move(1500*round(18/MoveSpeedNum, 8), RightKey)
+					sleep, 200
+				}
+			}
 			nm_walkFrom(fieldName)
 			DisconnectCheck()
 			nm_findHiveSlot()

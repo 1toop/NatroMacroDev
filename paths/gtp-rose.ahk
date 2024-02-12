@@ -24,6 +24,7 @@ send {" RotLeft " 4}
 " nm_Walk(10, RightKey) "
 " nm_Walk(12, RightKey, FwdKey) "
 " nm_Walk(7, BackKey, LeftKey) "
+send {" RotLeft " 2}
 )"
 }
 else {

@@ -275,4 +275,5 @@ arr2 := arr.Push("MPuffMode3" ; 250
 	, "AntPassBuyCheck"
 	, "StickerStackHive"
 	, "StickerStackCub"
-	, "QuestBoostCheck")
+	, "QuestBoostCheck"
+	, "MConvertFullBagHarvest")
