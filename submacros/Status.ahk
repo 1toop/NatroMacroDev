@@ -1567,8 +1567,7 @@ nm_command(command)
 					"name": "' j.name '",
 					"value": "' duration '",
 					"inline": true
-				},
-				'
+				},'
 				)
 			}
 			Loop Mod(3 - Mod(timers.mobs.values.Count, 3), 3)
@@ -1609,8 +1608,7 @@ nm_command(command)
 								"name": "' j.name '",
 								"value": "' duration '",
 								"inline": true
-							},
-							'
+							},'
 							)
 						}
 					}
