@@ -19460,7 +19460,7 @@ ba_placePlanter(fieldName, planter, planterNum, atField:=0){
 	return 1
 }
 ba_harvestPlanter(planterNum){
-	global PlanterName1, PlanterName2, PlanterName3, PlanterField1, PlanterField2, PlanterField3, PlanterHarvestTime1, PlanterHarvestTime2, PlanterHarvestTime3, PlanterNectar1, PlanterNectar2, PlanterNectar3, PlanterEstPercent1, PlanterEstPercent2, PlanterEstPercent3, BackKey, RightKey, objective, TotalPlantersCollected, SessionPlantersCollected, HarvestFullGrown, ConvertFullBagHarvest, GatherPlanterLoot, BackpackPercent, bitmaps, SC_E, HiveBees, PlanterHarvestNow1, PlanterHarvestNow2, PlanterHarvestNow3
+	global PlanterName1, PlanterName2, PlanterName3, PlanterField1, PlanterField2, PlanterField3, PlanterHarvestTime1, PlanterHarvestTime2, PlanterHarvestTime3, PlanterNectar1, PlanterNectar2, PlanterNectar3, PlanterEstPercent1, PlanterEstPercent2, PlanterEstPercent3, PlanterGlitterC1, PlanterGlitterC2, PlanterGlitterC3, PlanterGlitter1, PlanterGlitter2, PlanterGlitter3, BackKey, RightKey, objective, TotalPlantersCollected, SessionPlantersCollected, HarvestFullGrown, ConvertFullBagHarvest, GatherPlanterLoot, BackpackPercent, bitmaps, SC_E, HiveBees, PlanterHarvestNow1, PlanterHarvestNow2, PlanterHarvestNow3
 
 	nm_updateAction("Planters")
 
@@ -19494,12 +19494,16 @@ ba_harvestPlanter(planterNum){
 			PlanterNectar%planterNum% := "None"
 			PlanterHarvestTime%planterNum% := 20211106000000
 			PlanterEstPercent%planterNum% := 0
+			PlanterGlitterC%planterNum% := 0
+			PlanterGlitter%planterNum% := 0
 			;write values to ini
 			IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterName" planterNum
 			IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterField" planterNum
 			IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterNectar" planterNum
 			IniWrite 20211106000000, "settings\nm_config.ini", "Planters", "PlanterHarvestTime" planterNum
 			IniWrite 0, "settings\nm_config.ini", "Planters", "PlanterEstPercent" planterNum
+			IniWrite PlanterGlitter%planterNum%, "settings\nm_config.ini", "Planters", "PlanterGlitter" planterNum
+			IniWrite PlanterGlitterC%planterNum%, "settings\nm_config.ini", "Planters", "PlanterGlitterC" planterNum
 			return 1
 		}
 		else
@@ -19572,12 +19576,16 @@ ba_harvestPlanter(planterNum){
 		PlanterNectar%planterNum% := "None"
 		PlanterHarvestTime%planterNum% := 20211106000000
 		PlanterEstPercent%planterNum% := 0
+		PlanterGlitterC%planterNum% := 0
+		PlanterGlitter%planterNum% := 0
 		;write values to ini
 		IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterName" planterNum
 		IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterField" planterNum
 		IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterNectar" planterNum
 		IniWrite 20211106000000, "settings\nm_config.ini", "Planters", "PlanterHarvestTime" planterNum
 		IniWrite 0, "settings\nm_config.ini", "Planters", "PlanterEstPercent" planterNum
+		IniWrite PlanterGlitter%planterNum%, "settings\nm_config.ini", "Planters", "PlanterGlitter" planterNum
+		IniWrite PlanterGlitterC%planterNum%, "settings\nm_config.ini", "Planters", "PlanterGlitterC" planterNum
 		TotalPlantersCollected:=TotalPlantersCollected+1
 		SessionPlantersCollected:=SessionPlantersCollected+1
 		PostSubmacroMessage("StatMonitor", 0x5555, 4, 1)
