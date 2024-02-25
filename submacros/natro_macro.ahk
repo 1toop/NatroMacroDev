@@ -8488,7 +8488,7 @@ nm_AdvancedGUI(init:=0){
 }
 nm_TestInfinite(*){
 	global
-	Gui["TestCountEdit"].Enabled := Gui["TestCount"].Enabled := !(TestInfinite := MainGui["TestInfinite"].Value)
+	MainGui["TestCount"].Enabled := !(TestInfinite := MainGui["TestInfinite"].Value)
 }
 nm_selectTestPath(GuiCtrl, *){
 	global Test1Path, Test2Path
