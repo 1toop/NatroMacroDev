@@ -450,7 +450,7 @@ nm_setGlobalStr(wParam, lParam, *)
 	Critical
 	; enumeration
 	#Include "%A_ScriptDir%\..\lib\enum\EnumStr.ahk"
-	static sections := ["Boost","Collect","Gather","Gui","Planters","Quests","Settings","Status"]
+	static sections := ["Boost","Collect","Gather","Gui","Planters","Quests","Settings","Status","Blender","Shrine"]
 
 	local var := arr[wParam], section := sections[lParam]
 	try %var% := IniRead("settings\nm_config.ini", section, var)

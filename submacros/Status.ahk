@@ -253,6 +253,18 @@ settings["BlenderItem3"] := {enum: 64, type: "str", section: "Blender", regex: "
 settings["StickerStackItem"] := {enum: 65, type: "str", section: "Boost", regex: "i)^(tickets|sticker|sticker\+tickets)$"}
 settings["StickerPrinterEgg"] := {enum: 66, type: "str", section: "Boost", regex: "i)^(Basic|Silver|Gold|Diamond|Mythic)$"}
 settings["MondoLootDirection"] := {enum: 67, type: "str", section: "Collect", regex: "i)^(Left|Right|Random)$"}
+settings["PlanterName1"] := {enum: 68, type: "str", section: "Planters", regex: "i)^(PlasticPlanter|CandyPlanter|BlueClayPlanter|RedClayPlanter|TackyPlanter|PesticidePlanter|HeatTreatedPlanter|HydroponicPlanter|PetalPlanter|PlanterOfPlenty|PaperPlanter|TicketPlanter)$"}
+settings["PlanterName2"] := {enum: 69, type: "str", section: "Planters", regex: "i)^(PlasticPlanter|CandyPlanter|BlueClayPlanter|RedClayPlanter|TackyPlanter|PesticidePlanter|HeatTreatedPlanter|HydroponicPlanter|PetalPlanter|PlanterOfPlenty|PaperPlanter|TicketPlanter)$"}
+settings["PlanterName3"] := {enum: 70, type: "str", section: "Planters", regex: "i)^(PlasticPlanter|CandyPlanter|BlueClayPlanter|RedClayPlanter|TackyPlanter|PesticidePlanter|HeatTreatedPlanter|HydroponicPlanter|PetalPlanter|PlanterOfPlenty|PaperPlanter|TicketPlanter)$"}
+settings["PlanterField1"] := {enum: 71, type: "str", section: "Planters", regex: "i)^(None|Bamboo|Blue Flower|Cactus|Clover|Coconut|Dandelion|Mountain Top|Mushroom|Pepper|Pine Tree|Pineapple|Pumpkin|Rose|Spider|Strawberry|Stump|Sunflower)$"}
+settings["PlanterField2"] := {enum: 72, type: "str", section: "Planters", regex: "i)^(None|Bamboo|Blue Flower|Cactus|Clover|Coconut|Dandelion|Mountain Top|Mushroom|Pepper|Pine Tree|Pineapple|Pumpkin|Rose|Spider|Strawberry|Stump|Sunflower)$"}
+settings["PlanterField3"] := {enum: 73, type: "str", section: "Planters", regex: "i)^(None|Bamboo|Blue Flower|Cactus|Clover|Coconut|Dandelion|Mountain Top|Mushroom|Pepper|Pine Tree|Pineapple|Pumpkin|Rose|Spider|Strawberry|Stump|Sunflower)$"}
+settings["PlanterNectar1"] := {enum: 74, type: "str", section: "Planters", regex: "i)^(None|Comforting|Refreshing|Satisfying|Motivating|Invigorating)$"}
+settings["PlanterNectar2"] := {enum: 75, type: "str", section: "Planters", regex: "i)^(None|Comforting|Refreshing|Satisfying|Motivating|Invigorating)$"}
+settings["PlanterNectar3"] := {enum: 76, type: "str", section: "Planters", regex: "i)^(None|Comforting|Refreshing|Satisfying|Motivating|Invigorating)$"}
+settings["PlanterHarvestFull1"] := {enum: 77, type: "str", section: "Planters", regex: "i)^(Full|Timed)$"}
+settings["PlanterHarvestFull2"] := {enum: 78, type: "str", section: "Planters", regex: "i)^(Full|Timed)$"}
+settings["PlanterHarvestFull3"] := {enum: 79, type: "str", section: "Planters", regex: "i)^(Full|Timed)$"}
 
 ;settings["discordMode"] := {enum: 1, type: "int", section: "Status", regex: "i)^(0|1|2)$"} dangerous
 ;settings["discordCheck"] := {enum: 2, type: "int", section: "Status", regex: "i)^(0|1)$"} dangerous
@@ -533,6 +545,38 @@ settings["StickerStackHive"] := {enum: 276, type: "int", section: "Boost", regex
 settings["StickerStackCub"] := {enum: 277, type: "int", section: "Boost", regex: "i)^(0|1)$"}
 settings["QuestBoostCheck"] := {enum: 278, type: "int", section: "Quests", regex: "i)^(0|1)$"}
 settings["MConvertFullBagHarvest"] := {enum: 279, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["MPlanterGatherA"] := {enum: 280, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["MPlanterGather1"] := {enum: 281, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["MPlanterGather2"] := {enum: 282, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["MPlanterGather3"] := {enum: 283, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["MPlanterSmoking1"] := {enum: 284, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["MPlanterSmoking2"] := {enum: 285, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["MPlanterSmoking3"] := {enum: 286, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["MPuffModeA"] := {enum: 287, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["MPuffMode1"] := {enum: 288, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["MPuffMode2"] := {enum: 289, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["MPuffMode3"] := {enum: 290, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["PlanterHarvestNow1"] := {enum: 291, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["PlanterHarvestNow2"] := {enum: 292, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["PlanterHarvestNow3"] := {enum: 293, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["PlanterSS1"] := {enum: 294, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["PlanterSS2"] := {enum: 295, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["PlanterSS3"] := {enum: 296, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["PlanterHarvestTime1"] := {enum: 297, type: "int", section: "Planters", regex: "i)^\d{1,10}$"}
+settings["PlanterHarvestTime2"] := {enum: 298, type: "int", section: "Planters", regex: "i)^\d{1,10}$"}
+settings["PlanterHarvestTime3"] := {enum: 299, type: "int", section: "Planters", regex: "i)^\d{1,10}$"}
+settings["PlanterEstPercent1"] := {enum: 300, type: "int", section: "Planters", regex: "i)^\d{1,3}$"}
+settings["PlanterEstPercent2"] := {enum: 301, type: "int", section: "Planters", regex: "i)^\d{1,3}$"}
+settings["PlanterEstPercent3"] := {enum: 302, type: "int", section: "Planters", regex: "i)^\d{1,3}$"}
+settings["PlanterGlitter1"] := {enum: 303, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["PlanterGlitter2"] := {enum: 304, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["PlanterGlitter3"] := {enum: 305, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["PlanterGlitterC1"] := {enum: 306, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["PlanterGlitterC2"] := {enum: 307, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["PlanterGlitterC3"] := {enum: 308, type: "int", section: "Planters", regex: "i)^(0|1)$"}
+settings["PlanterManualCycle1"] := {enum: 309, type: "int", section: "Planters", regex: "i)^\d$"}
+settings["PlanterManualCycle2"] := {enum: 310, type: "int", section: "Planters", regex: "i)^\d$"}
+settings["PlanterManualCycle3"] := {enum: 311, type: "int", section: "Planters", regex: "i)^\d$"}
 
 bitmaps := Map()
 bitmaps["moon"] := Gdip_BitmapFromBase64("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")
@@ -1094,7 +1138,7 @@ nm_command(command)
 				n := params[3]
 				if (vars["PlanterName" n] && (vars["PlanterName" n] != "None"))
 				{
-					IniWrite (vars["PlanterHarvestTime" n] := nowUnix()-1), "settings\nm_config.ini", "Planters", "PlanterHarvestTime" n
+					UpdateInt("PlanterHarvestTime" n, nowUnix()-1, "Planters")
 					discord.SendEmbed("Set remaining planter time in Slot " n " to 0!", 5066239, , , , id)
 				}
 				else
@@ -1109,8 +1153,8 @@ nm_command(command)
 				n := params[3]
 				if (vars["PlanterName" n] && (vars["PlanterName" n] != "None"))
 				{
-					IniWrite 1, "settings\nm_config.ini", "Planters", "PlanterHarvestNow" n
-					IniWrite (vars["PlanterHarvestTime" n] := nowUnix()-1), "settings\nm_config.ini", "Planters", "PlanterHarvestTime" n
+					UpdateInt("PlanterHarvestNow" n, 1, "Planters")
+					UpdateInt("PlanterHarvestTime" n, nowUnix()-1, "Planters")
 					discord.SendEmbed("Harvest planter in Slot " n "!", 5066239, , , , id)
 				}
 				else
@@ -1126,7 +1170,7 @@ nm_command(command)
 				n := params[3]
 				if (vars["PlanterName" n] && (vars["PlanterName" n] != "None") && (vars["MPlanterHold" n] = 1) && (vars["PlanterMode"] = 1))
 				{
-					IniWrite 1, "settings\nm_config.ini", "Planters", "MPlanterSmoking" n
+					UpdateInt("PlanterSmoking" n, 1, "Planters")
 					discord.SendEmbed("Set held planter in Slot " n " to smoking!", 5066239, , , , id)
 				}
 				else
@@ -1161,9 +1205,7 @@ nm_command(command)
 							}
 						}
 
-						vars["PlanterHarvestTime" n] := Max(t, vars["PlanterHarvestTime" n]) + time_delta
-						IniWrite vars["PlanterHarvestTime" n], "settings\nm_config.ini", "Planters", "PlanterHarvestTime" n
-
+						UpdateInt("PlanterHarvestTime" n, vars["PlanterHarvestTime" n] := Max(t, vars["PlanterHarvestTime" n]) + time_delta, "Planters")
 						delta := hmsFromSeconds(time_delta)
 						duration := DurationFromSeconds(timer := (vars["PlanterHarvestTime" n] - nowUnix()), (timer > 0) ? (((timer >= 86400) ? "d'd' h" : "") ((timer >= 3600) ? "h'h' m" : "") ((timer >= 60) ? "m'm' s" : "") "s's'") : "'Ready'")
 						discord.SendEmbed("Added " delta " to planter in Slot " n "!\nNew Remaining Time: " duration, 5066239, , , , id)
@@ -1201,9 +1243,7 @@ nm_command(command)
 							}
 						}
 
-						vars["PlanterHarvestTime" n] := Max(t, vars["PlanterHarvestTime" n] - time_delta)
-						IniWrite vars["PlanterHarvestTime" n], "settings\nm_config.ini", "Planters", "PlanterHarvestTime" n
-
+						UpdateInt("PlanterHarvestTime" n, vars["PlanterHarvestTime" n] := Max(t, vars["PlanterHarvestTime" n] - time_delta), "Planters")
 						delta := hmsFromSeconds(time_delta)
 						duration := DurationFromSeconds(timer := (vars["PlanterHarvestTime" n] - nowUnix()), (timer > 0) ? (((timer >= 86400) ? "d'd' h" : "") ((timer >= 3600) ? "h'h' m" : "") ((timer >= 60) ? "m'm' s" : "") "s's'") : "'Ready'")
 						discord.SendEmbed("Subtracted " delta " from planter in Slot " n "!\nNew Remaining Time: " duration, 5066239, , , , id)
@@ -1219,14 +1259,14 @@ nm_command(command)
 			if ((params[3] = 1) || (params[3] = 2) || (params[3] = 3))
 			{
 				n := params[3]
-				IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterName" n
-				IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterField" n
-				IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterNectar" n
-				IniWrite "20211106000000", "settings\nm_config.ini", "Planters", "PlanterHarvestTime" n
-				IniWrite 0, "settings\nm_config.ini", "Planters", "PlanterEstPercent" n
-				IniWrite "", "settings\nm_config.ini", "Planters", "PlanterHarvestFull" n
-				IniWrite 0, "settings\nm_config.ini", "Planters", "PlanterGlitter" n
-				IniWrite 0, "settings\nm_config.ini", "Planters", "PlanterGlitterC" n
+				UpdateStr("PlanterName" n, "None", "Planters")
+				UpdateStr("PlanterField" n, "None", "Planters")
+				UpdateStr("PlanterNectar" n, "None", "Planters")
+				UpdateStr("PlanterHarvestFull" n, "", "Planters")
+				UpdateInt("PlanterHarvestTime" n, 2147483647, "Planters")
+				UpdateInt("PlanterEstPercent" n, 0, "Planters")
+				UpdateInt("PlanterGlitter" n, 0, "Planters")
+				UpdateInt("PlanterGlitterC" n, 0, "Planters")
 				discord.SendEmbed("Cleared planter in Slot " n "!", 5066239, , , , id)
 			}
 			else
@@ -1238,7 +1278,7 @@ nm_command(command)
 				n := params[3]
 				if (vars["PlanterName" n] && (vars["PlanterName" n] != "None"))
 					{
-						IniWrite 1, "settings\nm_config.ini", "Planters", "PlanterSS" n
+						UpdateInt("PlanterSS" n, 1, "Planters")
 						discord.SendEmbed("Take screenshot of planter in Slot " n "!", 5066239, , , , id)
 					}
 				else
@@ -1371,7 +1411,7 @@ nm_command(command)
 			}
 			if IsSet(cooldown)
 			{
-				IniWrite (vars["Last" varname] := nowUnix()), "settings\nm_config.ini", "Collect", "Last" varname
+				UpdateInt("Last" varname, nowUnix(), "Collect")
 				duration := DurationFromSeconds(time := (cooldown*((section = "mobs") ? (1-(vars["MonsterRespawnTime"]?vars["MonsterRespawnTime"]:0)*0.01) : 1)), ((time >= 86400) ? "d'd' h" : "") ((time >= 3600) ? "h'h' m" : "") ((time >= 60) ? "m'm' s" : "") "s's'")
 				discord.SendEmbed("Reset timer for " displayname "!\n" displayname " will now be " ((section = "mobs") ? "killed" : "collected") " in " duration ".", 5066239, , , , id)
 			}
@@ -1397,7 +1437,7 @@ nm_command(command)
 			}
 			if IsSet(cooldown)
 			{
-				IniWrite (vars["Last" varname] := 1), "settings\nm_config.ini", "Collect", "Last" varname
+				UpdateInt("Last" varname, 1, "Collect")
 				discord.SendEmbed("Set " displayname " to be " ((section = "mobs") ? "killed" : "collected") " as soon as possible!", 5066239, , , , id)
 			}
 			else if IsSet(varname)
@@ -1442,9 +1482,7 @@ nm_command(command)
 						}
 					}
 
-					vars["Last" varname] := Round(Max(t-(cooldown*((section = "mobs") ? (1-(vars["MonsterRespawnTime"]?vars["MonsterRespawnTime"]:0)*0.01) : 1)), vars["Last" varname]) + time_delta)
-					IniWrite vars["Last" varname], "settings\nm_config.ini", "Collect", "Last" varname
-
+					UpdateInt("Last" varname, vars["Last" varname] := Round(Max(t-(cooldown*((section = "mobs") ? (1-(vars["MonsterRespawnTime"]?vars["MonsterRespawnTime"]:0)*0.01) : 1)), vars["Last" varname]) + time_delta), "Collect")
 					delta := hmsFromSeconds(time_delta)
 					duration := DurationFromSeconds(timer := (vars["Last" varname] + cooldown*((section = "mobs") ? (1-(vars["MonsterRespawnTime"]?vars["MonsterRespawnTime"]:0)*0.01) : 1) - t), (timer > 0) ? (((timer >= 86400) ? "d'd' h" : "") ((timer >= 3600) ? "h'h' m" : "") ((timer >= 60) ? "m'm' s" : "") "s's'") : ((section = "mobs") ? "'Alive'" : "'Ready'"))
 					discord.SendEmbed("Added " delta " to " displayname " timer!\nNew Remaining Time: " duration, 5066239, , , , id)
@@ -1492,9 +1530,7 @@ nm_command(command)
 						}
 					}
 
-					vars["Last" varname] := Round(Max(t-(cooldown*((section = "mobs") ? (1-(vars["MonsterRespawnTime"]?vars["MonsterRespawnTime"]:0)*0.01) : 1)), vars["Last" varname] - time_delta))
-					IniWrite vars["Last" varname], "settings\nm_config.ini", "Collect", "Last" varname
-
+					UpdateInt("Last" varname, vars["Last" varname] := Round(Max(t-(cooldown*((section = "mobs") ? (1-(vars["MonsterRespawnTime"]?vars["MonsterRespawnTime"]:0)*0.01) : 1)), vars["Last" varname] - time_delta)), "Collect")
 					delta := hmsFromSeconds(time_delta)
 					duration := DurationFromSeconds(timer := (vars["Last" varname] + cooldown*((section = "mobs") ? (1-(vars["MonsterRespawnTime"]?vars["MonsterRespawnTime"]:0)*0.01) : 1) - t), (timer > 0) ? (((timer >= 86400) ? "d'd' h" : "") ((timer >= 3600) ? "h'h' m" : "") ((timer >= 60) ? "m'm' s" : "") "s's'") : ((section = "mobs") ? "'Alive'" : "'Ready'"))
 					discord.SendEmbed("Subtracted " delta " from " displayname " timer!\nNew Remaining Time: " duration, 5066239, , , , id)

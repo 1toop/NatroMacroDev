@@ -334,8 +334,7 @@ ba_resetPlanterTimer(GuiCtrl, *){
     i := SubStr(GuiCtrl.Name, -1)
 	PlanterName%i% := IniRead("settings\nm_config.ini", "Planters", "PlanterName" i)
 	if (PlanterName%i% != "None") {
-		PlanterHarvestTime%i% := nowUnix()-1
-		IniWrite PlanterHarvestTime%i%, "settings\nm_config.ini", "Planters", "PlanterHarvestTime" i
+		UpdateInt("PlanterHarvestTime" i, nowUnix()-1)
 	}
 }
 ba_setPlanterTimer(GuiCtrl, *){
@@ -344,8 +343,8 @@ ba_setPlanterTimer(GuiCtrl, *){
 	PlanterName%i% := IniRead("settings\nm_config.ini", "Planters", "PlanterName" i)
 	if (PlanterName%i% != "None") {
         PlanterHarvestTime%i% := IniRead("settings\nm_config.ini", "Planters", "PlanterHarvestTime" i)
-		IniWrite (PlanterHarvestTime%i% := (c = "Sub") ? Max(nowUnix(), PlanterHarvestTime%i%-3600) : Max(nowUnix(), PlanterHarvestTime%i%)+3600), "settings\nm_config.ini", "Planters", "PlanterHarvestTime" i
-		IniWrite Min(Max((PlanterHarvestTime%i% - nowUnix())//864, 0), 100), "settings\nm_config.ini", "Planters", "PlanterEstPercent" i
+        UpdateInt("PlanterHarvestTime" i, PlanterHarvestTime%i% := (c = "Sub") ? Max(nowUnix(), PlanterHarvestTime%i%-3600) : Max(nowUnix(), PlanterHarvestTime%i%)+3600)
+        UpdateInt("PlanterEstPercent" i, Min(Max((PlanterHarvestTime%i% - nowUnix())//864, 0), 100))
 	}
 }
 ba_setPlanterData(GuiCtrl, *){
@@ -355,17 +354,17 @@ ba_setPlanterData(GuiCtrl, *){
     if (PlanterName%i% = "None") {
         ba_addPlanterData(i)
     } else {
-        IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterName" i
-        IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterField" i
-        IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterNectar" i
-        IniWrite "20211106000000", "settings\nm_config.ini", "Planters", "PlanterHarvestTime" i
-        IniWrite 0, "settings\nm_config.ini", "Planters", "PlanterEstPercent" i
-        IniWrite "", "settings\nm_config.ini", "Planters", "PlanterHarvestFull" i
-        IniWrite 0, "settings\nm_config.ini", "Planters", "PlanterGlitter" i
-        IniWrite 0, "settings\nm_config.ini", "Planters", "PlanterGlitterC" i
-        IniWrite 0, "settings\nm_config.ini", "Planters", "MPlanterHold" i
-        IniWrite 0, "settings\nm_config.ini", "Planters", "PlanterHarvestNow" i
-        IniWrite 0, "settings\nm_config.ini", "Planters", "MPlanterSmoking" i
+        UpdateStr("PlanterName" i, "None")
+        UpdateStr("PlanterField" i, "None")
+        UpdateStr("PlanterNectar" i, "None")
+        UpdateStr("PlanterHarvestFull" i, "")
+        UpdateInt("PlanterHarvestTime" i, 2147483647)
+        UpdateInt("PlanterEstPercent" i, 0)
+        UpdateInt("PlanterGlitter" i, 0)
+        UpdateInt("PlanterGlitterC" i, 0)
+        UpdateInt("MPlanterHold" i, 0)
+        UpdateInt("PlanterHarvestNow" i, 0)
+        UpdateInt("MPlanterSmoking" i, 0)
     }
 }
 ba_addPlanterData(PlanterIndex){
@@ -455,17 +454,17 @@ ba_AddPlanter(GuiCtrl?, *){
 	}
 	local values := AddGui.Submit()
     AddGui.Destroy()
-	IniWrite addplanter, "settings\nm_config.ini", "Planters", "PlanterName" addindex
-	IniWrite addfield, "settings\nm_config.ini", "Planters", "PlanterField" addindex
-	IniWrite addnectar, "settings\nm_config.ini", "Planters", "PlanterNectar" addindex
-    IniWrite nowUnix() + (addharvesttime := values.AddHours*3600+values.AddMins*60+values.AddSecs), "settings\nm_config.ini", "Planters", "PlanterHarvestTime" addindex
-	IniWrite Min(addharvesttime//864, 100), "settings\nm_config.ini", "Planters", "PlanterEstPercent" addindex
-	IniWrite "", "settings\nm_config.ini", "Planters", "PlanterHarvestFull" addindex
-	IniWrite 0, "settings\nm_config.ini", "Planters", "PlanterGlitter" addindex
-	IniWrite 0, "settings\nm_config.ini", "Planters", "PlanterGlitterC" addindex
-	IniWrite 0, "settings\nm_config.ini", "Planters", "MPlanterHold" addindex
-	IniWrite 0, "settings\nm_config.ini", "Planters", "PlanterHarvestNow" addindex
-	IniWrite 0, "settings\nm_config.ini", "Planters", "MPlanterSmoking" addindex
+    UpdateStr("PlanterName" addindex, addplanter)
+    UpdateStr("PlanterField" addindex, addfield)
+    UpdateStr("PlanterNectar" addindex, addnectar)
+    UpdateStr("PlanterHarvestFull" addindex, "")
+    UpdateInt("PlanterHarvestTime" addindex, nowUnix() + (addharvesttime := values.AddHours*3600+values.AddMins*60+values.AddSecs))
+    UpdateInt("PlanterEstPercent" addindex, Min(addharvesttime//864, 100))
+    UpdateInt("PlanterGlitter" addindex, 0)
+    UpdateInt("PlanterGlitterC" addindex, 0)
+    UpdateInt("MPlanterHold" addindex, 0)
+    UpdateInt("PlanterHarvestNow" addindex, 0)
+    UpdateInt("MPlanterSmoking" addindex, 0)
 }
 
 ba_setBlenderAmount(GuiCtrl, *){
@@ -661,6 +660,75 @@ ba_AddShrineItem(GuiCtrl?, *){
         PostMessage 0x5553, 56+ShrineaddIndex, 10 ; ShrineIndex
         PostMessage 0x5553, 54+ShrineaddIndex, 10 ; ShrineItem
     }
+}
+
+UpdateStr(var, value)
+{
+	global
+	static enum := Map("PlanterName1", 68
+		, "PlanterName2", 69
+		, "PlanterName3", 70
+		, "PlanterField1", 71
+		, "PlanterField2", 72
+		, "PlanterField3", 73
+		, "PlanterNectar1", 74
+		, "PlanterNectar2", 75
+		, "PlanterNectar3", 76
+		, "PlanterHarvestFull1", 77
+		, "PlanterHarvestFull2", 78
+		, "PlanterHarvestFull3", 79)
+
+	try %var% := value
+	IniWrite value, "settings\nm_config.ini", "Planters", var
+	DetectHiddenWindows 1
+	if WinExist("natro_macro ahk_class AutoHotkey")
+		PostMessage 0x5553, enum[var], 5
+}
+
+UpdateInt(var, value)
+{
+	global
+	static enum := Map("MPlanterHold1", 264
+		, "MPlanterHold2", 265
+		, "MPlanterHold3", 266
+		, "MPlanterGatherA", 280
+		, "MPlanterGather1", 281
+		, "MPlanterGather2", 282
+		, "MPlanterGather3", 283
+		, "MPlanterSmoking1", 284
+		, "MPlanterSmoking2", 285
+		, "MPlanterSmoking3", 286
+		, "MPuffModeA", 287
+		, "MPuffMode1", 288
+		, "MPuffMode2", 289
+		, "MPuffMode3", 290
+		, "PlanterHarvestNow1", 291
+		, "PlanterHarvestNow2", 292
+		, "PlanterHarvestNow3", 293
+		, "PlanterSS1", 294
+		, "PlanterSS2", 295
+		, "PlanterSS3", 296
+		, "PlanterHarvestTime1", 297
+		, "PlanterHarvestTime2", 298
+		, "PlanterHarvestTime3", 299
+		, "PlanterEstPercent1", 300
+		, "PlanterEstPercent2", 301
+		, "PlanterEstPercent3", 302
+		, "PlanterGlitter1", 303
+		, "PlanterGlitter2", 304
+		, "PlanterGlitter3", 305
+		, "PlanterGlitterC1", 306
+		, "PlanterGlitterC2", 307
+		, "PlanterGlitterC3", 308
+		, "PlanterManualCycle1", 309
+		, "PlanterManualCycle2", 310
+		, "PlanterManualCycle3", 311)
+
+	try %var% := value
+	IniWrite value, "settings\nm_config.ini", "Planters", var
+	DetectHiddenWindows 1
+	if WinExist("natro_macro ahk_class AutoHotkey")
+		PostMessage 0x5552, enum[var], value
 }
 
 ba_saveTimerGui(){

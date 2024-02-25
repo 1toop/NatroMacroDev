@@ -744,9 +744,9 @@ nm_importConfig()
 		, "PlanterField1", "None"
 		, "PlanterField2", "None"
 		, "PlanterField3", "None"
-		, "PlanterHarvestTime1", 20211106000000
-		, "PlanterHarvestTime2", 20211106000000
-		, "PlanterHarvestTime3", 20211106000000
+		, "PlanterHarvestTime1", 2147483647
+		, "PlanterHarvestTime2", 2147483647
+		, "PlanterHarvestTime3", 2147483647
 		, "PlanterNectar1", "None"
 		, "PlanterNectar2", "None"
 		, "PlanterNectar3", "None"
@@ -11106,6 +11106,7 @@ nm_AutoFieldBoost(fieldName){
 	global FieldBooster, AFBrollingDice, AFBuseGlitter, AFBuseBooster, serverStart, AutoFieldBoostActive
 		, FieldLastBoosted, FieldLastBoostedBy, FieldBoostStacks, AutoFieldBoostRefresh, AFBHoursLimitEnable
 		, AFBHoursLimit, AFBFieldEnable, AFBDiceEnable, AFBGlitterEnable, MainGui, AFBGui
+		, LastBlueBoost, LastRedBoost, LastMountainBoost
 
 	if(not AutoFieldBoostActive)
 		return
@@ -11126,7 +11127,7 @@ nm_AutoFieldBoost(fieldName){
 		if(AFBFieldEnable){
 			;determine which booster applies
 			if((booster := FieldBooster[StrLower(fieldName)].booster)!="none") {
-				boosterTimer := IniRead("settings\nm_config.ini", "Collect", "Last" booster "Boost")
+				boosterTimer := Last%booster%Boost
 				if (nowUnix() - boosterTimer > 3600){
 					AFBuseBooster:=1
 				}
@@ -11234,15 +11235,15 @@ nm_fieldBoostDice(){
 		booster := FieldBooster[StrLower(CurrentField)].booster
 		if(booster="blue") {
 			boosterName:="bbooster"
-			boostTimer := IniRead("settings\nm_config.ini", "Collect", "LastBlueBoost")
+			boostTimer := LastBlueBoost
 		}
 		else if(booster="red") {
 			boosterName:="rbooster"
-			boostTimer := IniRead("settings\nm_config.ini", "Collect", "LastRedBoost")
+			boostTimer := LastRedBoost
 		}
 		else if(booster="mountain") {
 			boosterName:="mbooster"
-			boostTimer := IniRead("settings\nm_config.ini", "Collect", "LastMountainBoost")
+			boostTimer := LastMountainBoost
 		}
 		if(AFBFieldEnable && (nowUnix()-boostTimer)>(3600-AutoFieldBoostRefresh*60)) {
 			FieldNextBoostedBy:=boosterName
@@ -11293,15 +11294,15 @@ nm_fieldBoostGlitter(){
 		booster := FieldBooster[StrLower(CurrentField)].booster
 		if(booster="blue") {
 			boosterName:="bbooster"
-			boostTimer := IniRead("settings\nm_config.ini", "Collect", "LastBlueBoost")
+			boostTimer := LastBlueBoost
 		}
 		else if(booster="red") {
 			boosterName:="rbooster"
-			boostTimer := IniRead("settings\nm_config.ini", "Collect", "LastRedBoost")
+			boostTimer := LastRedBoost
 		}
 		else if(booster="mountain") {
 			boosterName:="mbooster"
-			boostTimer := IniRead("settings\nm_config.ini", "Collect", "LastMountainBoost")
+			boostTimer := LastMountainBoost
 		}
 		if(AFBFieldEnable && (nowUnix()-boostTimer)>(3600-AutoFieldBoostRefresh*60)) {
 			FieldNextBoostedBy:=boosterName
@@ -13847,12 +13848,6 @@ nm_GoGather(){
 
 		if((MPlanterGatherA) && (PlanterMode = 1)) {
 
-			Loop 3 {
-				PlanterField%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterField" A_Index)
-				MPlanterHold%A_Index% := IniRead("settings\nm_config.ini", "Planters", "MPlanterHold" A_Index)
-			}
-			LastPlanterGatherSlot := IniRead("settings\nm_config.ini", "Planters", "LastPlanterGatherSlot")
-
 			; define available planter gather slots/fields: selected by user for planter gather, with planter in field, and not 'holding at full grown'
 			(eligible := []).Length := 3
 			Loop 3 {
@@ -13914,7 +13909,6 @@ nm_GoGather(){
 		if((gotoPlanterField) && (PlanterMode = 2)){
 			Loop 3{
 				inverseIndex:=(4-A_Index)
-				PlanterField%inverseIndex% := IniRead("settings\nm_config.ini", "Planters", "PlanterField" inverseIndex)
 				If(PlanterField%inverseIndex%="dandelion" || PlanterField%inverseIndex%="sunflower" || PlanterField%inverseIndex%="mushroom" || PlanterField%inverseIndex%="blue flower" || PlanterField%inverseIndex%="clover" || PlanterField%inverseIndex%="strawberry" || PlanterField%inverseIndex%="spider" || PlanterField%inverseIndex%="bamboo" || PlanterField%inverseIndex%="pineapple" || PlanterField%inverseIndex%="stump" || PlanterField%inverseIndex%="cactus" || PlanterField%inverseIndex%="pumpkin" || PlanterField%inverseIndex%="pine tree" || PlanterField%inverseIndex%="rose" || PlanterField%inverseIndex%="mountain top" || PlanterField%inverseIndex%="pepper" || PlanterField%inverseIndex%="coconut"){
 					fieldOverrideReason:="Planter"
 					FieldName:=PlanterField%inverseIndex%
@@ -14185,10 +14179,6 @@ nm_GoGather(){
 						nm_PlanterTimeUpdate(FieldName, 0)
 						MPlanterGatherDetectionTime := nowUnix()
 					}
-					;check all planter timers
-					PlanterHarvestTime1 := IniRead("settings\nm_config.ini", "Planters", "PlanterHarvestTime1")
-					PlanterHarvestTime2 := IniRead("settings\nm_config.ini", "Planters", "PlanterHarvestTime2")
-					PlanterHarvestTime3 := IniRead("settings\nm_config.ini", "Planters", "PlanterHarvestTime3")
 					;interrupt if
 					if (((nowUnix() >= PlanterHarvestTime1) && (eligible.Has(1))) || ((nowUnix() >= PlanterHarvestTime2) && (eligible.Has(2))) || ((nowUnix() >= PlanterHarvestTime3) && (eligible.Has(3)))) {
 						interruptReason := "Planter Harvest"
@@ -15402,7 +15392,6 @@ DisconnectCheck(testCheck := 0)
 				IniWrite LastGingerbread, "settings\nm_config.ini", "Collect", "LastGingerbread"
 			}
 			Loop 3 {
-				PlanterHarvestTime%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterHarvestTime" A_Index)
 				PlanterHarvestTime%A_Index% += PlanterName%A_Index% ? (ReconnectDuration ? ReconnectDuration : 300) : 0
 				IniWrite PlanterHarvestTime%A_Index%, "settings\nm_config.ini", "Planters", "PlanterHarvestTime" A_Index
 			}
@@ -18617,11 +18606,6 @@ ba_planter(){
 	global MPlanterHold1, MPlanterHold2, MPlanterHold3
 	global MPlanterSmoking1, MPlanterSmoking2, MPlanterSmoking3
 	Loop 3 {
-		PlanterName%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterName" A_Index)
-		PlanterField%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterField" A_Index)
-		PlanterHarvestTime%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterHarvestTime" A_Index)
-		PlanterNectar%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterNectar" A_Index)
-		PlanterEstPercent%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterEstPercent" A_Index)
 		;reset manual planter disable auto harvest variables to 0
 		if (PlanterMode = 2) {
 			MPlanterHold%A_Index% := 0
@@ -18676,9 +18660,7 @@ ba_planter(){
 						if(currentField!=PlanterField%A_Index% && currentFieldNectar=PlanterNectar%A_Index%) {
 							temp1:=PlanterField%A_Index%
 							PlanterHarvestTime%A_Index% := nowUnix()-1
-							PlanterHarvestTimeN:=PlanterHarvestTime%A_Index%
-							IniWrite PlanterHarvestTimeN, "settings\nm_config.ini", "Planters", "PlanterHarvestTime" A_Index
-							PlanterHarvestTime%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterHarvestTime" A_Index)
+							IniWrite PlanterHarvestTime%A_Index%, "settings\nm_config.ini", "Planters", "PlanterHarvestTime" A_Index
 						}
 					}
 				}
@@ -18688,9 +18670,7 @@ ba_planter(){
 						planterNectar:=PlanterNectar%A_Index%
 						if (PlanterNectar=currentNectar) {
 							PlanterHarvestTime%A_Index% := nowUnix()-1
-							PlanterHarvestTimeN:=PlanterHarvestTime%A_Index%
-							IniWrite PlanterHarvestTimeN, "settings\nm_config.ini", "Planters", "PlanterHarvestTime" A_Index
-							PlanterHarvestTime%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterHarvestTime" A_Index)
+							IniWrite PlanterHarvestTime%A_Index%, "settings\nm_config.ini", "Planters", "PlanterHarvestTime" A_Index
 						}
 					}
 				}
@@ -18711,13 +18691,13 @@ ba_planter(){
 						PlanterName%i% := "None"
 						PlanterField%i% := "None"
 						PlanterNectar%i% := "None"
-						PlanterHarvestTime%i% := 20211106000000
+						PlanterHarvestTime%i% := 2147483647
 						PlanterEstPercent%i% := 0
 						;write values to ini
 						IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterName" i
 						IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterField" i
 						IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterNectar" i
-						IniWrite 20211106000000, "settings\nm_config.ini", "Planters", "PlanterHarvestTime" i
+						IniWrite 2147483647, "settings\nm_config.ini", "Planters", "PlanterHarvestTime" i
 						IniWrite 0, "settings\nm_config.ini", "Planters", "PlanterEstPercent" i
 						break
 					}
@@ -18778,7 +18758,6 @@ ba_planter(){
 		;get nectarPlantersPlaced
 		nectarPlantersPlaced:=0
 		Loop 3{
-			PlanterNectar%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterNectar" A_Index)
 			if(PlanterNectar%A_Index%=currentNectar)
 				nectarPlantersPlaced:=nectarPlantersPlaced+1
 		}
@@ -18947,7 +18926,6 @@ ba_planter(){
 		;get nectarPlantersPlaced
 		nectarPlantersPlaced:=0
 		Loop 3{
-			PlanterNectar%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterNectar" A_Index)
 			if(PlanterNectar%A_Index%=currentNectar)
 				nectarPlantersPlaced:=nectarPlantersPlaced+1
 		}
@@ -19116,7 +19094,6 @@ ba_planter(){
 		;get nectarPlantersPlaced
 		nectarPlantersPlaced:=0
 		Loop 3{
-			PlanterNectar%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterNectar" A_Index)
 			if(PlanterNectar%A_Index%=currentNectar)
 				nectarPlantersPlaced:=nectarPlantersPlaced+1
 		}
@@ -19257,9 +19234,6 @@ ba_getLastField(currentnectar){
 		, BambooFieldCheck, BlueFlowerFieldCheck, CactusFieldCheck, CloverFieldCheck, CoconutFieldCheck, DandelionFieldCheck, MountainTopFieldCheck, MushroomFieldCheck
 		, PepperFieldCheck, PineTreeFieldCheck, PineappleFieldCheck, PumpkinFieldCheck, RoseFieldCheck, SpiderFieldCheck, StrawberryFieldCheck, StumpFieldCheck, SunflowerFieldCheck
 		, PlanterField1, PlanterField2, PlanterField3
-	Loop 3 {
-		PlanterField%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterField" A_Index)
-	}
 
 	(arr := []).Length := 2, arr.Default := ""
 	if (currentNectar = "None")
@@ -19295,9 +19269,6 @@ ba_getNextPlanter(nextfield){
 		, PlasticPlanterCheck, CandyPlanterCheck, BlueClayPlanterCheck, RedClayPlanterCheck, TackyPlanterCheck, PesticidePlanterCheck, HeatTreatedPlanterCheck
 		, HydroponicPlanterCheck, PetalPlanterCheck, PaperPlanterCheck, TicketPlanterCheck, PlanterOfPlentyCheck
 		, PlanterName1, PlanterName2, PlanterName3
-	Loop 3 {
-		PlanterName%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterName" A_Index)
-	}
 	global LostPlanters
 	;determine available planters
 	tempFieldName := StrReplace(nextfield, " ", "")
@@ -19486,7 +19457,7 @@ ba_harvestPlanter(planterNum){
 			PlanterName%planterNum% := "None"
 			PlanterField%planterNum% := "None"
 			PlanterNectar%planterNum% := "None"
-			PlanterHarvestTime%planterNum% := 20211106000000
+			PlanterHarvestTime%planterNum% := 2147483647
 			PlanterEstPercent%planterNum% := 0
 			PlanterGlitterC%planterNum% := 0
 			PlanterGlitter%planterNum% := 0
@@ -19494,7 +19465,7 @@ ba_harvestPlanter(planterNum){
 			IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterName" planterNum
 			IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterField" planterNum
 			IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterNectar" planterNum
-			IniWrite 20211106000000, "settings\nm_config.ini", "Planters", "PlanterHarvestTime" planterNum
+			IniWrite 2147483647, "settings\nm_config.ini", "Planters", "PlanterHarvestTime" planterNum
 			IniWrite 0, "settings\nm_config.ini", "Planters", "PlanterEstPercent" planterNum
 			IniWrite PlanterGlitter%planterNum%, "settings\nm_config.ini", "Planters", "PlanterGlitter" planterNum
 			IniWrite PlanterGlitterC%planterNum%, "settings\nm_config.ini", "Planters", "PlanterGlitterC" planterNum
@@ -19568,7 +19539,7 @@ ba_harvestPlanter(planterNum){
 		PlanterName%planterNum% := "None"
 		PlanterField%planterNum% := "None"
 		PlanterNectar%planterNum% := "None"
-		PlanterHarvestTime%planterNum% := 20211106000000
+		PlanterHarvestTime%planterNum% := 2147483647
 		PlanterEstPercent%planterNum% := 0
 		PlanterGlitterC%planterNum% := 0
 		PlanterGlitter%planterNum% := 0
@@ -19576,7 +19547,7 @@ ba_harvestPlanter(planterNum){
 		IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterName" planterNum
 		IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterField" planterNum
 		IniWrite "None", "settings\nm_config.ini", "Planters", "PlanterNectar" planterNum
-		IniWrite 20211106000000, "settings\nm_config.ini", "Planters", "PlanterHarvestTime" planterNum
+		IniWrite 2147483647, "settings\nm_config.ini", "Planters", "PlanterHarvestTime" planterNum
 		IniWrite 0, "settings\nm_config.ini", "Planters", "PlanterEstPercent" planterNum
 		IniWrite PlanterGlitter%planterNum%, "settings\nm_config.ini", "Planters", "PlanterGlitter" planterNum
 		IniWrite PlanterGlitterC%planterNum%, "settings\nm_config.ini", "Planters", "PlanterGlitterC" planterNum
@@ -19621,14 +19592,6 @@ ba_SavePlacedPlanter(fieldName, planter, planterNum, nectar){
 		, PlanterNectar1, PlanterNectar2, PlanterNectar3
 		, PlanterEstPercent1, PlanterEstPercent2, PlanterEstPercent3
 		, LastComfortingField, LastMotivatingField, LastSatisfyingField, LastRefreshingField, LastInvigoratingField, HarvestInterval
-	Loop 3{
-		PlanterName%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterName" A_Index)
-		PlanterField%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterField" A_Index)
-		PlanterHarvestTime%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterHarvestTime" A_Index)
-		PlanterNectar%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterNectar" A_Index)
-		PlanterEstPercent%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterEstPercent" A_Index)
-	}
-	HarvestInterval := IniRead("settings\nm_config.ini", "gui", "HarvestInterval")
 	global PlasticPlanterCheck, CandyPlanterCheck, BlueClayPlanterCheck, RedClayPlanterCheck, TackyPlanterCheck, PesticidePlanterCheck, HeatTreatedPlanterCheck
 		, HydroponicPlanterCheck, PetalPlanterCheck, PaperPlanterCheck, TicketPlanterCheck, PlanterOfPlentyCheck
 		, n1minPercent, n2minPercent, n3minPercent, n4minPercent, n5minPercent, AutomaticHarvestInterval, HarvestFullGrown
@@ -19738,9 +19701,6 @@ mp_Planter() { ;//todo: merge these manual planter functions as much as possible
 		Loop 3 {
 			If (!MSlot%A_Index%Cycle1Field)
 				Continue
-			PlanterField%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterField" A_Index)
-			PlanterHarvestNow%A_Index% := IniRead("settings\nm_config.ini", "Planters", "PlanterHarvestNow" A_Index)
-			MPlanterSmoking%A_Index% := IniRead("settings\nm_config.ini", "Planters", "MPlanterSmoking" A_Index)
 			; reset Release variable to 0 if planter slot empty
 			If (PlanterField%A_Index% = "None") {
 				PlanterHarvestNow%A_Index% := 0
@@ -20128,7 +20088,7 @@ mp_HarvestPlanter(PlanterIndex) {
 			PlanterGlitterC%PlanterIndex% := 0
 			PlanterGlitter%PlanterIndex% := 0
 			PlanterHarvestFull%PlanterIndex% := ""
-			PlanterHarvestTime%PlanterIndex% := 20211106000000
+			PlanterHarvestTime%PlanterIndex% := 2147483647
 
 			IniWrite PlanterName%PlanterIndex%, "settings\nm_config.ini", "Planters", "PlanterName" PlanterIndex
 			IniWrite PlanterField%PlanterIndex%, "settings\nm_config.ini", "Planters", "PlanterField" PlanterIndex
@@ -20229,7 +20189,7 @@ mp_HarvestPlanter(PlanterIndex) {
 		PlanterGlitterC%PlanterIndex% := 0
 		PlanterGlitter%PlanterIndex% := 0
 		PlanterHarvestFull%PlanterIndex% := ""
-		PlanterHarvestTime%PlanterIndex% := 20211106000000
+		PlanterHarvestTime%PlanterIndex% := 2147483647
 
 		IniWrite PlanterName%PlanterIndex%, "settings\nm_config.ini", "Planters", "PlanterName" PlanterIndex
 		IniWrite PlanterField%PlanterIndex%, "settings\nm_config.ini", "Planters", "PlanterField" PlanterIndex
@@ -20751,13 +20711,12 @@ nm_setGlobalStr(wParam, lParam, *)
 {
 	global
 	Critical
-	local var
 	; enumeration
 	#Include "%A_ScriptDir%\..\lib\enum\EnumStr.ahk"
 	static sections := ["Boost","Collect","Gather","Gui","Planters","Quests","Settings","Status","Blender","Shrine"]
 
-	var := arr[wParam], section := sections[lParam]
-	%var% := IniRead("settings\nm_config.ini", section, var)
+	local var := arr[wParam], section := sections[lParam]
+	try %var% := IniRead("settings\nm_config.ini", section, var)
 	nm_UpdateGUIVar(var)
 	return 0
 }
@@ -20765,11 +20724,11 @@ nm_setGlobalInt(wParam, lParam, *)
 {
 	global
 	Critical
-	local var
 	; enumeration
 	#Include "%A_ScriptDir%\..\lib\enum\EnumInt.ahk"
 
-	var := arr[wParam], %var% := lParam
+	local var := arr[wParam]
+	try %var% := lParam
 	nm_UpdateGUIVar(var)
 	return 0
 }
