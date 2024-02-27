@@ -2,8 +2,8 @@
  * @description: JSON格式字符串序列化和反序列化, 修改自[HotKeyIt/Yaml](https://github.com/HotKeyIt/Yaml)
  * 增加了对true/false/null类型的支持, 保留了数值的类型
  * @author thqby, HotKeyIt
- * @date 2023/05/12
- * @version 1.0.5
+ * @date 2024/02/24
+ * @version 1.0.7
  ***********************************************************************/
 
  class JSON {
@@ -22,11 +22,11 @@
 		D := [C := (A := InStr(text := LTrim(text, " `t`r`n"), "[") = 1) ? [] : maptype()], text := LTrim(SubStr(text, 2), " `t`r`n"), L := 1, N := 0, V := K := "", J := C, !(Q := InStr(text, '"') != 1) ? text := LTrim(text, '"') : ""
 		Loop Parse text, '"' {
 			Q := NQ ? 1 : !Q
-			NQ := Q && (SubStr(A_LoopField, -3) = "\\\" || (SubStr(A_LoopField, -1) = "\" && SubStr(A_LoopField, -2) != "\\"))
+			NQ := Q && RegExMatch(A_LoopField, '(^|[^\\])(\\\\)*\\$')
 			if !Q {
 				if (t := Trim(A_LoopField, " `t`r`n")) = "," || (t = ":" && V := 1)
 					continue
-				else if t && (InStr("{[]},:", SubStr(t, 1, 1)) || RegExMatch(t, "^-?\d*(\.\d*)?\s*[,\]\}]")) {
+				else if t && (InStr("{[]},:", SubStr(t, 1, 1)) || A && RegExMatch(t, "m)^(null|false|true|-?\d+(\.\d*(e[-+]\d+)?)?)\s*[,}\]\r\n]")) {
 					Loop Parse t {
 						if N && N--
 							continue
@@ -44,7 +44,7 @@
 								throw Error("Malformed JSON - to many closing brackets.", 0, t)
 							else C := --L = 0 ? "" : D[L], A := Type(C) = "Array"
 						} else if !(InStr(" `t`r,", A_LoopField) || (A_LoopField = ":" && V := 1)) {
-							if RegExMatch(SubStr(t, A_Index), "m)^(null|false|true|-?\d+\.?\d*)\s*[,}\]\r\n]", &R) && (N := R.Len(0) - 2, R := R.1, 1) {
+							if RegExMatch(SubStr(t, A_Index), "m)^(null|false|true|-?\d+(\.\d*(e[-+]\d+)?)?)\s*[,}\]\r\n]", &R) && (N := R.Len(0) - 2, R := R.1, 1) {
 								if A
 									C.Push(R = "null" ? _null : R = "true" ? _true : R = "false" ? _false : IsNumber(R) ? R + 0 : R)
 								else if V
@@ -64,12 +64,12 @@
 									if N
 										continue
 								}
-								throw Error("Malformed JSON - unrecognized character-", 0, A_LoopField " in " t)
+								throw Error("Malformed JSON - unrecognized character.", 0, A_LoopField " in " t)
 							}
 						}
 					}
-				} else if InStr(t, ':') > 1
-					throw Error("Malformed JSON - unrecognized character-", 0, SubStr(t, 1, 1) " in " t)
+				} else if A || InStr(t, ':') > 1
+					throw Error("Malformed JSON - unrecognized character.", 0, SubStr(t, 1, 1) " in " t)
 			} else if NQ && (P .= A_LoopField '"', 1)
 				continue
 			else if A
