@@ -20932,6 +20932,8 @@ nm_MemoryMatchOAC(PriorityItemOAC:=0, MMValue:=0) { ; PriorityItem can be set to
 	PairFoundOAC:=0
 	MatchFoundOAC:=0
 	Click:=0
+	Click1:=0
+	Click2:=0
 
 	pBMScreen := Gdip_BitmapFromScreen(middleX-275-Xoffset "|" middleY-146 "|100|100") ; Detect Number of Chances
 	Loop 8 {
@@ -20943,7 +20945,7 @@ nm_MemoryMatchOAC(PriorityItemOAC:=0, MMValue:=0) { ; PriorityItem can be set to
 	}
 	Gdip_DisposeImage(pBMScreen)
 
-	Loop %Chances% { ; Numer of available Chances. 
+	Loop Chances { ; Numer of available Chances. 
 
 		if(MMFound=0) 
            		Break        	
@@ -20951,9 +20953,9 @@ nm_MemoryMatchOAC(PriorityItemOAC:=0, MMValue:=0) { ; PriorityItem can be set to
 		loop 2 { ;Click tile, store item and compare
 			if(A_Index=1) {
 				; Compare Tiles before Click 1								
-				loop %Tiles% {				
+				loop Tiles {				
 					i:=A_index			
-					loop %Tiles% { 			
+					loop Tiles { 			
 		    				j := A_index		
 								
 		    				if (i = j)		
@@ -20995,7 +20997,7 @@ nm_MemoryMatchOAC(PriorityItemOAC:=0, MMValue:=0) { ; PriorityItem can be set to
 					j:=Tile			
 					Item1 := StoreitemValOAC[j]								
 			
-					loop %Tiles% {			
+					loop Tiles {			
 						i:=A_index		
 								
 			    			if (i = Tile)		
