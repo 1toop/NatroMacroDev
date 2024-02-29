@@ -7468,7 +7468,7 @@ nm_BitterberryFeeder(*)
 
 	Loop
 	{
-		if ((pos := nm_InventorySearch("bitterberry", "down", , , 0, (A_Index = 1) ? 40 : 4)) = 0)
+		if ((pos := nm_InventorySearch("bitterberry", "down", , , , (A_Index = 1) ? 40 : 4)) = 0)
 		{
 			MsgBox "You ran out of Bitterberries!", "Bitterberry Auto-Feeder v0.2", 0x40010
 			break
@@ -7608,7 +7608,7 @@ nm_BasicEggHatcher(*)
 	rj := 0
 	Loop
 	{
-		if ((pos := (A_Index = 1) ? nm_InventorySearch("basicegg", "down", , , 0, 70) : (rj = 1) ? nm_InventorySearch("royaljelly", "down", , , 0, 7) : nm_InventorySearch("basicegg", "up", , , 0, 7)) = 0)
+		if ((pos := (A_Index = 1) ? nm_InventorySearch("basicegg", "up", , , , 70) : (rj = 1) ? nm_InventorySearch("royaljelly", "down", , , 0, 7) : nm_InventorySearch("basicegg", "up", , , 0, 7)) = 0)
 		{
 			MsgBox "You ran out of " ((rj = 1) ? "Royal Jellies!" : "Basic Eggs!"), "Basic Bee Replacement Program", 0x40010
 			break
