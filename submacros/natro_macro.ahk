@@ -7424,12 +7424,11 @@ nm_BitterberryFeeder(*)
 		ExitApp
 
 	bitterberrynos := InputBox("Enter the amount of bitterberry used each time", "How many bitterberry?", "w320 h180 T60").Value
-	if IsInteger(bitterberrynos)
+	if IsInteger(bitterberrynos) {
 		if (bitterberrynos > 30)
 			if (MsgBox("You have entered " bitterberrynos " which is more than 30.``nAre you sure?", "Bitterberry Auto-Feeder v0.2", 0x40034) = "No")
 				ExitApp
-	else
-	{
+	} else {
 		MsgBox "You must enter a number for Bitterberries!!``nStopping Feeder!", "Bitterberry Auto-Feeder v0.2", 0x40010
 		ExitApp
 	}
