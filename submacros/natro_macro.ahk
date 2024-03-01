@@ -16656,7 +16656,11 @@ nm_PolarQuestProg(){
 		wh := windowY+PolarStart[3]
 		for key, value in PolarBear {
 			filename:=(key . ".png")
-			if(ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*10 nm_image_assets\" fileName) = 1) {
+			try
+				result := ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*10 nm_image_assets\" fileName)
+			catch
+				result := 0
+			if(result = 1) {
 				PolarQuest:=key
 				questSteps:=PolarBear[key].Length
 				;make sure full quest is visible
@@ -16664,7 +16668,11 @@ nm_PolarQuestProg(){
 					found:=0
 					NextY:=windowY+PolarStart[3]
 					loop questSteps {
-						if(ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png") = 1) {
+						try
+							result := ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png")
+						catch
+							result := 0
+						if(result = 1) {
 							NextY:=NextY+QuestBarSize
 							found:=found+1
 						} else {
@@ -16869,7 +16877,11 @@ nm_RileyQuestProg(){
 		wh := windowY+RileyStart[3]
 		for key, value in RileyBee {
 			filename:=(key . ".png")
-			if(ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*100 nm_image_assets\" fileName) = 1) {
+			try
+				result := ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*100 nm_image_assets\" fileName)
+			catch
+				result := 0
+			if(result = 1) {
 				RileyQuest:=key
 				questSteps:=RileyBee[key].Length
 				;make sure full quest is visible
@@ -16877,7 +16889,11 @@ nm_RileyQuestProg(){
 					found:=0
 					NextY:=windowY+RileyStart[3]
 					loop questSteps {
-						if(ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png") = 1) {
+						try
+							result := ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png")
+						catch
+							result := 0
+						if(result = 1) {
 							NextY:=NextY+QuestBarSize
 							found:=found+1
 						} else {
@@ -17137,7 +17153,11 @@ nm_BuckoQuestProg(){
 		wh := windowY+BuckoStart[3]
 		for key, value in BuckoBee {
 			filename:=(key . ".png")
-			if(ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*100 nm_image_assets\" fileName) = 1) {
+			try
+				result := ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*100 nm_image_assets\" fileName)
+			catch
+				result := 0
+			if(result = 1) {
 				BuckoQuest:=key
 				questSteps:=BuckoBee[key].Length
 				;make sure full quest is visible
@@ -17145,7 +17165,11 @@ nm_BuckoQuestProg(){
 					found:=0
 					NextY:=windowY+BuckoStart[3]
 					loop questSteps {
-						if(ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png") = 1) {
+						try
+							result := ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png")
+						catch
+							result := 0
+						if(result = 1) {
 							NextY:=NextY+QuestBarSize
 							found:=found+1
 						} else {
@@ -17415,7 +17439,11 @@ nm_BlackQuestProg(){
 		wh := windowY+BlackStart[3]
 		for key, value in BlackBear {
 			filename:=(key . ".png")
-			if(ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*100 nm_image_assets\" fileName) = 1) {
+			try
+				result := ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*100 nm_image_assets\" fileName)
+			catch
+				result := 0
+			if(result = 1) {
 				BlackQuest:=key
 				questSteps:=BlackBear[key].Length
 				;make sure full quest is visible
@@ -17423,7 +17451,11 @@ nm_BlackQuestProg(){
 					found:=0
 					NextY:=windowY+BlackStart[3]
 					loop questSteps {
-						if(ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png") = 1) {
+						try
+							result := ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png")
+						catch
+							result := 0
+						if(result = 1) {
 							NextY:=NextY+QuestBarSize
 							found:=found+1
 						} else {
