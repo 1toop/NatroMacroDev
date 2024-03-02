@@ -308,4 +308,14 @@
 	, "PlanterGlitterC3"
 	, "PlanterManualCycle1"
 	, "PlanterManualCycle2"
-	, "PlanterManualCycle3"]
+	, "PlanterManualCycle3"
+	, "NormalMemoryMatchCheck"
+	, "LastNormalMemoryMatch"
+	, "MegaMemoryMatchCheck"
+	, "LastMegaMemoryMatch"
+	, "ExtremeMemoryMatchCheck"
+	, "LastExtremeMemoryMatch"
+	, "NightMemoryMatchCheck"
+	, "LastNightMemoryMatch"
+	, "WinterMemoryMatchCheck"
+	, "LastWinterMemoryMatch"]

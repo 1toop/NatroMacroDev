@@ -22,8 +22,6 @@ if (MoveMethod = "walk")
 	nm_Walk(3.5, RightKey)
 	nm_Walk(11, BackKey)
 	send "{" RotLeft " 2}"
-	HyperSleep(1500)
-	
 }
 else
 {
@@ -40,7 +38,7 @@ else
 	nm_Walk(3, LeftKey)
 	nm_Walk(5, FwdKey)
 	send "{" RotRight " 2}"
-	HyperSleep(1500)
 }
+Sleep 1000
 ;path 230630 noobyguy - walk updated
 ;adjusted for memory match OAC

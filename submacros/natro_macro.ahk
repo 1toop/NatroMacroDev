@@ -580,7 +580,17 @@ nm_importConfig()
 		, "StingerDailyBonusCheck", 0
 		, "NightLastDetected", 1
 		, "VBLastKilled", 1
-		, "MondoSecs", 120)
+		, "MondoSecs", 120
+		, "NormalMemoryMatchCheck", 0
+		, "LastNormalMemoryMatch", 1
+		, "MegaMemoryMatchCheck", 0
+		, "LastMegaMemoryMatch", 1
+		, "ExtremeMemoryMatchCheck", 0
+		, "LastExtremeMemoryMatch", 1
+		, "NightMemoryMatchCheck", 0
+		, "LastNightMemoryMatch", 1
+		, "WinterMemoryMatchCheck", 0
+		, "LastWinterMemoryMatch", 1)
 
 	config["Shrine"] := Map("ShrineCheck", 0
 		, "LastShrine", 1
@@ -1959,7 +1969,7 @@ hBitmapsSBT := Map(), hBitmapsSBT.CaseSense := 0
 #Include "sprinkler\bitmaps.ahk"
 #Include "stickerstack\bitmaps.ahk"
 #Include "stickerprinter\bitmaps.ahk"
-#Include OAC\bitmaps.ahk
+#Include "memorymatch\bitmaps.ahk"
 
 hBitmapsSB := Map()
 for x,y in hBitmapsSBT
@@ -2568,7 +2578,7 @@ MainGui.Add("Button", "x4 y21 w246 h18 vCollectSubTab Disabled", "Collect").OnEv
 MainGui.Add("Button", "x250 y21 w246 h18 vKillSubTab", "Kill").OnEvent("Click", nm_CollectKillButton)
 ;collect
 MainGui.SetFont("w700")
-MainGui.Add("GroupBox", "x5 y42 w125 h194 vCollectGroupBox", "Collect")
+MainGui.Add("GroupBox", "x5 y42 w125 h124 vCollectGroupBox", "Collect")
 MainGui.SetFont("s8 cDefault Norm", "Tahoma")
 (GuiCtrl := MainGui.Add("CheckBox", "x10 y57 vClockCheck Disabled Checked" ClockCheck, "Clock (tickets)")).Section := "Collect", GuiCtrl.OnEvent("Click", nm_saveConfig)
 (GuiCtrl := MainGui.Add("CheckBox", "x10 yp+18 w50 vMondoBuffCheck Disabled Checked" MondoBuffCheck, "Mondo")).Section := "Collect", GuiCtrl.OnEvent("Click", nm_saveConfig)
@@ -2589,8 +2599,14 @@ MainGui.Add("Button", "xp-12 yp-1 w12 h16 vAPALeft Disabled", "<").OnEvent("Clic
 MainGui.Add("Button", "xp+66 yp w12 h16 vAPARight Disabled", ">").OnEvent("Click", nm_AntPassAction)
 MainGui.Add("Text", "x14 yp+15 vAntPassPointText +BackgroundTrans", "\__")
 MainGui.Add("CheckBox", "x+4 yp+5 vAntPassBuyCheck Disabled Checked" AntPassBuyCheck, "Use Tickets").OnEvent("Click", nm_AntPassBuyCheck)
-(GuiCtrl := MainGui.Add("CheckBox", "x10 yp+17 vRoboPassCheck Disabled Checked" RoboPassCheck, "Robo Pass")).Section := "Collect", GuiCtrl.OnEvent("Click", nm_saveConfig)
-(GuiCtrl := MainGui.Add("CheckBox", "x10 yp+18 vHoneystormCheck Disabled Checked" HoneystormCheck, "Honeystorm")).Section := "Collect", GuiCtrl.OnEvent("Click", nm_saveConfig)
+(GuiCtrl := MainGui.Add("CheckBox", "x10 yp+17 vHoneystormCheck Disabled Checked" HoneystormCheck, "Honeystorm")).Section := "Collect", GuiCtrl.OnEvent("Click", nm_saveConfig)
+;memory match
+MainGui.SetFont("w700")
+MainGui.Add("GroupBox", "x5 y168 w125 h68 vMemoryMatchGroupBox", "Memory Match")
+MainGui.SetFont("s8 cDefault Norm", "Tahoma")
+(GuiCtrl := MainGui.Add("CheckBox", "x10 yp+15 vNormalMemoryMatchCheck Disabled Checked" NormalMemoryMatchCheck, "Normal")).Section := "Collect", GuiCtrl.OnEvent("Click", nm_saveConfig)
+(GuiCtrl := MainGui.Add("CheckBox", "x10 yp+18 vMegaMemoryMatchCheck Disabled Checked" MegaMemoryMatchCheck, "Mega")).Section := "Collect", GuiCtrl.OnEvent("Click", nm_saveConfig)
+(GuiCtrl := MainGui.Add("CheckBox", "xp+56 yp-18 vExtremeMemoryMatchCheck Disabled Checked" ExtremeMemoryMatchCheck, "Extreme")).Section := "Collect", GuiCtrl.OnEvent("Click", nm_saveConfig)
 ;dispensers
 MainGui.SetFont("w700")
 MainGui.Add("GroupBox", "x135 y42 w165 h105 vDispensersGroupBox", "Dispensers")
@@ -2602,6 +2618,7 @@ MainGui.SetFont("s8 cDefault Norm", "Tahoma")
 (GuiCtrl := MainGui.Add("CheckBox", "xp yp+18 vCoconutDisCheck Disabled Checked" CoconutDisCheck, "Coconut")).Section := "Collect", GuiCtrl.OnEvent("Click", nm_saveConfig)
 (GuiCtrl := MainGui.Add("CheckBox", "xp+85 y57 vRoyalJellyDisCheck Disabled Checked" RoyalJellyDisCheck, "Royal Jelly")).Section := "Collect", GuiCtrl.OnEvent("Click", nm_saveConfig)
 (GuiCtrl := MainGui.Add("CheckBox", "xp yp+18 vGlueDisCheck Disabled Checked" GlueDisCheck, "Glue")).Section := "Collect", GuiCtrl.OnEvent("Click", nm_saveConfig)
+(GuiCtrl := MainGui.Add("CheckBox", "xp yp+18 vRoboPassCheck Disabled Checked" RoboPassCheck, "Robo Pass")).Section := "Collect", GuiCtrl.OnEvent("Click", nm_saveConfig)
 ;beesmas
 beesmasActive := 0
 MainGui.SetFont("w700")
@@ -3396,6 +3413,9 @@ nm_TabCollectLock(){
 	MainGui["SamovarCheck"].Enabled := 0
 	MainGui["LidArtCheck"].Enabled := 0
 	MainGui["GummyBeaconCheck"].Enabled := 0
+	MainGui["NormalMemoryMatchCheck"].Enabled := 0
+	MainGui["MegaMemoryMatchCheck"].Enabled := 0
+	MainGui["ExtremeMemoryMatchCheck"].Enabled := 0
 	;kill
 	MainGui["BugRunCheck"].Enabled := 0
 	MainGui["MonsterRespawnTime"].Enabled := 0
@@ -3483,6 +3503,9 @@ nm_TabCollectUnLock(){
 		MainGui["LidArtCheck"].Enabled := 1
 		MainGui["GummyBeaconCheck"].Enabled := 1
 	}
+	MainGui["NormalMemoryMatchCheck"].Enabled := 1
+	MainGui["MegaMemoryMatchCheck"].Enabled := 1
+	MainGui["ExtremeMemoryMatchCheck"].Enabled := 1
 	;kill
 	MainGui["BugRunCheck"].Enabled := 1
 	MainGui["MonsterRespawnTime"].Enabled := 1
@@ -4513,7 +4536,8 @@ nm_CollectKillButton(GuiCtrl, *){
 		,"ClockCheck","MondoBuffCheck","MondoAction","AntPassCheck","AntPassPointText","AntPassBuyCheck","AntPassAction","RoboPassCheck","HoneystormCheck"
 		,"HoneyDisCheck","TreatDisCheck","BlueberryDisCheck","StrawberryDisCheck","CoconutDisCheck","RoyalJellyDisCheck","GlueDisCheck"
 		,"MALeft","MARight","APALeft","APARight"
-		,"BeesmasGatherInterruptCheck","StockingsCheck","WreathCheck","FeastCheck","RBPDelevelCheck","GingerbreadCheck","SnowMachineCheck","CandlesCheck","SamovarCheck","LidArtCheck","GummyBeaconCheck"]
+		,"BeesmasGatherInterruptCheck","StockingsCheck","WreathCheck","FeastCheck","RBPDelevelCheck","GingerbreadCheck","SnowMachineCheck","CandlesCheck","SamovarCheck","LidArtCheck","GummyBeaconCheck"
+		,"MemoryMatchGroupBox","NormalMemoryMatchCheck","MegaMemoryMatchCheck","ExtremeMemoryMatchCheck"]
 	, KillControls := ["BugRunGroupBox","BugRunCheck","MonsterRespawnTime","TextMonsterRespawnPercent","TextMonsterRespawn","MonsterRespawnTimeHelp"
 		,"BugrunInterruptCheck","TextLoot","TextKill","TextLineBugRun1","TextLineBugRun2"
 		,"BugrunLadybugsLoot","BugrunRhinoBeetlesLoot","BugrunSpiderLoot","BugrunMantisLoot","BugrunScorpionsLoot","BugrunWerewolfLoot"
@@ -8586,13 +8610,6 @@ nm_Start(){
 	global serverStart := nowUnix()
 	Loop {
 		DisconnectCheck()
-
-
-nm_MemoryMatchOAC(0, 1) ; Normal     Here for testing
-nm_MemoryMatchOAC(0, 2) ; Mega
-nm_MemoryMatchOAC(0, 3) ; Extreme
-
-
 		;vicious/stingers
 		nm_locateVB()
 		;mondo
@@ -9189,6 +9206,9 @@ nm_Reset(checkAll:=1, wait:=2000, convert:=1, force:=0){
 			MouseMove windowX+350, windowY+offsetY+100
 			Sleep 1000
 		}
+		;check to make sure there is no Memory Match
+		nm_SolveMemoryMatch()
+
 		nm_setStatus("Resetting", "Character " . Mod(A_Index, 10))
 		MouseMove windowX+350, windowY+offsetY+100
 		PrevKeyDelay:=A_KeyDelay
@@ -9541,6 +9561,11 @@ nm_Collect(){
 		nm_GummyBeacon()
 		nm_RBPDelevel()
 	}
+
+	;MEMORY MATCH
+	nm_MemoryMatch("Normal")
+	nm_MemoryMatch("Mega")
+	nm_MemoryMatch("Extreme")
 
 	;OTHER
 	nm_Honeystorm()
@@ -10579,6 +10604,263 @@ nm_RBPDelevel(){ ;Robo Bear Party De-level
 		LastRBPDelevel:=nowUnix()
 		IniWrite LastRBPDelevel, "settings\nm_config.ini", "Collect", "LastRBPDelevel"
 	}
+}
+; Memory Match code written by OfficerAC
+nm_MemoryMatch(MemoryMatchGame) {
+
+	global NormalMemoryMatchCheck, MegaMemoryMatchCheck, ExtremeMemoryMatchCheck, NightMemoryMatchCheck, WinterMemoryMatchCheck
+		, LastNormalMemoryMatch, LastMegaMemoryMatch, LastExtremeMemoryMatch, LastNightMemoryMatch, LastWinterMemoryMatch
+
+	static cooldowns := Map("Normal",7200, "Mega",14400, "Extreme",28800, "Night",28800, "Winter",14400)
+
+	if !(%MemoryMatchGame%MemoryMatchCheck && (nowUnix()-Last%MemoryMatchGame%MemoryMatch)>cooldowns["MemoryMatchGame"])
+		return
+
+	loop 2 {
+		nm_reset()
+		nm_SetStatus("Traveling", MemoryMatchGame " Memory Match" ((A_Index > 1) ? " (Attempt 2)" : "" ))
+		nm_GoToCollect(MemoryMatchGame "mm")
+
+		searchRet := nm_imgSearch("e_button.png",30,"high")
+		If (searchRet[1] = 0) {
+			nm_setStatus("Found", MemoryMatchGame " Memory Match")
+			sendinput "{" SC_E " down}"
+			Sleep 100
+			sendinput "{" SC_E " up}"
+			UpdateConfig()
+			sleep 1500
+			Break
+		} else if (A_Index = 2) {
+			UpdateConfig()
+			return
+		}
+	} ;  close Try twice to find MM
+
+	nm_SolveMemoryMatch(MemoryMatchGame)
+
+	UpdateConfig() {
+		IniWrite Last%MemoryMatchGame%MemoryMatch:=nowUnix(), "settings\nm_config.ini", "Collect", "Last" MemoryMatchGame "MemoryMatch"
+	}
+}
+nm_SolveMemoryMatch(MemoryMatchGame:="", PriorityItemOAC:=0) { ; PriorityItem can be set to a numeric value to prioritize certain bitmap. It will ignore all other pairs until it finds and claims PriorityItem if PriorityItem>0.
+
+	; initialize variables
+	GetRobloxClientPos()
+	middleX := windowX+(windowWidth//2)
+	middleY := windowY+(windowHeight//2)
+
+	switch MemoryMatchGame {
+		case "Extreme","Winter":
+		Xoffset := 40, Tiles := 20
+
+		case "Normal","Mega","Night":
+		Xoffset := 0, Tiles := 16
+
+		default:
+		pBMScreen := Gdip_BitmapFromScreen(middleX-250 "|" middleY-210 "|500|50")
+		if (Gdip_ImageSearch(pBMScreen, bitmaps["MMTitleWide"], , , , , , 8) = 1)
+			Xoffset := 40, Tiles := 20
+		else if (Gdip_ImageSearch(pBMScreen, bitmaps["MMTitle"], , , , , , 8) = 1)
+			Xoffset := 0, Tiles := 16
+		else {
+			Gdip_DisposeImage(pBMScreen)
+			return
+		}
+		Gdip_DisposeImage(pBMScreen)
+	}
+
+	StoreItemOAC := [], StoreItemOAC.Default := "", StoreItemOAC.Length := 20
+	StoreItemValOAC := [], StoreItemValOAC.Default := 0, StoreItemValOAC.Length := 20
+
+	GridOAC:= [] ;Define MM Tile Coordinates
+	Loop 5 {
+		Xcord:=middleX-200+80*A_Index
+		x:=A_index
+		Loop 4 {
+			row := []
+			Ycord:=middleY-200+80*A_Index
+			R:=A_index+(x-1)*4
+			Row.push(Xcord)
+			Row.push(Ycord)
+			GridOAC.push(row)
+		}
+	}
+	Tile:=0
+	PriorityClaimedOAC:=0
+	MMTempTile1OAC:=0
+	MMTempTile2OAC:=0
+	PairFoundOAC:=0
+	MatchFoundOAC:=0
+	ClickNum:=0
+	Chances:=8
+
+	pBMScreen := Gdip_BitmapFromScreen(middleX-275-Xoffset "|" middleY-146 "|100|100") ; Detect Number of Chances
+	Loop 8 {
+		bitmap:="Chances" . A_Index
+		if (Gdip_ImageSearch(pBMScreen, bitmaps[bitmap], , , , , , 10, , 2) = 1) {
+			Chances:=A_Index
+			Break
+		}
+	}
+	Gdip_DisposeImage(pBMScreen)
+
+	Loop Chances { ; Numer of available Chances.
+		loop 2 { ;Click tile, store item and compare
+			if(A_Index=1) {
+				; Compare Tiles before Click 1
+				loop Tiles {
+					i:=A_index
+					loop Tiles {
+						j := A_index
+
+						if (i = j)
+							continue ; Skip self-comparison
+
+						Item1 := StoreitemValOAC[i]
+						Item2 := StoreitemValOAC[j]
+
+						; Check if either variable is Null or Priority
+						if(StoreitemOAC[i] = 0 || StoreitemOAC[j] = 0 || StoreitemOAC[i] = "" || StoreitemOAC[j] = "" || (PriorityClaimedOAC=0 && PriorityItemOAC>0 && (Item1!=PriorityItemOAC || Item2!=PriorityItemOAC)))
+							continue ; Skip the comparison if either Item is Null or Not Priority
+
+						; Check variables are Priority
+						if(Item1 = PriorityItemOAC && Item2 = PriorityItemOAC)
+							PriorityClaimedOAC:=1
+
+						; Check if variables have the same value
+						if (Gdip_ImageSearch(StoreitemOAC[i], StoreitemOAC[j], , , , , , 10, , 2)=1) {
+							MMTempTile1OAC:=i
+							MMTempTile2OAC:=j
+							Gdip_DisposeImage(StoreitemOAC[i]), StoreitemOAC[i]:=0	;claimed
+							Gdip_DisposeImage(StoreitemOAC[j]), StoreitemOAC[j]:=0	;claimed
+							PairFoundOAC:=1
+							Break 2
+						} else {
+							PairFoundOAC:=0
+						}
+					}
+				}
+				;end compare1
+				if(PairFoundOAC) {
+					LastTile:=Tile
+					Tile:=MMTempTile1OAC ;-1
+				}
+			} else {
+				;if(PairFoundOAC=0 || ClickNum=Chances*2-1) {
+				if(PairFoundOAC=0) {
+					; Compare all other tiles to click 1
+					j:=Tile
+					Item1 := StoreitemValOAC[j]
+
+					loop Tiles {
+						i:=A_index
+
+						if (i = Tile)
+							continue ; Skip self-comparison
+
+						Item2 := StoreitemValOAC[i]
+
+						; Check if either variable is Null or Priority
+						if (StoreitemOAC[i] = 0 || StoreitemOAC[j] = 0 || StoreitemOAC[i] = "" || StoreitemOAC[j] = "" || (PriorityClaimedOAC=0 && PriorityItemOAC>0 && (Item1!=PriorityItemOAC || Item2!=PriorityItemOAC)))
+							continue ; Skip the comparison if either Item is Null or Not Priority
+
+						; Check Items are Priority
+						if(Item1 = PriorityItemOAC && Item2 = PriorityItemOAC)
+							PriorityClaimedOAC:=1
+
+						; Check if Items are the same.
+						if (Gdip_ImageSearch(StoreitemOAC[j], StoreitemOAC[i], , , , , , 10, , 2)=1) {
+							MMTempTile2OAC:=i
+							Gdip_DisposeImage(StoreitemOAC[i]), StoreitemOAC[i]:=0	;claimed
+							Gdip_DisposeImage(StoreitemOAC[j]), StoreitemOAC[j]:=0	;claimed
+							MatchFoundOAC:=1
+							Break
+						} else {
+							MatchFoundOAC:=0
+						}
+					}
+					;end compare2
+					if(MatchFoundOAC) {
+						LastTile:=Tile
+						Tile:=MMTempTile2OAC
+					}
+				}
+				if(PairFoundOAC)
+					Tile:=MMTempTile2OAC
+			}
+
+			if(!MatchFoundOAC && !PairFoundOAC) {
+				Loop 20 {
+					Tile := Random(1, Tiles)
+					If(StoreItemOAC[Tile]="")
+						break
+				}
+			}
+
+			TileXCordOAC:=GridOAC[Tile][1]-Xoffset ; Determine click coordinates
+			TileYCordOAC:=GridOAC[Tile][2]
+			ClickNum++
+			MMItemOAC:=0
+
+			MouseMove TileXCordOAC, TileYCordOAC
+			sleep 400 ; I know this looks excessive, but it is to compensate for lag.
+			sendinput "{click down}"
+			sleep 100
+			sendinput "{click up}"
+			sleep 500
+
+			Loop 20 {
+				pBMScreen := Gdip_BitmapFromScreen(TileXCordOAC-35 "|" TileYCordOAC-20 "|8|20") ; Detect Clicked Item
+				;Gdip_SaveBitmapToFile(pBMScreen, "Border.png")
+				if (Gdip_ImageSearch(pBMScreen, bitmaps["MMBorder"], , , , , , 1, , 2) = 1) {
+					Gdip_DisposeImage(pBMScreen)
+					break
+				}
+				Gdip_DisposeImage(pBMScreen)
+				sleep 50
+			}
+			sleep 300
+
+			if(PairFoundOAC!=1 && (A_Index=1 || (A_Index=2 &&  MatchFoundOAC!=1))) {
+				StoreItemOAC[Tile] := Gdip_BitmapFromScreen(TileXCordOAC-25 "|" TileYCordOAC-25 "|50|50") ; Detect Clicked Item
+				;path:=A_ScriptDir "\..\MMScreenshots\"
+				;Gdip_SaveBitmapToFile(StoreItemOAC[Tile], path "image" Tile ".png")
+
+				Loop 25 {
+					bitmap:="MM" . A_Index
+					if (Gdip_ImageSearch(StoreItemOAC[Tile], bitmaps[bitmap], , , , , , 10, , 2) = 1) {
+						StoreItemValOAC[Tile]:=A_Index
+						Break
+					}
+				}
+			}
+
+			if(A_Index=1) {
+				Click1Tile:=Tile
+				if(PairFoundOAC) {
+					Tile:=MMTempTile2OAC
+				}
+			} else {
+				if((Gdip_ImageSearch(StoreitemOAC[Click1Tile], StoreitemOAC[Tile], , , , , , 1, , 2) = 1) && PairFoundOAC!=1 && MatchFoundOAC!=1) {
+					Gdip_DisposeImage(StoreitemOAC[Click1Tile]), StoreitemOAC[Click1Tile]:=0 ;"claimed"
+					Gdip_DisposeImage(StoreitemOAC[Tile]), StoreitemOAC[Tile]:=0 ;"claimed"
+					Continue
+				}
+				if(PairFoundOAC || MatchFoundOAC) {
+					Tile:=LastTile
+					if(PairFoundOAC)
+						PairFoundOAC:=0
+					if(MatchFoundOAC)
+						MatchFoundOAC:=0
+				}
+			}
+		} ;Close loop 2 Click tile, store item, and compare
+	} ;close Chances Loop
+	nm_setStatus("Collected", (MemoryMatchGame ? (MemoryMatchGame " ") : "") "Memory Match")
+
+	; dispose remnant bitmaps
+	for pBM in StoreitemOAC
+		IsSet(pBM) && IsInteger(pBM) && (pBM > 0) && Gdip_DisposeImage(pBM)
 }
 nm_Honeystorm(fromSnowMachine:=0){
 	global HoneystormCheck, LastHoneyStorm
@@ -20865,250 +21147,4 @@ nm_UpdateGUIVar(var)
 			MainGui[k].Value := %k%
 		}
 	}
-}
-
-nm_MemoryMatchOAC(PriorityItemOAC:=0, MMValue:=0) { ; PriorityItem can be set to a numeric value to prioritize certain bitmap. It will ignore all other pairs until it finds and claims PriorityItem if PriorityItem>0.
-
-	global
-	static MMGameArr:=["Normal", "Mega", "Extreme"]
-
-	MemoryMatchGame := MMGameArr[MMValue]
-
-	if (MemoryMatchGame = "Skip") ;This isn't currently used, but needs to be implemented.
-		return
-
-	loop 2 {
-		nm_reset()
-		nm_SetStatus("Traveling", MemoryMatchGame " Memory Match" ((A_Index > 1) ? " (Attempt 2)" : "" ))
-		nm_GoToCollect(MemoryMatchGame "mm")
-
-        	sleep 2000
-
-	searchRet := nm_imgSearch("e_button.png",30,"high")
-        	If (searchRet[1] = 0) {
-                	nm_setStatus("Mem Match", "Found!")
-                	MMFound:=1
-                	sleep 1000
-                	send "{e}"
-                	sleep 1000
-                	send "{e}"
-                	sleep 1500
-                	Break
-                	} else {
-                    		nm_setStatus("Mem Match", "Not Found 😦 ")
-				MMFound:=0
-                    		sleep 2000
-        	}
-    	} ;  close Try twice to find MM
-
-	; initialize variables
-
-	StoreItemOAC:=[]
-	loop 20 {
-		StoreItemOAC.push("")
-	}
-	StoreItemValOAC:=[]
-	loop 20 {
-		StoreItemValOAC.push(0)
-	}
-
-	Xoffset := (MemoryMatchGame = "Extreme") ? 40 : 0
-	Tiles := (MemoryMatchGame = "Extreme") ? 20 : 16
-
-	WinGetClientPos &windowX, &windowY, &windowWidth, &windowHeight, GetRobloxHWND()
-
-	middleX := windowX+(windowWidth/2)
-	middleY := windowY+(windowHeight/2)
-
-	GridOAC:= [] ;Define MM Tile Coordinates
-    	Loop 5 {
-    		Xcord:=middleX-200+80*A_Index
-    		x:=A_index        
-        	Loop 4 {
-            		row := []
-            		Ycord:=middleY-200+80*A_Index
-            		R:=A_index+(x-1)*4
-            		Row.push(Xcord)
-            		Row.push(Ycord)            
-                	GridOAC.push(row) 
-        	}        
-    	}	
-	Tile:=0
-	PriorityClaimedOAC:=0
-	MMTempTile1OAC:=0
-	MMTempTile2OAC:=0
-	PairFoundOAC:=0
-	MatchFoundOAC:=0
-	ClickNum:=0
-	Chances:=8
-
-	pBMScreen := Gdip_BitmapFromScreen(middleX-275-Xoffset "|" middleY-146 "|100|100") ; Detect Number of Chances
-	Loop 8 {
-    		bitmap:="Chance" . A_Index 
-        	if (Gdip_ImageSearch(pBMScreen, bitmaps[bitmap], &pos, , , , , 10, , 2) = 1) {
-        		Chances:=A_Index
-        		Break      
-        	}
-	}
-
-	Gdip_DisposeImage(pBMScreen)
-
-	Loop Chances { ; Numer of available Chances. 
-
-		if(MMFound=0) 
-           		Break        	
-
-		loop 2 { ;Click tile, store item and compare
-			if(A_Index=1) {
-				; Compare Tiles before Click 1								
-				loop Tiles {				
-					i:=A_index			
-					loop Tiles { 			
-		    				j := A_index		
-								
-		    				if (i = j)		
-		        			continue ; Skip self-comparison			
-								
-		        			Item1 := StoreitemValOAC[i]			
-		        			Item2 := StoreitemValOAC[j]			
-								
-		        			; Check if either variable is Null or Priority			
-		       			 	if(StoreitemOAC[i] = 0 || StoreitemOAC[j] = 0 || StoreitemOAC[i] = "" || StoreitemOAC[j] = "" || (PriorityClaimedOAC=0 && PriorityItemOAC>0 && (Item1!=PriorityItemOAC || Item2!=PriorityItemOAC)))		
-		            			continue ; Skip the comparison if either Item is Null or Not Priority		
-								
-		        			; Check variables are Priority			
-		       			 	if(Item1 = PriorityItemOAC && Item2 = PriorityItemOAC)		
-		            				PriorityClaimedOAC:=1		
-								
-		        			; Check if variables have the same value		        			
-						if (Gdip_ImageSearch(StoreitemOAC[i], StoreitemOAC[j], &pos, , , , , 10, , 2)=1) {						
-							MMTempTile1OAC:=i	
-							MMTempTile2OAC:=j
-							StoreitemOAC[i]:=0	;claimed
-							StoreitemOAC[j]:=0	;claimed
-							PairFoundOAC:=1	
-							Break 2	
-		       					} else {	
-								PairFoundOAC:=0
-						}		
-					} 			
-				} 
-				;end compare1
-				if(PairFoundOAC) {
-					LastTile:=Tile
-					Tile:=MMTempTile1OAC ;-1
-				}			
-			} else {
-				;if(PairFoundOAC=0 || ClickNum=Chances*2-1) {
-				if(PairFoundOAC=0) {
-					; Compare all other tiles to click 1								
-					j:=Tile			
-					Item1 := StoreitemValOAC[j]								
-			
-					loop Tiles {			
-						i:=A_index		
-								
-			    			if (i = Tile)		
-			        		continue ; Skip self-comparison			
-								
-			    			Item2 := StoreitemValOAC[i]		
-								
-			    			; Check if either variable is Null or Priority		
-			    			if (StoreitemOAC[i] = 0 || StoreitemOAC[j] = 0 || StoreitemOAC[i] = "" || StoreitemOAC[j] = "" || (PriorityClaimedOAC=0 && PriorityItemOAC>0 && (Item1!=PriorityItemOAC || Item2!=PriorityItemOAC)))		
-			        			continue ; Skip the comparison if either Item is Null or Not Priority		
-								
-			        		; Check Items are Priority			
-			       			 if(Item1 = PriorityItemOAC && Item2 = PriorityItemOAC)		
-			            			PriorityClaimedOAC:=1		
-								
-			    			; Check if Items are the same.		
-						if (Gdip_ImageSearch(StoreitemOAC[j], StoreitemOAC[i], &pos, , , , , 10, , 2)=1) {								
-							MMTempTile2OAC:=i	
-							StoreitemOAC[i]:=0 ;"claimed"	
-							StoreitemOAC[j]:=0 ;"claimed"	
-							MatchFoundOAC:=1	
-							Break	
-			       				} else {	
-								MatchFoundOAC:=0
-			    			}		
-					}								
-					;end compare2
-					if(MatchFoundOAC) {
-						LastTile:=Tile
-						Tile:=MMTempTile2OAC
-					}
-				}
-				if(PairFoundOAC) 
-					Tile:=MMTempTile2OAC				
-			}			
-	
-			if(!MatchFoundOAC && !PairFoundOAC) {
-				Loop 20 {
-					Tile := Random(1, Tiles)
-					If(StoreItemOAC[Tile]="")
-						break
-				}
-			}
-
-        		TileXCordOAC:=GridOAC[Tile][1]-Xoffset ; Determine click coordinates
-        		TileYCordOAC:=GridOAC[Tile][2]
-			ClickNum++
-			MMItemOAC:=0
-
-			MouseMove TileXCordOAC, TileYCordOAC 
-				sleep 400 ; I know this looks excessive, but it is to compensate for lag.
-				sendinput "{click down}"
-				sleep 100
-				sendinput "{click up}"
-				sleep 500				
-			
-			Loop 20 {
-				pBMScreen := Gdip_BitmapFromScreen(TileXCordOAC-35 "|" TileYCordOAC-20 "|8|20") ; Detect Clicked Item
-				Gdip_SaveBitmapToFile(pBMScreen, "Border.png")
-				if (Gdip_ImageSearch(pBMScreen, bitmaps["MMBorder"], &pos, , , , , 1, , 2) = 1) {
-					break
-				}
-				sleep 50
-			}
-			Gdip_DisposeImage(pBMScreen)			
-			sleep 300
-
-			if(PairFoundOAC!=1 && (A_Index=1 || (A_Index=2 &&  MatchFoundOAC!=1))) {
-				StoreItemOAC[Tile] := Gdip_BitmapFromScreen(TileXCordOAC-25 "|" TileYCordOAC-25 "|50|50") ; Detect Clicked Item
-				path:=A_ScriptDir "\..\MMScreenshots\"
-				Gdip_SaveBitmapToFile(StoreItemOAC[Tile], path "image" Tile ".png")
-
-				Loop 25 {
-    					bitmap:="MM" . A_Index 
-        				if (Gdip_ImageSearch(StoreItemOAC[Tile], bitmaps[bitmap], &pos, , , , , 10, , 2) = 1) {
-        					StoreItemValOAC[Tile]:=A_Index
-        					Break      
-        				} 
-				}
-			}
-
-			if(A_Index=1) {
-				Click1Tile:=Tile
-				if(PairFoundOAC) {
-					Tile:=MMTempTile2OAC 
-				}
-			} else {
-				if((Gdip_ImageSearch(StoreitemOAC[Click1Tile], StoreitemOAC[Tile], &pos, , , , , 1, , 2) = 1) && PairFoundOAC!=1 && MatchFoundOAC!=1) {
-					StoreitemOAC[Click1Tile]:=0 ;"claimed"
-					StoreitemOAC[Tile]:=0 ;"claimed"
-					Continue
-				}
-				if(PairFoundOAC || MatchFoundOAC) {
-					Tile:=LastTile
-					if(PairFoundOAC)
-						PairFoundOAC:=0
-					if(MatchFoundOAC) 
-						MatchFoundOAC:=0
-				}
-			} 
-		} ;Close loop 2 Click tile, store item, and compare
-	} ;close Chances Loop  
-
-	nm_Reset()
-	Sleep 2000
 }
