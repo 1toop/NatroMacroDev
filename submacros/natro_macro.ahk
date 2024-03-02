@@ -1060,6 +1060,10 @@ SunflowerPlanters:=[["PetalPlanter", 1.5, 1.3415, 10.44] ; 2.01225
 	, ["TicketPlanter", 2, 1, 2]] ; 2
 
 ;quest data
+QuestBarGapSize := 10
+QuestBarSize := 50
+QuestBarInset := 16
+
 ;map: quest name, [objective array]
 PolarBear := Map("Aromatic Pie",
 		[[3,"Kill","Mantis"]
@@ -2336,9 +2340,9 @@ MainGui.Add("Text", "xp yp+60 wp h16 0x201 +Center")
 MainGui.Add("Text", "xp yp+60 wp h16 0x201 +Center")
 (GuiCtrl := MainGui.Add("UpDown", "Range1-4 Disabled vFieldRotateTimes3", FieldRotateTimes3)).Section := "Gather", GuiCtrl.OnEvent("Change", nm_saveConfig)
 
-(GuiCtrl := MainGui.Add("Edit", "x334 y58 w36 h20 limit4 number Disabled vFieldUntilMins1", FieldUntilMins1)).Section := "Gather", GuiCtrl.OnEvent("Change", nm_saveConfig)
-(GuiCtrl := MainGui.Add("Edit", "xp yp+60 wp h20 limit4 number Disabled vFieldUntilMins2", FieldUntilMins2)).Section := "Gather", GuiCtrl.OnEvent("Change", nm_saveConfig)
-(GuiCtrl := MainGui.Add("Edit", "xp yp+60 wp h20 limit4 number Disabled vFieldUntilMins3", FieldUntilMins3)).Section := "Gather", GuiCtrl.OnEvent("Change", nm_saveConfig)
+(GuiCtrl := MainGui.Add("Edit", "x334 y58 w36 h20 limit4 number Disabled vFieldUntilMins1", ValidateInt(&FieldUntilMins1, 10))).Section := "Gather", GuiCtrl.OnEvent("Change", nm_saveConfig)
+(GuiCtrl := MainGui.Add("Edit", "xp yp+60 wp h20 limit4 number Disabled vFieldUntilMins2", ValidateInt(&FieldUntilMins2, 10))).Section := "Gather", GuiCtrl.OnEvent("Change", nm_saveConfig)
+(GuiCtrl := MainGui.Add("Edit", "xp yp+60 wp h20 limit4 number Disabled vFieldUntilMins3", ValidateInt(&FieldUntilMins3, 10))).Section := "Gather", GuiCtrl.OnEvent("Change", nm_saveConfig)
 
 MainGui.Add("Text", "x375 y60 h16 w16 0x201 +Center +BackgroundTrans vFieldUntilPack1", FieldUntilPack1)
 MainGui.Add("UpDown", "xp+18 yp h16 -16 Range1-20 Disabled vFieldUntilPack1UpDown", FieldUntilPack1//5).OnEvent("Change", nm_FieldUntilPack)
@@ -2493,11 +2497,11 @@ MainGui.SetFont("s8 cDefault Norm", "Tahoma")
 MainGui.Add("Text", "x110 y109 w34 h16 0x201 +Center")
 (GuiCtrl := MainGui.Add("UpDown", "Range1-6 vHiveSlot Disabled", HiveSlot)).Section := "Settings", GuiCtrl.OnEvent("Change", nm_saveConfig)
 MainGui.Add("Text", "x10 y125 w110 +BackgroundTrans", "My Hive Has:")
-MainGui.Add("Edit", "x75 y124 w18 h16 Limit2 number vHiveBees Disabled", HiveBees).OnEvent("Change", nm_HiveBees)
+MainGui.Add("Edit", "x75 y124 w18 h16 Limit2 number vHiveBees Disabled", ValidateInt(&HiveBees, 50)).OnEvent("Change", nm_HiveBees)
 MainGui.Add("Text", "x98 y125 w110 +BackgroundTrans", "Bees")
 MainGui.Add("Button", "x150 y124 w10 h15 vHiveBeesHelp Disabled", "?").OnEvent("Click", nm_HiveBeesHelp)
 MainGui.Add("Text", "x9 y142 w110 +BackgroundTrans", "Wait")
-(GuiCtrl := MainGui.Add("Edit", "x33 y141 w18 h16 Limit2 number vConvertDelay Disabled", ConvertDelay)).Section := "Settings", GuiCtrl.OnEvent("Change", nm_saveConfig)
+(GuiCtrl := MainGui.Add("Edit", "x33 y141 w18 h16 Limit2 number vConvertDelay Disabled", ValidateInt(&ConvertDelay))).Section := "Settings", GuiCtrl.OnEvent("Change", nm_saveConfig)
 MainGui.Add("Text", "x54 y142 w110 +BackgroundTrans", "seconds after convert")
 
 ;reset settings
@@ -2520,11 +2524,11 @@ MainGui.Add("Button", "xp+59 yp w12 h15 vRMRight Disabled", ">").OnEvent("Click"
 MainGui.Add("Button", "x315 yp w10 h15 vReconnectMethodHelp Disabled", "?").OnEvent("Click", nm_ReconnectMethodHelp)
 MainGui.Add("Text", "x178 yp+21 +BackgroundTrans", "Daily Reconnect (optional):")
 MainGui.Add("Text", "x178 yp+18 +BackgroundTrans", "Reconnect every")
-MainGui.Add("Edit", "x264 yp-1 w18 h16 Number Limit2 vReconnectInterval Disabled", ReconnectInterval).OnEvent("Change", nm_setReconnectInterval)
+MainGui.Add("Edit", "x264 yp-1 w18 h16 Number Limit2 vReconnectInterval Disabled", ValidateInt(&ReconnectInterval, "")).OnEvent("Change", nm_setReconnectInterval)
 MainGui.Add("Text", "x287 yp+1 +BackgroundTrans", "hours")
 MainGui.Add("Text", "x196 yp+18 +BackgroundTrans", "starting at")
-MainGui.Add("Edit", "x250 yp-1 w18 h16 Number Limit2 vReconnectHour Disabled", ReconnectHour).OnEvent("Change", nm_setReconnectHour)
-MainGui.Add("Edit", "x275 yp w18 h16 Number Limit2 vReconnectMin Disabled", ReconnectMin).OnEvent("Change", nm_setReconnectMin)
+MainGui.Add("Edit", "x250 yp-1 w18 h16 Number Limit2 vReconnectHour Disabled", IsInteger(ReconnectHour) ? SubStr("0" ReconnectHour, -2) : "").OnEvent("Change", nm_setReconnectHour)
+MainGui.Add("Edit", "x275 yp w18 h16 Number Limit2 vReconnectMin Disabled", IsInteger(ReconnectMin) ? SubStr("0" ReconnectMin, -2) : "").OnEvent("Change", nm_setReconnectMin)
 MainGui.SetFont("w1000 s11")
 MainGui.Add("Text", "x269 yp-3 +BackgroundTrans", ":")
 MainGui.SetFont("s6 w700")
@@ -2561,7 +2565,7 @@ MainGui.Add("Text", "x434 yp w48 vConvertBalloon +Center +BackgroundTrans", Conv
 MainGui.Add("Button", "x422 y131 w12 h16 vCBLeft Disabled", "<").OnEvent("Click", nm_ConvertBalloon)
 MainGui.Add("Button", "x480 y131 w12 h16 vCBRight Disabled", ">").OnEvent("Click", nm_ConvertBalloon)
 MainGui.Add("Text", "x370 y147 w110 +BackgroundTrans", "\____\___")
-(GuiCtrl := MainGui.Add("Edit", "x422 y150 w30 h18 number Limit3 vConvertMins Disabled", ConvertMins)).Section := "Settings", GuiCtrl.OnEvent("Change", nm_saveConfig)
+(GuiCtrl := MainGui.Add("Edit", "x422 y150 w30 h18 number Limit3 vConvertMins Disabled", ValidateInt(&ConvertMins, 30))).Section := "Settings", GuiCtrl.OnEvent("Change", nm_saveConfig)
 MainGui.Add("Text", "x456 y152", "Mins")
 MainGui.Add("Text", "x345 y170 w110 +BackgroundTrans", "Multiple Reset:")
 (GuiCtrl := MainGui.Add("Slider", "x415 y168 w78 h16 vMultiReset Thick16 Disabled ToolTipTop Range0-3 Page1 TickInterval1", MultiReset)).Section := "Settings", GuiCtrl.OnEvent("Change", nm_saveConfig)
@@ -2587,7 +2591,7 @@ MainGui.Add("Text", "x75 yp w40 vMondoAction +Center +BackgroundTrans", MondoAct
 MainGui.Add("Button", "xp-12 yp-1 w12 h16 vMALeft Disabled", "<").OnEvent("Click", nm_MondoAction)
 MainGui.Add("Button", "xp+51 yp w12 h16 vMARight Disabled", ">").OnEvent("Click", nm_MondoAction)
 MainGui.Add("Text", "x14 yp+15 w110 vMondoPointText +BackgroundTrans Section Hidden" (MondoAction != "Buff" && MondoAction != "Kill"), "\__")
-(GuiCtrl := MainGui.Add("Edit", "xs+20 ys+3 w30 h18 number Limit3 vMondoSecs Disabled Hidden" (MondoAction != "Buff"), MondoSecs)).Section := "Collect", GuiCtrl.OnEvent("Change", nm_saveConfig)
+(GuiCtrl := MainGui.Add("Edit", "xs+20 ys+3 w30 h18 number Limit3 vMondoSecs Disabled Hidden" (MondoAction != "Buff"), ValidateInt(&MondoSecs, 120))).Section := "Collect", GuiCtrl.OnEvent("Change", nm_saveConfig)
 MainGui.Add("Text", "x+4 yp+2 vMondoSecsText Hidden" (MondoAction != "Buff"), "Secs")
 MainGui.Add("Text", "xs+18 ys+4 vMondoLootText Hidden" (MondoAction != "Kill"), "Loot:")
 MainGui.Add("Text", "x+13 yp w45 vMondoLootDirection +Center +BackgroundTrans Hidden" (MondoAction != "Kill"), MondoLootDirection)
@@ -2682,7 +2686,7 @@ MainGui.SetFont("s8 cDefault Norm", "Tahoma")
 MainGui.Add("CheckBox", "x76 y43 vBugRunCheck Disabled Hidden", "Select All").OnEvent("Click", nm_BugRunCheck)
 MainGui.Add("Text", "x16 y62 +BackgroundTrans Hidden vTextMonsterRespawnPercent", "–       %")
 MainGui.Add("Text", "x52 y55 w80 +BackgroundTrans +Center vTextMonsterRespawn Hidden", "Monster Respawn Time")
-MainGui.Add("Edit", "x24 y61 w18 h16 Limit2 number vMonsterRespawnTime Disabled Hidden", MonsterRespawnTime).OnEvent("Change", nm_MonsterRespawnTime)
+MainGui.Add("Edit", "x24 y61 w18 h16 Limit2 number vMonsterRespawnTime Disabled Hidden", ValidateNumber(&MonsterRespawnTime)).OnEvent("Change", nm_MonsterRespawnTime)
 MainGui.Add("Button", "x128 y63 w12 h14 vMonsterRespawnTimeHelp Disabled Hidden", "?").OnEvent("Click", nm_MonsterRespawnTimeHelp)
 GuiCtrl := MainGui.Add("CheckBox", "x16 y82 w125 h15 vBugrunInterruptCheck Disabled Hidden Checked" BugrunInterruptCheck, "Allow Gather Interrupt")
 GuiCtrl.Section := "Collect", GuiCtrl.OnEvent("Click", nm_saveConfig)
@@ -2758,8 +2762,8 @@ MainGui.Add("Text", "x272 yp-1 w34 h16 0x200 vChickLevelText +Center Hidden", "?
 MainGui.Add("UpDown", "w10 h16 vChickLevel Range3-25 Disabled Hidden", ChickLevel).OnEvent("Change", nm_setChickHealth)
 MainGui.Add("Text", "x325 y186 vSnailHPText Hidden", "HP:")
 MainGui.Add("Text", "xp yp+21 vChickHPText Hidden", "HP:")
-MainGui.Add("Edit", "x343 y184 w60 h18 Number Limit8 vSnailHealthEdit Disabled Hidden", Round(30000000*InputSnailHealth/100)).OnEvent("Change", nm_setSnailHealth)
-MainGui.Add("Edit", "xp yp+21 w60 h18 Number Limit8 vChickHealthEdit Disabled Hidden", Round(CommandoChickHealth[Number(ChickLevel)]*InputChickHealth/100)).OnEvent("Change", nm_setChickHealth)
+MainGui.Add("Edit", "x343 y184 w60 h18 Number Limit8 vSnailHealthEdit Disabled Hidden", Round(30000000*ValidateNumber(&InputSnailHealth)/100)).OnEvent("Change", nm_setSnailHealth)
+MainGui.Add("Edit", "xp yp+21 w60 h18 Number Limit8 vChickHealthEdit Disabled Hidden", Round(CommandoChickHealth[ValidateInt(&ChickLevel, 7)]*ValidateNumber(&InputChickHealth)/100)).OnEvent("Change", nm_setChickHealth)
 MainGui.SetFont("s7")
 MainGui.Add("Text", "x405 y188 w40 vSnailHealthText Hidden c" Format("0x{1:02x}{2:02x}{3:02x}", Round(Min(3*(100-InputSnailHealth), 150)), Round(Min(3*InputSnailHealth, 150)), 0), InputSnailHealth "%")
 MainGui.Add("Text", "xp yp+21 w40 vChickHealthText Hidden c" Format("0x{1:02x}{2:02x}{3:02x}", Round(Min(3*(100-InputChickHealth), 150)), Round(Min(3*InputChickHealth, 150)), 0), InputChickHealth "%")
@@ -2984,7 +2988,7 @@ MainGui.Add("CheckBox", "x2 y211 w150 h13 vgotoPlanterField Disabled Checked" go
 MainGui.Add("CheckBox", "x2 y224 w150 h13 vgatherFieldSipping Disabled Checked" gatherFieldSipping hidden, "Gather Field Nectar Sipping").OnEvent("Click", ba_gatherFieldSippingSwitch_)
 MainGui.Add("Text", "x80 y178 w32 h20 cRed vAutoText +BackgroundTrans" (((PlanterMode = 2) && AutomaticHarvestInterval) ? "" : " Hidden"), "[Auto]")
 MainGui.Add("Text", "x80 y178 w32 h20 cRed vFullText +BackgroundTrans" (((PlanterMode = 2) && HarvestFullGrown) ? "" : " Hidden"), "[Full]")
-GuiCtrl := MainGui.Add("Edit", "x80 y174 w32 h20 limit2 Number vHarvestInterval Disabled" (((PlanterMode = 2) && !HarvestFullGrown && !AutomaticHarvestInterval) ? "" : " Hidden"), HarvestInterval)
+GuiCtrl := MainGui.Add("Edit", "x80 y174 w32 h20 limit2 Number vHarvestInterval Disabled" (((PlanterMode = 2) && !HarvestFullGrown && !AutomaticHarvestInterval) ? "" : " Hidden"), ValidateNumber(&HarvestInterval, 2))
 GuiCtrl.OnEvent("Change", ba_harvestInterval)
 MainGui.Add("Text", "x115 y178 w70 h20 +BackgroundTrans vTextHours" hidden, "Hours")
 MainGui.Add("Text", "x10 y209 w137 h1 0x7 vTextLine3" hidden)
@@ -4071,6 +4075,10 @@ TextExtent(text, textCtrl)
 	DllCall("ReleaseDC", "Ptr", textCtrl.Hwnd, "Ptr", hDC)
 	return NumGet(nSize, 0, "UInt")
 }
+
+;miscellaneous functions
+ValidateNumber(&var, default := 0) => IsNumber(var) ? var : (var := default)
+ValidateInt(&var, default := 0) => IsInteger(var) ? var : (var := default)
 
 ; GATHER TAB
 ; ------------------------
@@ -7449,12 +7457,11 @@ nm_BitterberryFeeder(*)
 		ExitApp
 
 	bitterberrynos := InputBox("Enter the amount of bitterberry used each time", "How many bitterberry?", "w320 h180 T60").Value
-	if IsInteger(bitterberrynos)
+	if IsInteger(bitterberrynos) {
 		if (bitterberrynos > 30)
 			if (MsgBox("You have entered " bitterberrynos " which is more than 30.``nAre you sure?", "Bitterberry Auto-Feeder v0.2", 0x40034) = "No")
 				ExitApp
-	else
-	{
+	} else {
 		MsgBox "You must enter a number for Bitterberries!!``nStopping Feeder!", "Bitterberry Auto-Feeder v0.2", 0x40010
 		ExitApp
 	}
@@ -7494,7 +7501,7 @@ nm_BitterberryFeeder(*)
 
 	Loop
 	{
-		if ((pos := nm_InventorySearch("bitterberry", "down", , , 0, (A_Index = 1) ? 40 : 4)) = 0)
+		if ((pos := nm_InventorySearch("bitterberry", "down", , , , (A_Index = 1) ? 40 : 4)) = 0)
 		{
 			MsgBox "You ran out of Bitterberries!", "Bitterberry Auto-Feeder v0.2", 0x40010
 			break
@@ -7634,7 +7641,7 @@ nm_BasicEggHatcher(*)
 	rj := 0
 	Loop
 	{
-		if ((pos := (A_Index = 1) ? nm_InventorySearch("basicegg", "down", , , 0, 70) : (rj = 1) ? nm_InventorySearch("royaljelly", "down", , , 0, 7) : nm_InventorySearch("basicegg", "up", , , 0, 7)) = 0)
+		if ((pos := (A_Index = 1) ? nm_InventorySearch("basicegg", "up", , , , 70) : (rj = 1) ? nm_InventorySearch("royaljelly", "down", , , 0, 7) : nm_InventorySearch("basicegg", "up", , , 0, 7)) = 0)
 		{
 			MsgBox "You ran out of " ((rj = 1) ? "Royal Jellies!" : "Basic Eggs!"), "Basic Bee Replacement Program", 0x40010
 			break
@@ -8638,15 +8645,19 @@ nm_Start(){
 #Include "nm_InventorySearch.ahk"
 ;interrupts
 nm_MondoInterrupt() => (utc_min := FormatTime(A_NowUTC, "m"), now := nowUnix(),
-	((MondoBuffCheck = 1) && ((utc_min<14 && (now-LastMondoBuff)>960 && (MondoAction="Buff" || MondoAction="Kill"))
-		|| (utc_min<12 && (now-LastGuid)<60 && PMondoGuid && MondoAction="Guid")
-		|| (utc_min<=8 && (now-LastMondoBuff)>960 && PMondoGuid && MondoAction="Tag"))
+	((MondoBuffCheck = 1) && (utc_min<14 && (now-LastMondoBuff)>960 && MondoAction="Kill")
+		|| (!nm_GatherBoostInterrupt()
+			&& ((utc_min<14 && (now-LastMondoBuff)>960 && MondoAction="Buff")
+			|| (utc_min<12 && (now-LastGuid)<60 && PMondoGuid && MondoAction="Guid")
+			|| (utc_min<=8 && (now-LastMondoBuff)>960 && PMondoGuid && MondoAction="Tag"))
+		)
 	)
 )
 nm_BeesmasInterrupt() {
 	global BeesmasGatherInterruptCheck
 	now := nowUnix()
-	return ((beesmasActive = 1) && (BeesmasGatherInterruptCheck = 1) && ((StockingsCheck && (now-LastStockings)>3600)
+	return ((beesmasActive = 1) && (BeesmasGatherInterruptCheck = 1)
+		&& ((StockingsCheck && (now-LastStockings)>3600)
 		|| (FeastCheck && (now-LastFeast)>5400)
 		|| (RBPDelevelCheck && (now-LastRBPDelevel)>10800)
 		|| (GingerbreadCheck && (now-LastGingerbread)>7200)
@@ -13795,8 +13806,6 @@ nm_Mondo(){
 	global VBState
 	;mondo buff
 	global MondoBuffCheck, PMondoGuid, LastGuid, MondoAction, LastMondoBuff, PMondoGuidComplete, GatherFieldBoostedStart, LastGlitter
-	if nm_GatherBoostInterrupt()
-		return
 	if(VBState=1)
 		return
 	if nm_MondoInterrupt(){
@@ -14003,18 +14012,18 @@ nm_GoGather(){
 		, BlackQuestCheck, BrownQuestCheck, BuckoQuestCheck, RileyQuestCheck, PolarQuestCheck
 		, BlackQuestComplete, BrownQuestComplete, BuckoQuestComplete, RileyQuestComplete, PolarQuestComplete
 
+	;VICIOUS BEE
+	if (VBState = 1)
+		return
+	;MONDO
+	if nm_MondoInterrupt()
+		return
 	if !(nm_GatherBoostInterrupt()){
 		;BUGS GatherInterruptCheck
 		if nm_BugrunInterrupt()
 			return
 		;BEESMAS GatherInterruptCheck
 		if nm_BeesmasInterrupt()
-			return
-		;MONDO
-		if nm_MondoInterrupt()
-			return
-		;VICIOUS BEE
-		if (VBState = 1)
 			return
 	}
 	utc_min := FormatTime(A_NowUTC, "m")
@@ -14375,7 +14384,7 @@ nm_GoGather(){
 			Click "Down"
 		nm_gather(FieldPattern, A_Index, FieldPatternSize, FieldPatternReps, FacingFieldCorner)
 
-		while (GetKeyState("F14") && (A_Index <= 3600)) { ; timeout 3m
+		while ((GetKeyState("F14") && (A_Index <= 3600)) || (A_Index = 1)) { ; timeout 3m
 			;use glitter
 			if (Mod(A_Index, 20) = 1) { ; every 1s
 				if(PFieldBoosted && (nowUnix()-GatherFieldBoostedStart)>525 && (nowUnix()-GatherFieldBoostedStart)<900 && (nowUnix()-LastGlitter)>900 && GlitterKey!="none" && fieldOverrideReason="None") { ;between 9 and 15 mins (-minus an extra 15 seconds)
@@ -16263,7 +16272,7 @@ nm_locateVB(){
 	if(VBState=1){
 		nm_setStatus("Confirming", "Night")
 		nm_Reset(0, 2000, 0)
-		sendinput "{" RotRight " 3}{" RotDown " 3}"
+		sendinput "{" RotDown " 5}"
 		loop 10 {
 			SendInput "{" ZoomOut "}"
 			Sleep 100
@@ -16273,7 +16282,7 @@ nm_locateVB(){
 		if(findImg[1]=0){
 			;night confirmed, proceed!
 			nm_setStatus("Starting", "Vicious Bee Cycle")
-			sendinput "{" RotLeft " 3}{" RotUp " 3}"
+			sendinput "{" RotUp " 5}"
 			send "{" ZoomOut " 8}"
 		} else {
 			;false positive, ABORT!
@@ -16282,7 +16291,7 @@ nm_locateVB(){
 			NightLastDetected:=nowUnix()-300-1 ;make NightLastDetected older than 5 minutes
 			IniWrite NightLastDetected, "settings\nm_config.ini", "Collect", "NightLastDetected"
 			nm_setStatus("Aborting", "Vicious Bee - Not Night")
-			sendinput "{" RotLeft " 3}{" RotUp " 3}"
+			sendinput "{" RotUp " 5}"
 			send "{" ZoomOut " 8}"
 			return
 		}
@@ -16807,47 +16816,6 @@ nm_HoneyQuest(){
 			MsgBox "Folder location cannot be found:`n" A_WorkingDir "\nm_image_assets\"
 		}
 		HoneyStart:=(result = 1) ? [0, FoundX-windowX, FoundY-windowY] : [1, 0, 0]
-		;determine quest bar sizes and spacing
-		if(QuestBarGapSize=0 || QuestBarSize=0 || QuestBarInset=0) {
-			Loop 3 {
-				xi := windowX
-				yi := windowY+HoneyStart[3]+15
-				ww := windowX+306
-				wh := windowY+HoneyStart[3]+100
-				if(ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*5 nm_image_assets\questbargap.png") = 1) {
-					QuestBarSize:=FoundY-windowY-HoneyStart[3]
-					QuestBarGapSize:=3
-					QuestBarInset:=3
-					NextY:=FoundY+1
-					NextX:=FoundX+1
-					loop 20 {
-						if(ImageSearch(&FoundX, &FoundY, FoundX, NextY, ww, wh, "*5 nm_image_assets\questbargap.png") = 1) {
-							NextY:=FoundY+1
-							QuestBarGapSize:=QuestBarGapSize+1
-						} else {
-							break
-						}
-					}
-					wh := windowY+HoneyStart[3]+200
-					loop 20 {
-						if(ImageSearch(&FoundX, &FoundY, NextX, yi, ww, wh, "*5 nm_image_assets\questbarinset.png") = 1) {
-							NextX:=FoundX+1
-							QuestBarInset:=QuestBarInset+1
-						} else {
-							break
-						}
-					}
-					break
-				} else {
-					MouseMove windowX+30, windowY+offsetY+225
-					Sleep 50
-					Send "{WheelDown 1}"
-					Sleep 50
-					HoneyStart[3]-=150
-					Sleep 500
-				}
-			}
-		}
 		;Update Honey quest progress in GUI
 		honeyProgress:=""
 		;also set next steps
@@ -16971,47 +16939,6 @@ nm_PolarQuestProg(){
 			MsgBox "Folder location cannot be found:`n" A_WorkingDir "\nm_image_assets\"
 		}
 		PolarStart:=(result = 1) ? [0, FoundX-windowX, FoundY-windowY] : [1, 0, 0]
-		;determine quest bar sizes and spacing
-		if(QuestBarGapSize=0 || QuestBarSize=0 || QuestBarInset=0) {
-			Loop 3 {
-				xi := windowX
-				yi := windowY+PolarStart[3]+15
-				ww := windowX+306
-				wh := windowY+PolarStart[3]+100
-				if(ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*5 nm_image_assets\questbargap.png") = 1) {
-					QuestBarSize:=FoundY-windowY-PolarStart[3]
-					QuestBarGapSize:=3
-					QuestBarInset:=3
-					NextY:=FoundY+1
-					NextX:=FoundX+1
-					loop 20 {
-						if(ImageSearch(&FoundX, &FoundY, FoundX, NextY, ww, wh, "*5 nm_image_assets\questbargap.png") = 1) {
-							NextY:=FoundY+1
-							QuestBarGapSize:=QuestBarGapSize+1
-						} else {
-							break
-						}
-					}
-					wh := windowY+PolarStart[3]+200
-					loop 20 {
-						if(ImageSearch(&FoundX, &FoundY, NextX, yi, ww, wh, "*5 nm_image_assets\questbarinset.png") = 1) {
-							NextX:=FoundX+1
-							QuestBarInset:=QuestBarInset+1
-						} else {
-							break
-						}
-					}
-					break
-				} else {
-					MouseMove windowX+30, windowY+offsetY+225
-					Sleep 50
-					Send "{WheelDown 1}"
-					Sleep 50
-					PolarStart[3]-=150
-					Sleep 500
-				}
-			}
-		}
 		;determine Quest name
 		xi := windowX
 		yi := windowY+PolarStart[3]-30
@@ -17019,7 +16946,11 @@ nm_PolarQuestProg(){
 		wh := windowY+PolarStart[3]
 		for key, value in PolarBear {
 			filename:=(key . ".png")
-			if(ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*10 nm_image_assets\" fileName) = 1) {
+			try
+				result := ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*10 nm_image_assets\" fileName)
+			catch
+				result := 0
+			if(result = 1) {
 				PolarQuest:=key
 				questSteps:=PolarBear[key].Length
 				;make sure full quest is visible
@@ -17027,7 +16958,11 @@ nm_PolarQuestProg(){
 					found:=0
 					NextY:=windowY+PolarStart[3]
 					loop questSteps {
-						if(ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png") = 1) {
+						try
+							result := ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png")
+						catch
+							result := 0
+						if(result = 1) {
 							NextY:=NextY+QuestBarSize
 							found:=found+1
 						} else {
@@ -17225,47 +17160,6 @@ nm_RileyQuestProg(){
 			MsgBox "Folder location cannot be found:`n" A_WorkingDir "\nm_image_assets\"
 		}
 		RileyStart:=(result = 1) ? [0, FoundX-windowX, FoundY-windowY] : [1, 0, 0]
-		;determine quest bar sizes and spacing
-		if(QuestBarGapSize=0 || QuestBarSize=0 || QuestBarInset=0) {
-			Loop 3 {
-				xi := windowX
-				yi := windowY+RileyStart[3]+15
-				ww := windowX+306
-				wh := windowY+RileyStart[3]+100
-				if(ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*5 nm_image_assets\questbargap.png") = 1) {
-					QuestBarSize:=FoundY-windowY-RileyStart[3]
-					QuestBarGapSize:=3
-					QuestBarInset:=3
-					NextY:=FoundY+1
-					NextX:=FoundX+1
-					loop 20 {
-						if(ImageSearch(&FoundX, &FoundY, FoundX, NextY, ww, wh, "*5 nm_image_assets\questbargap.png") = 1) {
-							NextY:=FoundY+1
-							QuestBarGapSize:=QuestBarGapSize+1
-						} else {
-							break
-						}
-					}
-					wh := windowY+RileyStart[3]+200
-					loop 20 {
-						if(ImageSearch(&FoundX, &FoundY, NextX, yi, ww, wh, "*5 nm_image_assets\questbarinset.png") = 1) {
-							NextX:=FoundX+1
-							QuestBarInset:=QuestBarInset+1
-						} else {
-							break
-						}
-					}
-					break
-				} else {
-					MouseMove windowX+30, windowY+offsetY+225
-					Sleep 50
-					Send "{WheelDown 1}"
-					Sleep 50
-					RileyStart[3]-=150
-					Sleep 500
-				}
-			}
-		}
 		;determine Quest name
 		xi := windowX
 		yi := windowY+RileyStart[3]-30
@@ -17273,7 +17167,11 @@ nm_RileyQuestProg(){
 		wh := windowY+RileyStart[3]
 		for key, value in RileyBee {
 			filename:=(key . ".png")
-			if(ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*100 nm_image_assets\" fileName) = 1) {
+			try
+				result := ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*100 nm_image_assets\" fileName)
+			catch
+				result := 0
+			if(result = 1) {
 				RileyQuest:=key
 				questSteps:=RileyBee[key].Length
 				;make sure full quest is visible
@@ -17281,7 +17179,11 @@ nm_RileyQuestProg(){
 					found:=0
 					NextY:=windowY+RileyStart[3]
 					loop questSteps {
-						if(ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png") = 1) {
+						try
+							result := ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png")
+						catch
+							result := 0
+						if(result = 1) {
 							NextY:=NextY+QuestBarSize
 							found:=found+1
 						} else {
@@ -17534,47 +17436,6 @@ nm_BuckoQuestProg(){
 			MsgBox "Folder location cannot be found:`n" A_WorkingDir "\nm_image_assets\"
 		}
 		BuckoStart:=(result = 1) ? [0, FoundX-windowX, FoundY-windowY] : [1, 0, 0]
-		;determine quest bar sizes and spacing
-		if(QuestBarGapSize=0 || QuestBarSize=0 || QuestBarInset=0) {
-			Loop 3 {
-				xi := windowX
-				yi := windowY+BuckoStart[3]+15
-				ww := windowX+306
-				wh := windowY+BuckoStart[3]+100
-				if(ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*5 nm_image_assets\questbargap.png") = 1) {
-					QuestBarSize:=FoundY-windowY-BuckoStart[3]
-					QuestBarGapSize:=3
-					QuestBarInset:=3
-					NextY:=FoundY+1
-					NextX:=FoundX+1
-					loop 20 {
-						if(ImageSearch(&FoundX, &FoundY, FoundX, NextY, ww, wh, "*5 nm_image_assets\questbargap.png") = 1) {
-							NextY:=FoundY+1
-							QuestBarGapSize:=QuestBarGapSize+1
-						} else {
-							break
-						}
-					}
-					wh := windowY+BuckoStart[3]+200
-					loop 20 {
-						if(ImageSearch(&FoundX, &FoundY, NextX, yi, ww, wh, "*5 nm_image_assets\questbarinset.png") = 1) {
-							NextX:=FoundX+1
-							QuestBarInset:=QuestBarInset+1
-						} else {
-							break
-						}
-					}
-					break
-				} else {
-					MouseMove windowX+30, windowY+offsetY+225
-					Sleep 50
-					Send "{WheelDown 1}"
-					Sleep 50
-					BuckoStart[3]-=150
-					Sleep 500
-				}
-			}
-		}
 		;determine Quest name
 		xi := windowX
 		yi := windowY+BuckoStart[3]-30
@@ -17582,7 +17443,11 @@ nm_BuckoQuestProg(){
 		wh := windowY+BuckoStart[3]
 		for key, value in BuckoBee {
 			filename:=(key . ".png")
-			if(ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*100 nm_image_assets\" fileName) = 1) {
+			try
+				result := ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*100 nm_image_assets\" fileName)
+			catch
+				result := 0
+			if(result = 1) {
 				BuckoQuest:=key
 				questSteps:=BuckoBee[key].Length
 				;make sure full quest is visible
@@ -17590,7 +17455,11 @@ nm_BuckoQuestProg(){
 					found:=0
 					NextY:=windowY+BuckoStart[3]
 					loop questSteps {
-						if(ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png") = 1) {
+						try
+							result := ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png")
+						catch
+							result := 0
+						if(result = 1) {
 							NextY:=NextY+QuestBarSize
 							found:=found+1
 						} else {
@@ -17853,47 +17722,6 @@ nm_BlackQuestProg(){
 			MsgBox "Folder location cannot be found:`n" A_WorkingDir "\nm_image_assets\"
 		}
 		BlackStart:=(result = 1) ? [0, FoundX-windowX, FoundY-windowY] : [1, 0, 0]
-		;determine quest bar sizes and spacing
-		if(QuestBarGapSize=0 || QuestBarSize=0 || QuestBarInset=0) {
-			Loop 3 {
-				xi := windowX
-				yi := windowY+BlackStart[3]+15
-				ww := windowX+306
-				wh := windowY+BlackStart[3]+100
-				if(ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*5 nm_image_assets\questbargap.png") = 1) {
-					QuestBarSize:=FoundY-windowY-BlackStart[3]
-					QuestBarGapSize:=3
-					QuestBarInset:=3
-					NextY:=FoundY+1
-					NextX:=FoundX+1
-					loop 20 {
-						if(ImageSearch(&FoundX, &FoundY, FoundX, NextY, ww, wh, "*5 nm_image_assets\questbargap.png") = 1) {
-							NextY:=FoundY+1
-							QuestBarGapSize:=QuestBarGapSize+1
-						} else {
-							break
-						}
-					}
-					wh := windowY+BlackStart[3]+200
-					loop 20 {
-						if(ImageSearch(&FoundX, &FoundY, NextX, yi, ww, wh, "*5 nm_image_assets\questbarinset.png") = 1) {
-							NextX:=FoundX+1
-							QuestBarInset:=QuestBarInset+1
-						} else {
-							break
-						}
-					}
-					break
-				} else {
-					MouseMove windowX+30, windowY+offsetY+225
-					Sleep 50
-					Send "{WheelDown 1}"
-					Sleep 50
-					BlackStart[3]-=150
-					Sleep 500
-				}
-			}
-		}
 		;determine Quest name
 		xi := windowX
 		yi := windowY+BlackStart[3]-30
@@ -17901,7 +17729,11 @@ nm_BlackQuestProg(){
 		wh := windowY+BlackStart[3]
 		for key, value in BlackBear {
 			filename:=(key . ".png")
-			if(ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*100 nm_image_assets\" fileName) = 1) {
+			try
+				result := ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*100 nm_image_assets\" fileName)
+			catch
+				result := 0
+			if(result = 1) {
 				BlackQuest:=key
 				questSteps:=BlackBear[key].Length
 				;make sure full quest is visible
@@ -17909,7 +17741,11 @@ nm_BlackQuestProg(){
 					found:=0
 					NextY:=windowY+BlackStart[3]
 					loop questSteps {
-						if(ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png") = 1) {
+						try
+							result := ImageSearch(&FoundX, &FoundY, windowX+QuestBarInset, NextY, windowX+QuestBarInset+300, NextY+QuestBarGapSize, "*5 nm_image_assets\questbargap.png")
+						catch
+							result := 0
+						if(result = 1) {
 							NextY:=NextY+QuestBarSize
 							found:=found+1
 						} else {
@@ -18128,47 +17964,6 @@ nm_BrownQuestProg(){
 				MsgBox "Folder location cannot be found:`n" A_WorkingDir "\nm_image_assets\"
 			}
 			BrownStart:=(result = 1) ? [0, FoundX-windowX, FoundY-windowY] : [1, 0, 0]
-			;determine quest bar sizes and spacing
-			if(QuestBarGapSize=0 || QuestBarSize=0 || QuestBarInset=0) {
-				Loop 3 {
-					xi := windowX
-					yi := windowY+BrownStart[3]+15
-					ww := windowX+306
-					wh := windowY+BrownStart[3]+100
-					if(ImageSearch(&FoundX, &FoundY, xi, yi, ww, wh, "*5 nm_image_assets\questbargap.png") = 1) {
-						QuestBarSize:=FoundY-windowY-BrownStart[3]
-						QuestBarGapSize:=3
-						QuestBarInset:=3
-						NextY:=FoundY+1
-						NextX:=FoundX+1
-						loop 20 {
-							if(ImageSearch(&FoundX, &FoundY, FoundX, NextY, ww, wh, "*5 nm_image_assets\questbargap.png") = 1) {
-								NextY:=FoundY+1
-								QuestBarGapSize:=QuestBarGapSize+1
-							} else {
-								break
-							}
-						}
-						wh := windowY+BrownStart[3]+200
-						loop 20 {
-							if(ImageSearch(&FoundX, &FoundY, NextX, yi, ww, wh, "*5 nm_image_assets\questbarinset.png") = 1) {
-								NextX:=FoundX+1
-								QuestBarInset:=QuestBarInset+1
-							} else {
-								break
-							}
-						}
-						break
-					} else {
-						MouseMove windowX+30, windowY+offsetY+225
-						Sleep 50
-						Send "{WheelDown 1}"
-						Sleep 50
-						BrownStart[3]-=150
-						Sleep 500
-					}
-				}
-			}
 			;determine Quest objecives
 			static objectiveList := Map("dandelion","Dand", "sunflower","Sunf", "mushroom","Mush", "blueflower","Bluf", "clover","Clove"
 				, "strawberry","Straw", "spider","Spide", "bamboo","Bamb", "pineapple","Pinap", "stump","Stump"
@@ -18298,7 +18093,7 @@ nm_BrownQuestProg(){
 		} else {
 			completeness:="Unknown"
 		}
-		BrownQuest .= "-" . objectiveList[obj]
+		BrownQuest .= "-" . ((obj = "unknown") ? "Unknown" : objectiveList[obj])
 		brownProgress .= newline . action . " " . where . ": " . completeness
 	}
 	brownProgress := (BrownQuest := LTrim(BrownQuest, "-")) . brownProgress
@@ -20681,9 +20476,6 @@ start(*){
 	global QuestMantis:=0
 	global QuestScorpions:=0
 	global QuestWerewolf:=0
-	global QuestBarSize:=0
-	global QuestBarGapSize:=0
-	global QuestBarInset:=0
 	global BuckoRhinoBeetles:=0
 	global BuckoMantis:=0
 	global RileyLadybugs:=0
