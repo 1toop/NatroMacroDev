@@ -10911,7 +10911,9 @@ nm_SolveMemoryMatch(MemoryMatchGame:="", PriorityItemOAC:=0) { ; PriorityItem ca
 			sendinput "{click down}"
 			sleep 100
 			sendinput "{click up}"
-			sleep 500
+			sleep 100
+			MouseMove middleX, windowY+offsetY+100		
+			sleep 350
 
 			Loop 20 {
 				pBMScreen := Gdip_BitmapFromScreen(TileXCordOAC-5 "|" TileYCordOAC+10 "|8|20") ; Detect Clicked Item
