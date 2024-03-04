@@ -44,7 +44,7 @@ HyperSleep(100)
 send "{" SC_Space " up}"
 nm_Walk(8.8, FwdKey)
 send "{" RotRight " 2}"
-nm_Walk(25, FwdKey)
+nm_Walk(25.6, FwdKey)
 
 ; moon jumps
 Jump([5, FwdKey])
@@ -57,14 +57,14 @@ nm_Walk(2, FwdKey)
 Jump([2.5, FwdKey], [2.5, FwdKey, LeftKey])
 nm_Walk(2, FwdKey)
 Jump([5, FwdKey])
-nm_Walk(3, FwdKey)
+nm_Walk(2, FwdKey)
 Jump([2, FwdKey, RightKey], [3, FwdKey])
 send "{" RotRight "}"
 nm_Walk(2, FwdKey)
-Jump([2, FwdKey, LeftKey], [2, FwdKey])
+Jump([2.5, FwdKey, LeftKey], [2, FwdKey])
 nm_Walk(2, FwdKey)
 Jump([5, FwdKey])
-nm_Walk(1, FwdKey)
+nm_Walk(2, FwdKey)
 Jump([4, FwdKey])
 send "{" RotRight "}"
 nm_Walk(2, FwdKey)

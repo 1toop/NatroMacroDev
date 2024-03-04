@@ -10772,7 +10772,7 @@ nm_MemoryMatch(MemoryMatchGame) {
 		IniWrite Last%MemoryMatchGame%MemoryMatch:=nowUnix(), "settings\nm_config.ini", "Collect", "Last" MemoryMatchGame "MemoryMatch"
 	}
 }
-nm_SolveMemoryMatch(MemoryMatchGame:="", PriorityItemOAC:=0) { ; PriorityItem can be set to a numeric value to prioritize certain bitmap. It will ignore all other pairs until it finds and claims PriorityItem if PriorityItem>0.
+nm_SolveMemoryMatch(MemoryMatchGame:="") {
 
 	; initialize variables
 	GetRobloxClientPos()
