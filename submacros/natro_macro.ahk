@@ -10967,25 +10967,22 @@ nm_SolveMemoryMatch(MemoryMatchGame:="") {
 			DllCall("GetSystemTimeAsFileTime", "int64p", &f:=s)
 			Sleep Max(500 - (f - s)//10000, -1) ; match previous version's total sleep 500
 
-			Loop 500 {
-			  pBMScreen := Gdip_BitmapFromScreen(TileXCordOAC-35 "|" TileYCordOAC-20 "|45|30") ; Detect Clicked Item
-			  Gdip_SaveBitmapToFile(pBMScreen, "empty" A_index ".png")
-			  if (Gdip_ImageSearch(pBMScreen, bitmaps["MMBorder"], , , , 8, 20, 1, , 2) = 1) {
-			    if (Gdip_ImageSearch(pBMScreen, bitmaps["MMEmptyTile"], , 25, 10, , , 1, , 2) != 1) {
-			      Gdip_DisposeImage(pBMScreen)
-			      break
-			    }
-			  } else {
-			    Gdip_DisposeImage(pBMScreen)
-			    ; no border but tile never showed an image (because the loop still isn't broken), handle this
-			  }
-			  Gdip_DisposeImage(pBMScreen)
-			  sleep 10
-			}			
-			
-			sleep 300
+			Loop 1000 {
+				pBMScreen := Gdip_BitmapFromScreen(TileXCordOAC-35 "|" TileYCordOAC-20 "|45|30") ; Detect Clicked Item
+				;Gdip_SaveBitmapToFile(pBMScreen, "empty" A_index ".png")
+				if (Gdip_ImageSearch(pBMScreen, bitmaps["MMBorder"], , , , 8, 20, 1, , 2) = 1) {
+					if (Gdip_ImageSearch(pBMScreen, bitmaps["MMEmptyTile"], , 25, 10, , , 1, , 2) != 1) {
+						MMItemOAC := 1
+						Gdip_DisposeImage(pBMScreen)
+						break
+					}
+				}
+				Gdip_DisposeImage(pBMScreen)
+				sleep 10
+			}
+			Sleep 100
 
-			if(PairFoundOAC!=1 && (A_Index=1 || (A_Index=2 &&  MatchFoundOAC!=1))) {
+			if(MMItemOAC=1 && PairFoundOAC!=1 && (A_Index=1 || (A_Index=2 && MatchFoundOAC!=1))) {
 				StoreItemOAC[Tile] := Gdip_BitmapFromScreen(TileXCordOAC-25 "|" TileYCordOAC-25 "|50|50") ; Detect Clicked Item
 				nm_CreateFolder(path := A_WorkingDir "\MMScreenshots"), Gdip_SaveBitmapToFile(StoreItemOAC[Tile], path "\image" Tile ".png") ; comment out this line for public release
 				for item in MemoryMatchItems {
@@ -10999,7 +10996,6 @@ nm_SolveMemoryMatch(MemoryMatchGame:="") {
 						}
 					}
 				}
-
 			}
 
 			if(A_Index=1) {
