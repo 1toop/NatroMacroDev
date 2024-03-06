@@ -16194,18 +16194,22 @@ nm_activeHoney(){
 		offsetY := GetYOffset(hwnd)
 		x1 := windowX + windowWidth//2 - 90
 		y1 := windowY + offsetY
-		if (PixelSearch(&bx2, &by2, x1, y1, x1+70, y1+34, 0xFFE280, 20) = 1){
+		try
+			result := PixelSearch(&bx2, &by2, x1, y1, x1+70, y1+34, 0xFFE280, 20)
+		catch
+			result := 0
+		if (result = 1){
 			GameFrozenCounter:=0
 			return 1
 		} else {
 			if(HiveBees<25){
 				x1 := windowX + windowWidth//2 + 210
 				y1 := windowY + offsetY
-				if (PixelSearch(&bx2, &by2, x1, y1, x1+70, y1+34, 0xFFFFFF, 20) = 1){
-					return 1
-				} else {
-					return 0
-				}
+				try
+					result := PixelSearch(&bx2, &by2, x1, y1, x1+70, y1+34, 0xFFFFFF, 20)
+				catch
+					result := 0
+				return result
 			} else {
 				return 0
 			}
@@ -19468,7 +19472,11 @@ ba_GetNectarPercent(var){
 			hwnd := GetRobloxHWND()
 			offsetY := GetYOffset(hwnd)
 			GetRobloxClientPos(hwnd)
-			If (PixelSearch(&bx2, &by2, windowX, windowY+offsetY+30, windowX+860, windowY+offsetY+150, nectarColor) = 1) {
+			try
+				result := PixelSearch(&bx2, &by2, windowX, windowY+offsetY+30, windowX+860, windowY+offsetY+150, nectarColor)
+			catch
+				result := 0
+			If (result = 1) {
 				nexty:=by2+1
 				pixels:=1
 				loop 38 {
