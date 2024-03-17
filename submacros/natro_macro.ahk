@@ -180,7 +180,7 @@ nm_importPatterns()
 	Loop Files A_WorkingDir "\patterns\*.ahk"
 	{
 		file := FileOpen(A_LoopFilePath, "r"), pattern := file.Read(), file.Close()
-		if !InStr(imported, imported_pattern := '("' (pattern_name := StrReplace(A_LoopFileName, ".ahk")) '")`r`n' pattern '`r`n`r`n')
+		if !InStr(imported, imported_pattern := '("' (pattern_name := StrReplace(A_LoopFileName, "." A_LoopFileExt)) '")`r`n' pattern '`r`n`r`n')
 		{
 			script :=
 			(
@@ -1718,10 +1718,12 @@ nm_importFieldDefaults()
 	global FieldPattern1, FieldPattern2, FieldPattern3
 	loop 3 {
 		i := A_Index
-		for pattern in patternlist
-			if (pattern = FieldPattern%i%)
-				continue 2
-		FieldPattern%i% := FieldDefault[FieldName%i%]["pattern"]
+		if (FieldName%i% != "None") {
+			for pattern in patternlist
+				if (pattern = FieldPattern%i%)
+					continue 2
+			FieldPattern%i% := FieldDefault[FieldName%i%]["pattern"]
+		}
 	}
 
 	ini := ""
@@ -20400,7 +20402,7 @@ mp_HarvestPlanter(PlanterIndex) {
 		; screenshot and set to hold instead of harvest, if auto harvest is disabled for the slot, and the user hasn't selected to release it by remote control
 		Sleep 200 ; wait for game to update frame
 		nm_PlanterTimeUpdate(MFieldName)
-		sleep 1000		
+		sleep 1000
 		If (nowUnix() >= PlanterHarvestTime%PlanterIndex%) {
 			nm_setStatus("Holding", (MPlanterName . " (" . MFieldName . ")"))
 			Sleep 2000
