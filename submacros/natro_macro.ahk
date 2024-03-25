@@ -32,7 +32,7 @@ You should have received a copy of the license along with Natro Macro. If not, p
 #Include "nowUnix.ahk"
 
 #Warn VarUnset, Off
-OnError (e, *) => (HasProp(e, "Number") && (e.Number = 32)) ? -1 : 0
+OnError (e, mode) => (mode = "Return") ? -1 : 0
 
 SetWorkingDir A_ScriptDir "\.."
 CoordMode "Mouse", "Screen"
@@ -10981,7 +10981,7 @@ nm_SolveMemoryMatch(MemoryMatchGame:="") {
 
 			if(MMItemOAC=1 && PairFoundOAC!=1 && (A_Index=1 || (A_Index=2 && MatchFoundOAC!=1))) {
 				StoreItemOAC[Tile] := Gdip_BitmapFromScreen(TileXCordOAC-25 "|" TileYCordOAC-25 "|50|50") ; Detect Clicked Item
-				nm_CreateFolder(path := A_WorkingDir "\MMScreenshots"), Gdip_SaveBitmapToFile(StoreItemOAC[Tile], path "\image" Tile ".png") ; comment out this line for public release
+				;nm_CreateFolder(path := A_WorkingDir "\MMScreenshots"), Gdip_SaveBitmapToFile(StoreItemOAC[Tile], path "\image" Tile ".png") ; comment out this line for public release
 				for item, data in MemoryMatch {
   					if ((MemoryMatchGame && (%item%MatchIgnore & MemoryMatchGames[MemoryMatchGame].bit)) || (!MemoryMatchGame && (%item%MatchIgnore = data.games))) {
 						loop 2 {

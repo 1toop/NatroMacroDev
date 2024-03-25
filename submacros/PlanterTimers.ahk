@@ -19,7 +19,7 @@ You should have received a copy of the license along with Natro Macro. If not, p
 #Include "DurationFromSeconds.ahk"
 #Include "nowUnix.ahk"
 
-OnError (e, *) => (HasProp(e, "Number") && (e.Number = 32)) ? -1 : 0
+OnError (e, mode) => (mode = "Return") ? -1 : 0
 DetectHiddenWindows 1
 SetWorkingDir A_ScriptDir "\.."
 
