@@ -261,13 +261,14 @@ nm_importPaths()
 			try
 				file := FileOpen(A_WorkingDir "\paths\" k "-" v ".ahk", "r"), paths[k][v] := file.Read(), file.Close()
 				if !!regexMatch(paths[k][v], "im)^paths\[")
-    			throw Error("Deprecated path detected",, k "-" v)
+    			throw
 			catch
 				MsgBox
 				(
 				"Could not find the '" k '-' v "' path!
 				This means the macro will NOT work correctly!
-				Make sure the path exists in the 'paths' folder and redownload if it doesn't!"
+				Make sure the path exists in the 'paths' folder, redownload if it doesn't
+				and if it does, make sure the path is for Natro Macro v1.0.0+!"
 				), "Error", 0x40010 " T60"
 		}
 	}
