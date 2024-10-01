@@ -18,7 +18,6 @@ You should have received a copy of the license along with Natro Macro. If not, p
 ;@Ahk2Exe-SetCompanyName Natro Team
 ;@Ahk2Exe-SetCopyright Copyright © Natro Team
 ;@Ahk2Exe-SetOrigFilename natro_macro.exe
-
 #MaxThreads 255
 #Requires AutoHotkey v2.0
 #SingleInstance Force
@@ -2047,7 +2046,9 @@ TraySetIcon "nm_image_assets\auryn.ico"
 A_TrayMenu.Delete()
 A_TrayMenu.Add()
 A_TrayMenu.Add("Open Logs", (*) => ListLines())
+A_TrayMenu.Add("Copy Logs", copyLogFile)
 A_TrayMenu.Add()
+
 A_TrayMenu.Add("Edit This Script", (*) => Edit())
 A_TrayMenu.Add("Suspend Hotkeys", (*) => (A_TrayMenu.ToggleCheck("Suspend Hotkeys"), Suspend()))
 A_TrayMenu.Add()
@@ -8190,7 +8191,8 @@ nm_DebugLogGUI(*){
 	DebugLogGui.SetFont("s8 cDefault Norm", "Tahoma")
 	DebugLogGui.Add("CheckBox", "x10 y6 vDebugLogEnabled Checked" DebugLogEnabled, "Enable Debug Logging").OnEvent("Click", nm_DebugLogCheck)
 	DebugLogGui.Add("Button", "xp+140 y5 h16", "Go To File").OnEvent("Click", (*) => Run('explorer.exe /e, /n, /select,"' A_WorkingDir '\settings\debug_log.txt"'))
-	DebugLogGui.Show("w210 h20")
+	DebugLogGui.Add("Button", "xp yp+20 hp wp", "Copy Logs").OnEvent("Click", copyLogFile)
+	DebugLogGui.Show("w210 h36")
 }
 nm_DebugLogCheck(*){
 	global
@@ -20566,6 +20568,45 @@ mp_HarvestPlanter(PlanterIndex) {
 		}
 		return 1
 	}
+}
+
+copyLogFile(*) {
+	static tempPath := A_Temp "\debug_log.txt", os_version := "Cannot detect OS version", processorName := '', RAMAmount := 0
+	alt := !!GetKeyState("Control")
+	if ((!processorName) || (os_version = "Cannot detect OS version"))
+		winmgmts := ComObjGet("winmgmts:")
+	if (os_version = "Cannot detect OS version") {
+		for objItem in winmgmts.ExecQuery("SELECT * FROM Win32_OperatingSystem")
+			os_version := Trim(StrReplace(StrReplace(StrReplace(StrReplace(objItem.Caption, "Microsoft"), "Майкрософт"), "مايكروسوفت"), "微软"))
+	}
+	if (!processorName){
+		for objItem in winmgmts.ExecQuery("SELECT * FROM Win32_Processor")
+			processorName := Trim(objItem.Name)
+	}
+	if (!RAMAmount) {
+		MEMORYSTATUSEX := Buffer(64,0)
+		NumPut("uint", 64, MEMORYSTATUSEX)
+		DllCall("kernel32\GlobalMemoryStatusEx", "ptr", MEMORYSTATUSEX)
+		RAMAmount := Round(NumGet(MEMORYSTATUSEX, 8, "int64") / 1073741824, 1)
+	}
+	out :=	
+	(
+	'``````md
+	# Info -----------------------------------------------
+	OSVersion: ' os_version ' (' (A_Is64bitOS ? '64-bit' : '32-bit') ')
+	AutoHotkey Version: ' A_AhkVersion '; ' (A_AhkPath = A_WorkingDir '\submacros\AutoHotkey32.exe' ? "Using included AHK" : "Using installed AHK") '
+	Natro Version: ' VersionID '
+	Installation Path: ' StrReplace(A_WorkingDir, A_UserName, '<user>')
+	. (processorName ? '`r`nCPU: ' processorName : '')
+	. (RAMAmount ? '`r`nRAM: ' RAMAmount 'GB' : '')
+	'
+	# Latest Logs ----------------------------------------
+	'
+	)
+	LatestDebuglog := FileRead(".\settings\debug_log.txt")
+	out .= SubStr(LatestDebugLog, InStr(LatestDebuglog, "`n", , ,-(alt ? 40 : 26)) + 1) "``````" ;InStr: retrieve the last 25 lines of the debug log (log is oldest to newest) [Integer] | SubStr: retrieve the content of the last 25 lines
+	A_Clipboard := out
+	MsgBox("Copied Debug stats to your clipboard.", "Copy Debug Logs", 0x40040)
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
