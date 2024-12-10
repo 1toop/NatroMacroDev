@@ -7648,7 +7648,7 @@ nm_BitterberryFeeder(*)
 	GetRobloxClientPos(hwnd)
 	offsetY := GetYOffset(hwnd, &offsetfail)
 	if (offsetfail = 1) {
-		MsgBox "Unable to detect in-game GUI offset!``nStopping Feeder!``n``nThere are a few reasons why this can happen:``n - Incorrect graphics settings (check Troubleshooting Guide!)``n - Your `'Experience Language`' is not set to English``n - Something is covering the top of your Roblox window``n``nJoin our Discord server for support!", "WARNING!!", "0x40030"
+		MsgBox "Unable to detect in-game GUI offset!``nStopping Feeder!``n``nThere are a few reasons why this can happen, including:``n - Incorrect graphics settings``n - Your `'Experience Language`' is not set to English``n - Something is covering the top of your Roblox window``n``nJoin our Discord server for support and our Knowledge Base post on this topic (Unable to detect in-game GUI offset)!", "WARNING!!", "0x40030"
 		ExitApp
 	}
 
@@ -7788,7 +7788,7 @@ nm_BasicEggHatcher(*)
 	GetRobloxClientPos()
 	offsetY := GetYOffset(hwnd, &offsetfail)
 	if (offsetfail = 1) {
-		MsgBox "Unable to detect in-game GUI offset!``nStopping Feeder!``n``nThere are a few reasons why this can happen:``n - Incorrect graphics settings (check Troubleshooting Guide!)``n - Your `'Experience Language`' is not set to English``n - Something is covering the top of your Roblox window``n``nJoin our Discord server for support!", "WARNING!!", 0x40030
+		MsgBox "Unable to detect in-game GUI offset!``nStopping Feeder!``n``nThere are a few reasons why this can happen, including:``n - Incorrect graphics settings``n - Your `'Experience Language`' is not set to English``n - Something is covering the top of your Roblox window``n``nJoin our Discord server for support and our Knowledge Base post on this topic (Unable to detect in-game GUI offset)!", "WARNING!!", 0x40030
 		ExitApp
 	}
 	StatusBar := Gui("-Caption +E0x80000 +AlwaysOnTop +ToolWindow -DPIScale")
@@ -20777,12 +20777,12 @@ start(*){
 		Unable to detect in-game GUI offset!
 		This means the macro will NOT work correctly!
 
-		There are a few reasons why this can happen:
-		- Incorrect graphics settings (check Troubleshooting Guide!)
+		There are a few reasons why this can happen, including:
+		- Incorrect graphics settings
 		- Your 'Experience Language' is not set to English
 		- Something is covering the top of your Roblox window
 
-		Join our Discord server for support!
+		Join our Discord server for support and our Knowledge Base post on this topic (Unable to detect in-game GUI offset)!
 		)", "WARNING!!", 0x1030 " T60"
 	nm_OpenMenu()
 	MouseMove windowX+350, windowY+offsetY+100
