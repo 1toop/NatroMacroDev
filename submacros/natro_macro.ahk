@@ -9553,8 +9553,8 @@ nm_setShiftLock(state, *){
 	Gdip_DisposeImage(pBMScreen)
 	return (ShiftLockEnabled := result)
 }
-; decision: "keep", 1; "replace", 2 // returns 0 - no prompt, 1 - prompt exists, 2 - no roblox window
-nm_AmuletPrompt(decision:=0, *){
+; decision: "keep", 1; "replace", 2; "obtained", 3 // returns 0 - no prompt, 1 - prompt exists, 2 - no roblox window
+nm_AmuletPrompt(decision:=0, type:=0, *){
 	global bitmaps, ShiftLockEnabled
 
 	Prev_ShiftLock := ShiftLockEnabled
@@ -9573,9 +9573,21 @@ nm_AmuletPrompt(decision:=0, *){
 		switch decision, 0
 		{
 			case "keep",1:
-			MouseMove windowX+windowWidth//2-250+SubStr(pos, 1, InStr(pos, ",")-1)+10, windowY+SubStr(pos, InStr(pos, ",")+1)+10, 5
-			Click
+			if type = "Ant" || type = "King Beetle" || type = "Shell"
+				nm_setStatus("Keeping", type " Amulet")	
 			Gdip_DisposeImage(pBMScreen)
+			loop 10
+			{
+				MouseMove windowX+350, windowY+offsetY+100
+				pBMScreen := Gdip_BitmapFromScreen(windowX+windowWidth//2-250 "|" windowY "|500|" windowHeight)
+				if (Gdip_ImageSearch(pBMScreen, bitmaps["keep"], &pos, , , , , 2, , 2) = 1)
+				{
+					MouseMove windowX+windowWidth//2-250+SubStr(pos, 1, InStr(pos, ",")-1)+10, windowY+SubStr(pos, InStr(pos, ",")+1)+10, 5
+					Sleep 200
+					Click
+				} 
+				Gdip_DisposeImage(pBMScreen)
+			}
 			nm_setShiftLock(Prev_ShiftLock)
 			return 1
 
@@ -9596,6 +9608,12 @@ nm_AmuletPrompt(decision:=0, *){
 				Gdip_DisposeImage(pBMScreen)
 				Sleep 100
 			}
+			nm_setShiftLock(Prev_ShiftLock)
+			return 1
+
+			case "obtained",3:
+			nm_setStatus("Obtained", type " Amulet")
+			Gdip_DisposeImage(pBMScreen)
 			nm_setShiftLock(Prev_ShiftLock)
 			return 1
 
@@ -10138,16 +10156,7 @@ nm_Ant() { ;collect Ant Pass then do Challenge
 					loop 300 {
 						if (Mod(A_Index, 10) = 1)
 							PostSubmacroMessage("background", 0x5554, 1, nowUnix())
-						searchRet := nm_imgSearch("keep.png",30,"center")
-						searchRet2 := nm_imgSearch("d_ant_amulet.png",30,"center")
-						searchRet3 := nm_imgSearch("g_ant_amulet.png",30,"center")
-						If (searchRet[1]=0 && (searchRet2[1]=0 || searchRet3[1]=0)) {
-							nm_setStatus("Keeping", "Ant Amulet")
-							hwnd := GetRobloxHWND()
-							offsetY := GetYOffset(hwnd)
-							GetRobloxClientPos(hwnd)
-							MouseMove windowX+searchRet[2], windowY+searchRet[3], 5
-							click
+						if nm_AmuletPrompt(1, "Ant") {
 							MouseMove windowX+350, windowY+offsetY+100
 							break 2
 						}
@@ -13434,21 +13443,8 @@ nm_Bugrun(){
 				}
 				if(kingdead) {
 					;check for amulet
-					imgPos := nm_imgSearch("keep.png",25,"full")
-					If (imgPos[1] = 0){
-						if (KingBeetleAmuletMode = 1) {
-							nm_setStatus("Keeping", "King Beetle Amulet")
-							GetRobloxClientPos()
-							MouseMove windowX+(imgPos[2] + 10), windowY+(imgPos[3] + 10)
-							Click
-							Sleep 1000
-						} else {
-							nm_setStatus("Obtained", "King Beetle Amulet")
-						}
-					} else { ;loot
-						nm_setStatus("Looting", "King Beetle")
-						nm_loot(13.5, 7, "right", 1)
-					}
+					if !nm_AmuletPrompt(((KingBeetleAmuletMode = 1) ? 1 : 3), "King Beetle")
+						nm_setStatus("Looting", "King Beetle"), nm_loot(13.5, 7, "right", 1)							
 					TotalBossKills:=TotalBossKills+1
 					SessionBossKills:=SessionBossKills+1
 					PostSubmacroMessage("StatMonitor", 0x5555, 1, 1)
@@ -13537,19 +13533,10 @@ nm_Bugrun(){
 						Loop 600
 						{
 							Sleep 50
-							imgPos := nm_imgSearch("keep.png",25,"full")
-							If (imgPos[1] = 0){
+							If ((nm_AmuletPrompt(((ShellAmuletMode = 1) ? 1 : 3), "Shell")) = 1)
+							{
 								Ssdead := 1
 								Send "{" RotDown " 2}"
-								if (ShellAmuletMode = 1) {
-									nm_setStatus("Keeping", "Shell Amulet")
-									GetRobloxClientPos()
-									MouseMove windowX+(imgPos[2] + 10), windowY+(imgPos[3] + 10)
-									Click
-									Sleep 1000
-								} else {
-									nm_setStatus("Obtained", "Shell Amulet")
-								}
 								break 2
 							}
 							if((Mod(A_Index, 10) = 0) && (not nm_activeHoney())){
