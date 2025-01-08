@@ -2918,7 +2918,7 @@ Loop 6
 	MainGui.Add("Text", "x108 y" (95 + 20 * A_Index) " w62 vHBTimeText" i " +Center Hidden").OnEvent("Click", nm_HotbarEditTime)
 	MainGui.Add("UpDown", "x170 y" (94 + 20 * A_Index) " w10 h16 -16 Range1-99999 vHotbarTime" i " Hidden Disabled", HotbarTime%i%).OnEvent("Change", nm_HotbarTimeUpDown)
 	MainGui.Add("Text", "x188 y" (94 + 20 * A_Index) " w62 vHBConditionText" i " +Center Hidden")
-	(GuiCtrl := MainGui.Add("UpDown", "x250 y" (94 + 20 * A_Index) " w10 h16 -16 Range1-100 vHotbarMax" i " Hidden Disabled", HotbarMax%i%)).Section := "Boost", GuiCtrl.OnEvent("Change", nm_saveConfig)
+	(GuiCtrl := MainGui.Add("UpDown", "x250 y" (94 + 20 * A_Index) " w10 h16 -16 Range1-100 vHotbarMax" i " Hidden Disabled", HotbarMax%i%)).Section := "Boost", GuiCtrl.OnEvent("Change", nm_hotbarMaxUpDown)
 	SetLoadingProgress(31+A_Index)
 }
 nm_HotbarWhile()
@@ -5266,6 +5266,12 @@ nm_HotbarEditTime(GuiCtrl, *){
 	}
 	else if (time != "")
 		MsgBox "You must enter a valid number of seconds between 1 and 99999!", "Hotbar Slot Time", 0x40030 " T20"
+}
+nm_hotbarMaxUpDown(GuiCtrl, *){
+	global
+	local i := SubStr(GuiCtrl.Name, -1)
+	MainGui["HBConditionText" i].Text := "Until: " GuiCtrl.Value "%"
+	IniWrite (HotbarMax%i% := GuiCtrl.Value), "settings\nm_config.ini", "Boost", "HotbarMax" i
 }
 nm_ShrineIndexOption(*) {
 	global ShrineIndexOption, ShrineIndex
@@ -17036,9 +17042,10 @@ nm_hotbar(boost:=0){
 		;snowflake
 		else if(beesmasActive && (ActiveHotkeys[key][1]="Snowflake") && (nowUnix()-ActiveHotkeys[key][4])>ActiveHotkeys[key][3]) {
 			GetRobloxClientPos()
+			offsetY := GetYOffset()
 			;check that roblox window exists
 			if (windowWidth > 0) {
-				pBMArea := Gdip_BitmapFromScreen(windowX "|" windowY+30 "|" windowWidth "|50")
+				pBMArea := Gdip_BitmapFromScreen(windowX "|" windowY+offsetY+30 "|" windowWidth "|50")
 				;check that: science buff visible and e button not visible (buffs not obscured)
 				if ((Gdip_ImageSearch(pBMArea, bitmaps["science"]) = 1) && (Gdip_ImageSearch(pBMArea, bitmaps["e_button"]) = 0)) {
 					if (Gdip_ImageSearch(pBMArea, bitmaps["snowflake_identifier"], &pos, , 20, , , , , 7) = 1) {
