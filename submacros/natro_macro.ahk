@@ -11063,7 +11063,6 @@ nm_detectHiveSlots() {
 	loop 4 {
 		sleep(100), unclaimed := []
 		pBMScreen := Gdip_BitmapFromScreen(windowX + (windowWidth//2) - (windowHeight*0.4) "|" windowY + (windowHeight//2) - (windowHeight*0.25) "|" w "|" h)
-		Gdip_SaveBitmapToFile(pBMScreen, A_ScriptDir "\file.png")
 		loop 6 {
 			val := isUnclaimed(Gdip_GetPixel(pBMScreen, w*offsetsX[A_Index], h*offsetsY[A_Index]))
 			unclaimed.Push({HiveSlot:A_Index,Claimed:val ? "Empty" : "Claimed"}), detected += val
