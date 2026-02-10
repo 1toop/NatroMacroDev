@@ -7956,9 +7956,9 @@ nm_ClaimMethodHelp(*){ ; join method information
 	MsgBox "
 	(
 	DESCRIPTION:
-	This option lets you choose between 'Detect' and 'To Hive' Hive Claiming.
+	This option lets you choose between 'Detect' and 'To Slot' Hive Claiming.
 
-	'To Hive' is the more reliable option out of the bunch, this will go straight to hive without any concern to if it's claimed or not.
+	'To Slot' is the more reliable option out of the bunch, this will go straight to the set hive slot without any concern as to if it's claimed or not.
 	This is the best choice if you are in a private server.
 
 	'Detect' is only recommended if you are playing in a public server for speed.
