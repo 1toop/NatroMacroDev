@@ -1,4 +1,4 @@
-﻿static arr:=["discordMode" ; 1
+static arr:=["discordMode" ; 1
 	, "discordCheck" ; 2
 	, "MainChannelCheck" ; 3
 	, "ReportChannelCheck"
@@ -198,6 +198,7 @@
 	, "LastHotkey5"
 	, "LastHotkey6"
 	, "LastHotkey7"
+	, ""
 	, "LastWhirligig"
 	, "LastEnzymes"
 	, "LastGlitter"
@@ -239,14 +240,14 @@
 	, "BlenderTime2"
 	, "BlenderTime3"
 	, "MondoSecs"
-	, "MPlanterGatherA"
-	, "MPlanterGather1"
-	, "MPlanterGather2"
-	, "MPlanterGather3"
-	, "MPuffModeA"
-	, "MPuffMode1"
-	, "MPuffMode2"
-	, "MPuffMode3"
+	, ""
+	, ""
+	, ""
+	, ""
+	, ""
+	, ""
+	, ""
+	, ""
 	, "BlueFlowerBoosterCheck"
 	, "BambooBoosterCheck"
 	, "PineTreeBoosterCheck"
