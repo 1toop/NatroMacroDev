@@ -198,7 +198,6 @@
 	, "LastHotkey5"
 	, "LastHotkey6"
 	, "LastHotkey7"
-	, "LastHotkey7"
 	, "LastWhirligig"
 	, "LastEnzymes"
 	, "LastGlitter"
