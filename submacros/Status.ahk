@@ -480,7 +480,6 @@ settings["LastHotkey4"] := {enum: 197, type: "int", section: "Boost", regex: "i)
 settings["LastHotkey5"] := {enum: 198, type: "int", section: "Boost", regex: "i)^\d{1,10}$"}
 settings["LastHotkey6"] := {enum: 199, type: "int", section: "Boost", regex: "i)^\d{1,10}$"}
 settings["LastHotkey7"] := {enum: 200, type: "int", section: "Boost", regex: "i)^\d{1,10}$"}
-settings["LastHotkey7"] := {enum: 201, type: "int", section: "Boost", regex: "i)^\d{1,10}$"}
 settings["LastWhirligig"] := {enum: 202, type: "int", section: "Boost", regex: "i)^\d{1,10}$"}
 settings["LastEnzymes"] := {enum: 203, type: "int", section: "Boost", regex: "i)^\d{1,10}$"}
 settings["LastGlitter"] := {enum: 204, type: "int", section: "Boost", regex: "i)^\d{1,10}$"}
