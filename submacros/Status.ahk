@@ -1,4 +1,4 @@
-﻿/*
+/*
 Natro Macro (https://github.com/NatroTeam/NatroMacro)
 Copyright © Natro Team (https://github.com/NatroTeam)
 
@@ -521,14 +521,6 @@ settings["BlenderTime1"] := {enum: 239, type: "int", section: "Blender", regex: 
 settings["BlenderTime2"] := {enum: 240, type: "int", section: "Blender", regex: "i)^\d{1,10}$"}
 settings["BlenderTime3"] := {enum: 241, type: "int", section: "Blender", regex: "i)^\d{1,10}$"}
 settings["MondoSecs"] := {enum: 242, type: "int", section: "Collect", regex: "i)^\d{1,3}$"}
-settings["MPlanterGatherA"] := {enum: 243, type: "int", section: "Planters", regex: "i)^(0|1)$"}
-settings["MPlanterGather1"] := {enum: 244, type: "int", section: "Planters", regex: "i)^(0|1)$"}
-settings["MPlanterGather2"] := {enum: 245, type: "int", section: "Planters", regex: "i)^(0|1)$"}
-settings["MPlanterGather3"] := {enum: 246, type: "int", section: "Planters", regex: "i)^(0|1)$"}
-settings["MPuffModeA"] := {enum: 247, type: "int", section: "Planters", regex: "i)^(0|1)$"}
-settings["MPuffMode1"] := {enum: 248, type: "int", section: "Planters", regex: "i)^(0|1)$"}
-settings["MPuffMode2"] := {enum: 249, type: "int", section: "Planters", regex: "i)^(0|1)$"}
-settings["MPuffMode3"] := {enum: 250, type: "int", section: "Planters", regex: "i)^(0|1)$"}
 settings["BlueFlowerBoosterCheck"] := {enum: 251, type: "int", section: "Boost", regex: "i)^(0|1)$"}
 settings["BambooBoosterCheck"] := {enum: 252, type: "int", section: "Boost", regex: "i)^(0|1)$"}
 settings["PineTreeBoosterCheck"] := {enum: 253, type: "int", section: "Boost", regex: "i)^(0|1)$"}
