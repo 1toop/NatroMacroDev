@@ -59,7 +59,7 @@
 	, "StrawberryFieldCheck"
 	, "StumpFieldCheck"
 	, "SunflowerFieldCheck"
-	, ""
+	, "" ; 62 free
 	, "ConvertMins"
 	, "LastConvertBalloon"
 	, "DisableToolUse"
@@ -198,7 +198,7 @@
 	, "LastHotkey5"
 	, "LastHotkey6"
 	, "LastHotkey7"
-	, "" ; 201 free (duplicate LastHotkey7 removed)
+	, "" ; 201 free
 	, "LastWhirligig"
 	, "LastEnzymes"
 	, "LastGlitter"
@@ -221,7 +221,7 @@
 	, "PublicJoined"
 	, "DebugLogEnabled"
 	, "StingerDailyBonusCheck"
-	, ""
+	, "" ; 224 free
 	, "HoneystormCheck"
 	, "LastHoneystorm"
 	, "RBPDelevelCheck"
@@ -240,14 +240,14 @@
 	, "BlenderTime2"
 	, "BlenderTime3"
 	, "MondoSecs"
-	, "" ; 243 free (duplicate MPlanterGatherA removed)
-	, "" ; 244 free (duplicate MPlanterGather1 removed)
-	, "" ; 245 free (duplicate MPlanterGather2 removed)
-	, "" ; 246 free (duplicate MPlanterGather3 removed)
-	, "" ; 247 free (duplicate MPuffModeA removed)
-	, "" ; 248 free (duplicate MPuffMode1 removed)
-	, "" ; 249 free (duplicate MPuffMode2 removed)
-	, "" ; 250 free (duplicate MPuffMode3 removed)
+	, "" ; 243 free
+	, "" ; 244 free
+	, "" ; 245 free
+	, "" ; 246 free
+	, "" ; 247 free
+	, "" ; 248 free
+	, "" ; 249 free
+	, "" ; 250 free
 	, "BlueFlowerBoosterCheck"
 	, "BambooBoosterCheck"
 	, "PineTreeBoosterCheck"
